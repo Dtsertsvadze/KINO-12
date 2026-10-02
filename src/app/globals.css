@@ -1,1 +1,9 @@
 @import "tailwindcss";
+
+@theme {
+  --color-brand: #ff3b25;
+  --color-page: #050a0e;
+  --color-panel: #0c1218;
+  --color-status: #ff8a22;
+  --font-sans: Arial, Helvetica, sans-serif;
+}
