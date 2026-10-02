@@ -2,9 +2,9 @@ import { AuthControls } from "@/features/auth/components/auth-controls";
 
 export function Navbar() {
   return (
-    <header className="absolute inset-x-0 top-0 z-10 h-[108px] bg-transparent text-white">
+    <header className="absolute inset-x-0 top-0 z-10 h-[111px] bg-transparent text-white">
       <nav
-        className="flex h-full w-full items-center px-16"
+        className="flex h-full w-full items-center justify-between px-[60px] pt-[30px] pb-[40px]"
         aria-label="Primary navigation"
       >
         <div className="flex items-center gap-[45px]">
@@ -19,7 +19,7 @@ export function Navbar() {
           </span>
         </div>
 
-        <div className="ml-auto flex items-center gap-8">
+        <div className="flex items-center gap-8">
           <div
             className="flex h-[41px] w-[380px] items-center gap-1 rounded-full border border-white/[0.04] bg-white/[0.14] px-3 py-1.5 text-xs leading-none font-normal text-white/[0.82] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-[10px]"
             aria-label="Search films and live events"

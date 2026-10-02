@@ -12,5 +12,5 @@
   --color-success: #2ecb81;
   --color-disabled: #676b7a;
   --color-status: #ff8a22;
-  --font-sans: Arial, Helvetica, sans-serif;
+  --font-sans: var(--font-archivo), Arial, Helvetica, sans-serif;
 }
