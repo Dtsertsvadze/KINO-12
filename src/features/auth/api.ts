@@ -3,6 +3,7 @@ import type {
   AuthUser,
   LaravelAuthResponse,
   LaravelCurrentUserResponse,
+  PreferredVenue,
 } from "./types";
 
 type LoginCredentials = {
@@ -13,6 +14,12 @@ type LoginCredentials = {
 type ApiErrorResponse = {
   message?: string;
   errors?: AuthFormErrors;
+};
+
+type LaravelVenueOptionsResponse = {
+  data: {
+    venues: PreferredVenue[];
+  };
 };
 
 const TOKEN_STORAGE_KEY = "kinoxii_access_token";
@@ -153,6 +160,27 @@ export async function getCurrentUser(): Promise<AuthUser | null> {
 
     throw error;
   }
+}
+
+export async function getVenueOptions(): Promise<PreferredVenue[]> {
+  const response = await requestAuth<LaravelVenueOptionsResponse>(
+    "/filter-options",
+  );
+
+  return response.data.venues;
+}
+
+export async function updateProfile(formData: FormData): Promise<AuthUser> {
+  const response = await requestAuth<LaravelCurrentUserResponse>(
+    "/profile",
+    {
+      method: "PUT",
+      body: formData,
+    },
+    true,
+  );
+
+  return response.data;
 }
 
 export async function logout(): Promise<void> {

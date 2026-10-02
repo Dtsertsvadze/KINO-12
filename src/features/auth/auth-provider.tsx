@@ -19,8 +19,10 @@ type AuthModal = "login" | "register" | null;
 
 type AuthContextValue = {
   user: AuthUser | null;
+  isLoading: boolean;
   openLogin: () => void;
   openRegister: () => void;
+  updateUser: (user: AuthUser) => void;
   signOut: () => Promise<void>;
 };
 
@@ -28,6 +30,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<AuthUser | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const [activeModal, setActiveModal] = useState<AuthModal>(null);
 
   useEffect(() => {
@@ -43,6 +46,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (isCurrent) {
           setUser(null);
         }
+      })
+      .finally(() => {
+        if (isCurrent) {
+          setIsLoading(false);
+        }
       });
 
     return () => {
@@ -56,7 +64,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const handleAuthenticated = useCallback((authenticatedUser: AuthUser) => {
     setUser(authenticatedUser);
+    setIsLoading(false);
     setActiveModal(null);
+  }, []);
+
+  const updateUser = useCallback((updatedUser: AuthUser) => {
+    setUser(updatedUser);
   }, []);
 
   const signOut = useCallback(async () => {
@@ -69,8 +82,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ user, openLogin, openRegister, signOut }),
-    [openLogin, openRegister, signOut, user],
+    () => ({ user, isLoading, openLogin, openRegister, updateUser, signOut }),
+    [isLoading, openLogin, openRegister, signOut, updateUser, user],
   );
 
   return (

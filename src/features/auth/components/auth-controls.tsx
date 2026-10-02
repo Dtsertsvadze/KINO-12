@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 
 import { useAuth } from "../auth-provider";
@@ -139,12 +141,15 @@ export function AuthControls() {
         onClick={() => setIsMenuOpen((isOpen) => !isOpen)}
       >
         <span className="relative block size-10 shrink-0">
-          <span className="inline-flex size-10 items-center justify-center overflow-hidden rounded-lg bg-input text-xs leading-none font-bold text-white">
+          <span className="relative inline-flex size-10 items-center justify-center overflow-hidden rounded-lg bg-input text-xs leading-none font-bold text-white">
             {user.avatar ? (
-              <img
+              <Image
                 className="size-full object-cover"
                 src={user.avatar}
                 alt=""
+                fill
+                sizes="40px"
+                unoptimized
               />
             ) : (
               getUserInitials(user)
@@ -183,12 +188,15 @@ export function AuthControls() {
           <div className="px-6 pt-6 pb-3" role="none">
             <div className="flex items-center gap-3" role="none">
               <span className="relative block size-12 shrink-0">
-                <span className="inline-flex size-12 items-center justify-center overflow-hidden rounded-[10px] bg-input text-sm leading-none font-bold text-white">
+                <span className="relative inline-flex size-12 items-center justify-center overflow-hidden rounded-[10px] bg-input text-sm leading-none font-bold text-white">
                   {user.avatar ? (
-                    <img
+                    <Image
                       className="size-full object-cover"
                       src={user.avatar}
                       alt=""
+                      fill
+                      sizes="48px"
+                      unoptimized
                     />
                   ) : (
                     getUserInitials(user)
@@ -244,24 +252,24 @@ export function AuthControls() {
             )}
 
             <div className="mt-3 grid" role="none">
-              <button
-                type="button"
-                className="flex h-12 cursor-default items-center gap-3 text-left text-base font-semibold text-white"
+              <Link
+                href="/profile"
+                className="flex h-12 cursor-pointer items-center gap-3 text-left text-base font-semibold text-white transition-colors duration-200 hover:text-brand"
                 role="menuitem"
-                disabled
+                onClick={() => setIsMenuOpen(false)}
               >
                 <ProfileIcon />
                 <span>My Profile</span>
-              </button>
-              <button
-                type="button"
-                className="flex h-12 cursor-default items-center gap-3 text-left text-base font-semibold text-white"
+              </Link>
+              <Link
+                href="/profile/tickets"
+                className="flex h-12 cursor-pointer items-center gap-3 text-left text-base font-semibold text-white transition-colors duration-200 hover:text-brand"
                 role="menuitem"
-                disabled
+                onClick={() => setIsMenuOpen(false)}
               >
                 <TicketIcon />
                 <span>My Tickets</span>
-              </button>
+              </Link>
             </div>
           </div>
 
