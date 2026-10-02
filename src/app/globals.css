@@ -1,9 +1,16 @@
 @import "tailwindcss";
 
+:root {
+  --bg-page: #070c1c;
+}
+
 @theme {
-  --color-brand: #ff3b25;
-  --color-page: #050a0e;
+  --color-brand: #ec3013;
+  --color-page: var(--bg-page);
   --color-panel: #0c1218;
+  --color-input: #1d1f2e;
+  --color-success: #2ecb81;
+  --color-disabled: #676b7a;
   --color-status: #ff8a22;
   --font-sans: Arial, Helvetica, sans-serif;
 }
