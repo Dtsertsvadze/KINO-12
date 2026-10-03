@@ -17,7 +17,7 @@ export type MovieAgeRating = {
   description: string;
 };
 
-export type FeaturedMovie = {
+export type Movie = {
   id: number;
   slug: string;
   title: string;
@@ -36,6 +36,6 @@ export type FeaturedMovie = {
   synopsis: string;
 };
 
-export type FeaturedMoviesResponse = {
-  data: FeaturedMovie[];
+export type MoviesResponse = {
+  data: Movie[];
 };

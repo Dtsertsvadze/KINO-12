@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useEffect, useState, type FocusEvent } from "react";
 
-import type { FeaturedMovie } from "../types";
+import type { Movie } from "../types";
 
 const SLIDE_DURATION_MS = 6500;
 
@@ -47,7 +47,7 @@ function TicketIcon() {
 }
 
 type FeaturedHeroProps = {
-  movies: FeaturedMovie[];
+  movies: Movie[];
 };
 
 export function FeaturedHero({ movies }: FeaturedHeroProps) {

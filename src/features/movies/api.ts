@@ -1,8 +1,8 @@
 import { getApiUrl } from "@/config/api";
-import type { FeaturedMovie, FeaturedMoviesResponse } from "./types";
+import type { Movie, MoviesResponse } from "./types";
 
-export async function getFeaturedMovies(): Promise<FeaturedMovie[]> {
-  const response = await fetch(getApiUrl("/movies/featured"), {
+async function getMovies(path: `/${string}`, requestName: string) {
+  const response = await fetch(getApiUrl(path), {
     headers: {
       Accept: "application/json",
     },
@@ -10,9 +10,17 @@ export async function getFeaturedMovies(): Promise<FeaturedMovie[]> {
   });
 
   if (!response.ok) {
-    throw new Error(`Featured movies request failed with ${response.status}.`);
+    throw new Error(`${requestName} request failed with ${response.status}.`);
   }
 
-  const payload = (await response.json()) as FeaturedMoviesResponse;
+  const payload = (await response.json()) as MoviesResponse;
   return payload.data;
+}
+
+export function getFeaturedMovies(): Promise<Movie[]> {
+  return getMovies("/movies/featured", "Featured movies");
+}
+
+export function getNowPlayingMovies(): Promise<Movie[]> {
+  return getMovies("/movies/now-playing", "Now-playing movies");
 }
