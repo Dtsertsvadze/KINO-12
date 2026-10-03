@@ -1,4 +1,5 @@
 import { getApiUrl } from "@/config/api";
+import { requestAuthenticated } from "@/features/auth/api";
 import type { Movie, MoviesResponse } from "./types";
 
 async function getMovies(path: `/${string}`, requestName: string) {
@@ -23,4 +24,15 @@ export function getFeaturedMovies(): Promise<Movie[]> {
 
 export function getNowPlayingMovies(): Promise<Movie[]> {
   return getMovies("/movies/now-playing", "Now-playing movies");
+}
+
+export function getComingSoonMovies(): Promise<Movie[]> {
+  return getMovies("/movies/coming-soon", "Coming-soon movies");
+}
+
+export async function notifyMovie(movieSlug: string): Promise<void> {
+  await requestAuthenticated(
+    `/movies/${encodeURIComponent(movieSlug)}/notify`,
+    { method: "POST" },
+  );
 }

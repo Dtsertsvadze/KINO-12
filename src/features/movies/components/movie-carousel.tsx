@@ -1,21 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import {
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-  type PointerEvent,
-} from "react";
 
+import { useHorizontalCarousel } from "../hooks/use-horizontal-carousel";
 import type { Movie } from "../types";
-
-type DragState = {
-  active: boolean;
-  startX: number;
-  scrollLeft: number;
-};
 
 type MovieCarouselProps = {
   title: string;
@@ -55,114 +43,14 @@ function CarouselArrow({ direction }: { direction: "previous" | "next" }) {
 }
 
 export function MovieCarousel({ title, movies }: MovieCarouselProps) {
-  const carouselRef = useRef<HTMLDivElement>(null);
-  const [navigation, setNavigation] = useState({
-    hasOverflow: false,
-    atStart: true,
-    atEnd: true,
-  });
-  const dragStateRef = useRef<DragState>({
-    active: false,
-    startX: 0,
-    scrollLeft: 0,
-  });
-
-  const updateNavigation = useCallback(() => {
-    const carousel = carouselRef.current;
-
-    if (!carousel) {
-      return;
-    }
-
-    const maximumScroll = Math.max(
-      0,
-      carousel.scrollWidth - carousel.clientWidth,
-    );
-    const nextNavigation = {
-      hasOverflow: maximumScroll > 0,
-      atStart: carousel.scrollLeft <= 1,
-      atEnd: carousel.scrollLeft >= maximumScroll - 1,
-    };
-
-    setNavigation((currentNavigation) => {
-      if (
-        currentNavigation.hasOverflow === nextNavigation.hasOverflow &&
-        currentNavigation.atStart === nextNavigation.atStart &&
-        currentNavigation.atEnd === nextNavigation.atEnd
-      ) {
-        return currentNavigation;
-      }
-
-      return nextNavigation;
-    });
-  }, []);
-
-  useEffect(() => {
-    const carousel = carouselRef.current;
-
-    if (!carousel) {
-      return;
-    }
-
-    updateNavigation();
-
-    const resizeObserver = new ResizeObserver(updateNavigation);
-    resizeObserver.observe(carousel);
-    carousel.addEventListener("scroll", updateNavigation, { passive: true });
-
-    return () => {
-      resizeObserver.disconnect();
-      carousel.removeEventListener("scroll", updateNavigation);
-    };
-  }, [movies, updateNavigation]);
-
-  function scroll(direction: -1 | 1) {
-    const carousel = carouselRef.current;
-
-    if (!carousel) {
-      return;
-    }
-
-    carousel.scrollBy({
-      left: direction * carousel.clientWidth,
-      behavior: "smooth",
-    });
-  }
-
-  function handlePointerDown(event: PointerEvent<HTMLDivElement>) {
-    const carousel = carouselRef.current;
-
-    if (!carousel) {
-      return;
-    }
-
-    dragStateRef.current = {
-      active: true,
-      startX: event.clientX,
-      scrollLeft: carousel.scrollLeft,
-    };
-    carousel.setPointerCapture(event.pointerId);
-  }
-
-  function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
-    const carousel = carouselRef.current;
-    const dragState = dragStateRef.current;
-
-    if (!carousel || !dragState.active) {
-      return;
-    }
-
-    carousel.scrollLeft =
-      dragState.scrollLeft - (event.clientX - dragState.startX);
-  }
-
-  function stopDragging(event: PointerEvent<HTMLDivElement>) {
-    dragStateRef.current.active = false;
-
-    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
-      event.currentTarget.releasePointerCapture(event.pointerId);
-    }
-  }
+  const {
+    viewportRef,
+    navigation,
+    scrollByPage,
+    handlePointerDown,
+    handlePointerMove,
+    stopDragging,
+  } = useHorizontalCarousel(movies.length);
 
   if (movies.length === 0) {
     return null;
@@ -181,7 +69,7 @@ export function MovieCarousel({ title, movies }: MovieCarouselProps) {
         <div className="relative w-full">
           <div className="relative w-full overflow-hidden">
             <div
-              ref={carouselRef}
+              ref={viewportRef}
               className="flex cursor-grab snap-x snap-mandatory gap-5 overflow-x-auto pr-[4%] pb-1 select-none active:cursor-grabbing [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               style={{
                 maskImage:
@@ -278,7 +166,7 @@ export function MovieCarousel({ title, movies }: MovieCarouselProps) {
                 type="button"
                 className="absolute top-1/2 -left-16 z-20 inline-flex size-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/[0.52] text-white opacity-0 shadow-lg transition-[opacity,background-color] duration-200 group-hover/carousel:opacity-100 hover:bg-black/[0.72] focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 aria-label={`Scroll ${title} backward`}
-                onClick={() => scroll(-1)}
+                onClick={() => scrollByPage(-1)}
                 disabled={navigation.atStart}
               >
                 <CarouselArrow direction="previous" />
@@ -287,7 +175,7 @@ export function MovieCarousel({ title, movies }: MovieCarouselProps) {
                 type="button"
                 className="absolute top-1/2 -right-16 z-20 inline-flex size-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/[0.52] text-white opacity-0 shadow-lg transition-[opacity,background-color] duration-200 group-hover/carousel:opacity-100 hover:bg-black/[0.72] focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
                 aria-label={`Scroll ${title} forward`}
-                onClick={() => scroll(1)}
+                onClick={() => scrollByPage(1)}
                 disabled={navigation.atEnd}
               >
                 <CarouselArrow direction="next" />

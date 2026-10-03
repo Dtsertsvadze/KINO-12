@@ -33,7 +33,7 @@ export type Movie = {
   ageRating: MovieAgeRating;
   genres: MovieGenre[];
   formats: MovieFormat[];
-  synopsis: string;
+  synopsis?: string;
 };
 
 export type MoviesResponse = {

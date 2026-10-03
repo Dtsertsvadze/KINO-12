@@ -115,6 +115,13 @@ async function requestAuth<T>(
   return payload as T;
 }
 
+export function requestAuthenticated<T>(
+  path: `/${string}`,
+  init?: RequestInit,
+): Promise<T> {
+  return requestAuth<T>(path, init, true);
+}
+
 export async function login(credentials: LoginCredentials): Promise<AuthUser> {
   const response = await requestAuth<LaravelAuthResponse>("/login", {
     method: "POST",
