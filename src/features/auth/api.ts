@@ -5,6 +5,7 @@ import type {
   LaravelCurrentUserResponse,
   PreferredVenue,
 } from "./types";
+import { getApiUrl } from "@/config/api";
 
 type LoginCredentials = {
   email: string;
@@ -23,16 +24,6 @@ type LaravelVenueOptionsResponse = {
 };
 
 const TOKEN_STORAGE_KEY = "kinoxii_access_token";
-
-function getApiBaseUrl() {
-  const apiBaseUrl = process.env.NEXT_PUBLIC_LARAVEL_API_URL;
-
-  if (!apiBaseUrl) {
-    throw new AuthApiError("The API URL is not configured.", 0);
-  }
-
-  return apiBaseUrl.replace(/\/$/, "");
-}
 
 function getAccessToken() {
   return window.localStorage.getItem(TOKEN_STORAGE_KEY);
@@ -69,6 +60,7 @@ async function requestAuth<T>(
 ): Promise<T> {
   let response: Response;
   const headers = new Headers(init?.headers);
+  let requestUrl: string;
 
   headers.set("Accept", "application/json");
 
@@ -83,7 +75,13 @@ async function requestAuth<T>(
   }
 
   try {
-    response = await fetch(`${getApiBaseUrl()}${path}`, {
+    requestUrl = getApiUrl(path);
+  } catch {
+    throw new AuthApiError("The API URL is not configured.", 0);
+  }
+
+  try {
+    response = await fetch(requestUrl, {
       ...init,
       cache: "no-store",
       headers,

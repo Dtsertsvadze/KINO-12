@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { AuthControls } from "@/features/auth/components/auth-controls";
 
 export function Navbar() {
@@ -8,12 +10,13 @@ export function Navbar() {
         aria-label="Primary navigation"
       >
         <div className="flex items-center gap-[45px]">
-          <span
-            className="text-xl leading-none font-extrabold tracking-[0.02em] whitespace-nowrap"
+          <Link
+            href="/"
+            className="cursor-pointer text-xl leading-none font-extrabold tracking-[0.02em] whitespace-nowrap focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
             aria-label="Kino Twelve"
           >
             KINO <span className="ml-0.5 text-brand">XII</span>
-          </span>
+          </Link>
           <span className="text-[10px] leading-none font-semibold tracking-[0.14em] uppercase">
             Sessions
           </span>
