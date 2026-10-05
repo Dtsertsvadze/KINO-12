@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useEffect, useState, type FocusEvent } from "react";
 
 import {
@@ -212,13 +213,12 @@ export function FeaturedHero({
                 <TicketIcon />
                 Buy tickets
               </button>
-              <button
-                type="button"
-                className="inline-flex h-11 cursor-default items-center justify-center rounded-full bg-white/[0.12] px-6 text-sm font-bold text-white"
-                disabled
+              <Link
+                href="/sessions"
+                className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full bg-white/[0.12] px-6 text-sm font-bold text-white transition-colors hover:bg-white/[0.2] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
               >
                 All sessions
-              </button>
+              </Link>
             </div>
           </article>
         ))}

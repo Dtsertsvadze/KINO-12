@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 
 import {
   EmptyState,
@@ -103,7 +104,12 @@ export function MovieCarousel({
           <h2 className="text-2xl leading-7 font-extrabold uppercase">
             {title}
           </h2>
-          <span className="text-xs font-bold text-brand">See all</span>
+          <Link
+            href="/sessions"
+            className="text-xs font-bold text-brand transition-colors hover:text-white focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+          >
+            See all
+          </Link>
         </div>
 
         <div className="relative w-full">
