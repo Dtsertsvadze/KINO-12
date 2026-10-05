@@ -84,7 +84,7 @@ export function useHorizontalCarousel(itemCount: number) {
     }
 
     viewport.scrollBy({
-      left: direction * viewport.clientWidth,
+      left: direction * viewport.clientWidth * 0.8,
       behavior: "smooth",
     });
   }

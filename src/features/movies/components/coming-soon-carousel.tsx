@@ -3,14 +3,19 @@
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 
+import {
+  EmptyState,
+  RequestErrorState,
+} from "@/components/feedback/request-state";
 import { AuthApiError } from "@/features/auth/api";
 import { useAuth } from "@/features/auth/auth-provider";
-import { notifyMovie } from "../api";
+import { getAuthenticatedComingSoonMovies, notifyMovie } from "../api";
 import { useHorizontalCarousel } from "../hooks/use-horizontal-carousel";
 import type { Movie } from "../types";
 
 type ComingSoonCarouselProps = {
   movies: Movie[];
+  requestFailed?: boolean;
 };
 
 function formatReleaseDate(releaseDate: string) {
@@ -74,7 +79,10 @@ function CarouselArrow({ direction }: { direction: "previous" | "next" }) {
   );
 }
 
-export function ComingSoonCarousel({ movies }: ComingSoonCarouselProps) {
+export function ComingSoonCarousel({
+  movies,
+  requestFailed = false,
+}: ComingSoonCarouselProps) {
   const { user, isLoading: isAuthLoading, openLogin, signOut } = useAuth();
   const [notifiedMovieIds, setNotifiedMovieIds] = useState(
     () =>
@@ -88,9 +96,12 @@ export function ComingSoonCarousel({ movies }: ComingSoonCarouselProps) {
   const [notificationErrors, setNotificationErrors] = useState<
     Record<number, string>
   >({});
-  const pendingNotificationRef = useRef<Pick<Movie, "id" | "slug"> | null>(
-    null,
-  );
+  const [isRefreshingNotifications, setIsRefreshingNotifications] =
+    useState(false);
+  const [notificationRefreshError, setNotificationRefreshError] =
+    useState<string>();
+  const inFlightMovieIdsRef = useRef(new Set<number>());
+  const notificationRefreshIdRef = useRef(0);
   const {
     viewportRef,
     navigation,
@@ -100,8 +111,63 @@ export function ComingSoonCarousel({ movies }: ComingSoonCarouselProps) {
     stopDragging,
   } = useHorizontalCarousel(movies.length);
 
+  const refreshNotificationStatus = useCallback(async () => {
+    if (!user) {
+      return;
+    }
+
+    const refreshId = notificationRefreshIdRef.current + 1;
+    notificationRefreshIdRef.current = refreshId;
+    setIsRefreshingNotifications(true);
+    setNotificationRefreshError(undefined);
+
+    try {
+      const personalizedMovies = await getAuthenticatedComingSoonMovies();
+      if (notificationRefreshIdRef.current === refreshId) {
+        setNotifiedMovieIds(
+          new Set(
+            personalizedMovies
+              .filter((movie) => movie.isNotified)
+              .map((movie) => movie.id),
+          ),
+        );
+      }
+    } catch (error) {
+      if (notificationRefreshIdRef.current === refreshId) {
+        setNotificationRefreshError(
+          error instanceof Error
+            ? error.message
+            : "Could not refresh reminder status.",
+        );
+      }
+      throw error;
+    } finally {
+      if (notificationRefreshIdRef.current === refreshId) {
+        setIsRefreshingNotifications(false);
+      }
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+
+    void refreshNotificationStatus().catch(async (error: unknown) => {
+      if (error instanceof AuthApiError && error.status === 401) {
+        await signOut();
+        openLogin();
+      }
+    });
+  }, [openLogin, refreshNotificationStatus, signOut, user]);
+
   const subscribeToMovie = useCallback(
     async (movie: Pick<Movie, "id" | "slug">) => {
+      if (inFlightMovieIdsRef.current.has(movie.id)) {
+        return;
+      }
+
+      inFlightMovieIdsRef.current.add(movie.id);
       setSubmittingMovieIds((currentIds) => {
         const nextIds = new Set(currentIds);
         nextIds.add(movie.id);
@@ -115,16 +181,11 @@ export function ComingSoonCarousel({ movies }: ComingSoonCarouselProps) {
 
       try {
         await notifyMovie(movie.slug);
-        setNotifiedMovieIds((currentIds) => {
-          const nextIds = new Set(currentIds);
-          nextIds.add(movie.id);
-          return nextIds;
-        });
+        await refreshNotificationStatus();
       } catch (error) {
         if (error instanceof AuthApiError && error.status === 401) {
-          pendingNotificationRef.current = movie;
           await signOut();
-          openLogin();
+          openLogin(() => subscribeToMovie(movie));
         } else {
           setNotificationErrors((currentErrors) => ({
             ...currentErrors,
@@ -135,6 +196,7 @@ export function ComingSoonCarousel({ movies }: ComingSoonCarouselProps) {
           }));
         }
       } finally {
+        inFlightMovieIdsRef.current.delete(movie.id);
         setSubmittingMovieIds((currentIds) => {
           const nextIds = new Set(currentIds);
           nextIds.delete(movie.id);
@@ -142,19 +204,8 @@ export function ComingSoonCarousel({ movies }: ComingSoonCarouselProps) {
         });
       }
     },
-    [openLogin, signOut],
+    [openLogin, refreshNotificationStatus, signOut],
   );
-
-  useEffect(() => {
-    const pendingMovie = pendingNotificationRef.current;
-
-    if (!user || !pendingMovie) {
-      return;
-    }
-
-    pendingNotificationRef.current = null;
-    void subscribeToMovie(pendingMovie);
-  }, [subscribeToMovie, user]);
 
   function handleNotify(movie: Pick<Movie, "id" | "slug">) {
     if (
@@ -166,16 +217,34 @@ export function ComingSoonCarousel({ movies }: ComingSoonCarouselProps) {
     }
 
     if (!user) {
-      pendingNotificationRef.current = movie;
-      openLogin();
+      openLogin(() => subscribeToMovie(movie));
       return;
     }
 
     void subscribeToMovie(movie);
   }
 
-  if (movies.length === 0) {
-    return null;
+  if (requestFailed || movies.length === 0) {
+    return (
+      <section className="border-b border-white/[0.08] bg-page px-16 py-10 text-white">
+        <div className="mx-auto w-full max-w-[1640px]">
+          <h2 className="mb-6 text-2xl leading-7 font-extrabold uppercase">
+            Coming Soon...
+          </h2>
+          {requestFailed ? (
+            <RequestErrorState
+              title="Coming soon movies could not be loaded"
+              message="Please try again to load upcoming releases."
+            />
+          ) : (
+            <EmptyState
+              title="No upcoming releases"
+              message="No coming-soon titles have been announced yet. Check back soon for new releases."
+            />
+          )}
+        </div>
+      </section>
+    );
   }
 
   return (
@@ -185,7 +254,21 @@ export function ComingSoonCarousel({ movies }: ComingSoonCarouselProps) {
           <h2 className="text-2xl leading-7 font-extrabold uppercase">
             Coming Soon...
           </h2>
-          <span className="text-xs font-bold text-brand">See all</span>
+          {isAuthLoading || isRefreshingNotifications ? (
+            <span className="text-xs font-semibold text-white/[0.5]" role="status">
+              Checking reminders…
+            </span>
+          ) : notificationRefreshError ? (
+            <button
+              type="button"
+              className="cursor-pointer text-xs font-bold text-brand hover:brightness-125"
+              onClick={() => void refreshNotificationStatus().catch(() => undefined)}
+            >
+              Retry reminder status
+            </button>
+          ) : (
+            <span className="text-xs font-bold text-brand">See all</span>
+          )}
         </div>
 
         <div className="relative w-full">

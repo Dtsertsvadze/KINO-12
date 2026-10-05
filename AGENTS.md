@@ -190,6 +190,23 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Disable or guard submission while a request is running to prevent duplicate requests.
 - Preserve accessible dialog labelling, keyboard focus behavior, error announcements, and loading state with `aria-busy` where appropriate.
 
+## Application states and interaction safety
+
+- Apply loading, empty, error, and interaction-safety rules to every page and feature.
+- Give every asynchronous operation a visible loading state, including route loading, filter changes, form submissions, and mutations.
+- Use content-shaped skeletons for session loading instead of blocking the entire page with a spinner.
+- Give every list an explicit empty state that explains why it is empty and provides a reasonable next step when one exists.
+- Never turn a failed request into a blank section, an unexplained empty list, or only a console error.
+- Show failed requests with a useful error message and a retry action.
+- Handle request statuses consistently:
+  - `401`: open authentication and replay the interrupted action after login;
+  - `409`: refresh the contested resource and preserve unaffected user selections;
+  - `422`: map field errors to their matching inputs;
+  - `500`: show a general error message with a retry action.
+- Disable request-triggering buttons while their request is running.
+- Guard mutations synchronously so rapid repeated clicks cannot create duplicate orders, holds, subscriptions, or other writes.
+- After a mutation, render authoritative data returned by the server or refetch it; do not assume a local optimistic update is the stored result.
+
 ## Environment files
 
 - Keep `.env.local` untracked.

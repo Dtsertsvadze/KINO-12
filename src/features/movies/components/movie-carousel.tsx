@@ -2,13 +2,47 @@
 
 import Image from "next/image";
 
+import {
+  EmptyState,
+  RequestErrorState,
+} from "@/components/feedback/request-state";
 import { useHorizontalCarousel } from "../hooks/use-horizontal-carousel";
 import type { Movie } from "../types";
 
 type MovieCarouselProps = {
   title: string;
   movies: Movie[];
+  requestFailed?: boolean;
 };
+
+function MovieCarouselState({
+  title,
+  requestFailed,
+}: {
+  title: string;
+  requestFailed: boolean;
+}) {
+  return (
+    <section className="border-b border-white/[0.08] bg-page px-16 py-10 text-white">
+      <div className="mx-auto w-full max-w-[1640px]">
+        <h2 className="mb-6 text-2xl leading-7 font-extrabold uppercase">
+          {title}
+        </h2>
+        {requestFailed ? (
+          <RequestErrorState
+            title={`${title} could not be loaded`}
+            message="Please try again to load this movie list."
+          />
+        ) : (
+          <EmptyState
+            title={`No ${title.toLowerCase()} movies`}
+            message="There are no titles in this list right now. Check back soon for updated screenings."
+          />
+        )}
+      </div>
+    </section>
+  );
+}
 
 function TicketIcon() {
   return (
@@ -42,7 +76,11 @@ function CarouselArrow({ direction }: { direction: "previous" | "next" }) {
   );
 }
 
-export function MovieCarousel({ title, movies }: MovieCarouselProps) {
+export function MovieCarousel({
+  title,
+  movies,
+  requestFailed = false,
+}: MovieCarouselProps) {
   const {
     viewportRef,
     navigation,
@@ -52,8 +90,10 @@ export function MovieCarousel({ title, movies }: MovieCarouselProps) {
     stopDragging,
   } = useHorizontalCarousel(movies.length);
 
-  if (movies.length === 0) {
-    return null;
+  if (requestFailed || movies.length === 0) {
+    return (
+      <MovieCarouselState title={title} requestFailed={requestFailed} />
+    );
   }
 
   return (

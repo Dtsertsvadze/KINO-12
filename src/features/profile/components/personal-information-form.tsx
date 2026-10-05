@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useRef,
   useState,
   type ChangeEvent,
   type FormEvent,
@@ -72,16 +73,46 @@ function ProfileFormField({
 }
 
 export function PersonalInformationForm() {
-  const { user, isLoading, openLogin } = useAuth();
+  const {
+    user,
+    isLoading,
+    authError,
+    openLogin,
+    retryAuthentication,
+  } = useAuth();
 
   useEffect(() => {
-    if (!isLoading && !user) {
+    if (!isLoading && !authError && !user) {
       openLogin();
     }
-  }, [isLoading, openLogin, user]);
+  }, [authError, isLoading, openLogin, user]);
 
   if (isLoading) {
-    return <p className="text-sm text-white/[0.58]">Loading your profile…</p>;
+    return (
+      <div
+        className="h-80 w-[880px] animate-pulse rounded-2xl bg-white/[0.04] motion-reduce:animate-none"
+        aria-label="Loading your profile"
+        aria-busy="true"
+      />
+    );
+  }
+
+  if (authError) {
+    return (
+      <div
+        className="flex min-h-52 w-[880px] flex-col items-center justify-center rounded-2xl border border-brand/[0.18] bg-brand/[0.05] px-8 text-center"
+        role="alert"
+      >
+        <p className="text-sm text-white/[0.68]">{authError}</p>
+        <button
+          type="button"
+          className="mt-4 inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand px-5 text-xs font-extrabold text-white hover:bg-brand/[0.85]"
+          onClick={retryAuthentication}
+        >
+          Try again
+        </button>
+      </div>
+    );
   }
 
   if (!user) {
@@ -101,10 +132,14 @@ function AuthenticatedProfileForm({ user }: { user: AuthUser }) {
     valuesFromUser(user),
   );
   const [venues, setVenues] = useState<PreferredVenue[]>([]);
+  const [isLoadingVenues, setIsLoadingVenues] = useState(true);
+  const [venueError, setVenueError] = useState<string>();
+  const [venueRequestVersion, setVenueRequestVersion] = useState(0);
   const [fieldErrors, setFieldErrors] = useState<AuthFormErrors>({});
   const [formError, setFormError] = useState<string>();
   const [successMessage, setSuccessMessage] = useState<string>();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const submissionInFlightRef = useRef(false);
 
   useEffect(() => {
     let isCurrent = true;
@@ -116,15 +151,30 @@ function AuthenticatedProfileForm({ user }: { user: AuthUser }) {
         }
       })
       .catch(() => {
-        if (isCurrent && user.preferredVenue) {
-          setVenues([user.preferredVenue]);
+        if (isCurrent) {
+          setVenueError("Venues could not be loaded.");
+
+          if (user.preferredVenue) {
+            setVenues([user.preferredVenue]);
+          }
+        }
+      })
+      .finally(() => {
+        if (isCurrent) {
+          setIsLoadingVenues(false);
         }
       });
 
     return () => {
       isCurrent = false;
     };
-  }, [user.preferredVenue]);
+  }, [user.preferredVenue, venueRequestVersion]);
+
+  function retryVenues() {
+    setIsLoadingVenues(true);
+    setVenueError(undefined);
+    setVenueRequestVersion((version) => version + 1);
+  }
 
   function updateField(field: ProfileField) {
     return (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -139,15 +189,19 @@ function AuthenticatedProfileForm({ user }: { user: AuthUser }) {
     };
   }
 
-  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  async function saveProfile(formData: FormData) {
+    if (submissionInFlightRef.current) {
+      return;
+    }
+
+    submissionInFlightRef.current = true;
     setFieldErrors({});
     setFormError(undefined);
     setSuccessMessage(undefined);
     setIsSubmitting(true);
 
     try {
-      const updatedUser = await updateProfile(new FormData(event.currentTarget));
+      const updatedUser = await updateProfile(formData);
       updateUser(updatedUser);
       setValues(valuesFromUser(updatedUser));
       setSuccessMessage("Changes saved successfully.");
@@ -158,18 +212,29 @@ function AuthenticatedProfileForm({ user }: { user: AuthUser }) {
 
         if (error.status === 401) {
           await signOut();
-          openLogin();
+          openLogin(() => saveProfile(formData));
         }
       } else {
         setFormError("Something went wrong. Please try again.");
       }
     } finally {
+      submissionInFlightRef.current = false;
       setIsSubmitting(false);
     }
   }
 
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    void saveProfile(new FormData(event.currentTarget));
+  }
+
   return (
-    <form className="grid w-[880px] gap-5" noValidate onSubmit={handleSubmit}>
+    <form
+      className="grid w-[880px] gap-5"
+      noValidate
+      aria-busy={isSubmitting}
+      onSubmit={handleSubmit}
+    >
       <ProfileFormField
         id="profile-full-name"
         label="Full name"
@@ -261,6 +326,7 @@ function AuthenticatedProfileForm({ user }: { user: AuthUser }) {
             className={`${inputClassName} cursor-pointer appearance-none pr-11`}
             name="preferredVenueId"
             value={values.preferredVenueId}
+            disabled={isLoadingVenues}
             aria-invalid={Boolean(fieldErrors.preferredVenueId?.[0])}
             aria-describedby={
               fieldErrors.preferredVenueId?.[0]
@@ -269,7 +335,9 @@ function AuthenticatedProfileForm({ user }: { user: AuthUser }) {
             }
             onChange={updateField("preferredVenueId")}
           >
-            <option value="">Select a venue</option>
+            <option value="">
+              {isLoadingVenues ? "Loading venues…" : "Select a venue"}
+            </option>
             {venues.map((venue) => (
               <option key={venue.id} value={venue.id}>
                 {venue.name}
@@ -292,6 +360,20 @@ function AuthenticatedProfileForm({ user }: { user: AuthUser }) {
           </svg>
         </span>
       </ProfileFormField>
+
+      {venueError ? (
+        <div className="-mt-3 flex items-center gap-3" role="alert">
+          <p className="text-xs text-brand">{venueError}</p>
+          <button
+            type="button"
+            className="cursor-pointer text-xs font-bold text-white underline decoration-brand underline-offset-4 disabled:cursor-wait disabled:opacity-60"
+            disabled={isLoadingVenues}
+            onClick={retryVenues}
+          >
+            {isLoadingVenues ? "Retrying…" : "Try again"}
+          </button>
+        </div>
+      ) : null}
 
       <div className="mt-3 flex items-center gap-4">
         <button

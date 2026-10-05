@@ -3,6 +3,10 @@
 import Image from "next/image";
 import { useEffect, useState, type FocusEvent } from "react";
 
+import {
+  EmptyState,
+  RequestErrorState,
+} from "@/components/feedback/request-state";
 import type { Movie } from "../types";
 
 const SLIDE_DURATION_MS = 6500;
@@ -48,9 +52,13 @@ function TicketIcon() {
 
 type FeaturedHeroProps = {
   movies: Movie[];
+  requestFailed?: boolean;
 };
 
-export function FeaturedHero({ movies }: FeaturedHeroProps) {
+export function FeaturedHero({
+  movies,
+  requestFailed = false,
+}: FeaturedHeroProps) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
 
@@ -74,10 +82,26 @@ export function FeaturedHero({ movies }: FeaturedHeroProps) {
     return () => window.clearTimeout(timer);
   }, [activeIndex, isPaused, movies.length]);
 
+  if (requestFailed) {
+    return (
+      <section className="h-[760px] bg-page p-16 text-white">
+        <RequestErrorState
+          className="h-full"
+          title="Featured movies could not be loaded"
+          message="Please retry the request to restore the featured movie preview."
+        />
+      </section>
+    );
+  }
+
   if (movies.length === 0) {
     return (
-      <section className="flex h-[760px] items-center justify-center bg-page text-sm text-white/[0.58]">
-        Featured movies are unavailable right now.
+      <section className="h-[760px] bg-page p-16 text-white">
+        <EmptyState
+          className="h-full"
+          title="No featured movies"
+          message="There are no featured titles available right now. Check back soon for the next premiere."
+        />
       </section>
     );
   }

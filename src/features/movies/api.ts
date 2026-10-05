@@ -30,6 +30,14 @@ export function getComingSoonMovies(): Promise<Movie[]> {
   return getMovies("/movies/coming-soon", "Coming-soon movies");
 }
 
+export async function getAuthenticatedComingSoonMovies(): Promise<Movie[]> {
+  const response = await requestAuthenticated<MoviesResponse>(
+    "/movies/coming-soon",
+  );
+
+  return response.data;
+}
+
 export async function notifyMovie(movieSlug: string): Promise<void> {
   await requestAuthenticated(
     `/movies/${encodeURIComponent(movieSlug)}/notify`,

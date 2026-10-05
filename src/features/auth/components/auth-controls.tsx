@@ -67,10 +67,19 @@ function LogoutIcon() {
 }
 
 export function AuthControls() {
-  const { user, openLogin, openRegister, signOut } = useAuth();
+  const {
+    user,
+    isLoading,
+    authError,
+    openLogin,
+    openRegister,
+    retryAuthentication,
+    signOut,
+  } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isSigningOut, setIsSigningOut] = useState(false);
   const profileAreaRef = useRef<HTMLDivElement>(null);
+  const signOutInFlightRef = useRef(false);
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -98,6 +107,29 @@ export function AuthControls() {
     };
   }, [isMenuOpen]);
 
+  if (isLoading) {
+    return (
+      <div
+        className="h-11 w-[216px] animate-pulse rounded-full bg-white/[0.1] motion-reduce:animate-none"
+        aria-label="Checking your session"
+        aria-busy="true"
+      />
+    );
+  }
+
+  if (authError) {
+    return (
+      <button
+        type="button"
+        className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full border border-brand/[0.5] px-5 text-xs font-bold text-white transition-colors hover:bg-brand/[0.1] disabled:cursor-wait disabled:opacity-60"
+        title={authError}
+        onClick={retryAuthentication}
+      >
+        Account unavailable · Retry
+      </button>
+    );
+  }
+
   if (!user) {
     return (
       <div className="flex items-center gap-4">
@@ -111,7 +143,7 @@ export function AuthControls() {
         <button
           type="button"
           className="inline-flex h-11 w-[94px] cursor-pointer items-center justify-center rounded-full bg-white text-sm leading-none font-extrabold whitespace-nowrap text-[#111111] transition-colors duration-200 ease-out hover:bg-white/[0.88] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white motion-reduce:transition-none"
-          onClick={openLogin}
+          onClick={() => openLogin()}
         >
           Log in
         </button>
@@ -120,12 +152,18 @@ export function AuthControls() {
   }
 
   async function handleSignOut() {
+    if (signOutInFlightRef.current) {
+      return;
+    }
+
+    signOutInFlightRef.current = true;
     setIsSigningOut(true);
 
     try {
       await signOut();
       setIsMenuOpen(false);
     } finally {
+      signOutInFlightRef.current = false;
       setIsSigningOut(false);
     }
   }
