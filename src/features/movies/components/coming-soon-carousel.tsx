@@ -226,7 +226,7 @@ export function ComingSoonCarousel({
 
   if (requestFailed || movies.length === 0) {
     return (
-      <section className="border-b border-white/[0.08] bg-page px-16 py-10 text-white">
+      <section className="bg-page px-16 py-10 text-white">
         <div className="mx-auto w-full max-w-[1640px]">
           <h2 className="mb-6 text-2xl leading-7 font-extrabold uppercase">
             Coming Soon...
@@ -248,7 +248,7 @@ export function ComingSoonCarousel({
   }
 
   return (
-    <section className="group/carousel border-b border-white/[0.08] bg-page px-16 py-10">
+    <section className="group/carousel bg-page px-16 py-10">
       <div className="mx-auto w-full max-w-[1640px]">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl leading-7 font-extrabold uppercase">

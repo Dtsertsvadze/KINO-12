@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Archivo } from "next/font/google";
+import { Footer } from "@/components/layout/footer";
 import { Navbar } from "@/components/navigation/navbar";
 import { AuthProvider } from "@/features/auth/auth-provider";
 import "./globals.css";
@@ -20,6 +21,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <AuthProvider>
           <Navbar />
           {children}
+          <Footer />
         </AuthProvider>
       </body>
     </html>
