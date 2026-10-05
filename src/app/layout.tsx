@@ -19,9 +19,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="en" className={archivo.variable}>
       <body className="min-h-[1080px] min-w-[1920px] bg-page font-sans text-white">
         <AuthProvider>
-          <Navbar />
-          {children}
-          <Footer />
+          <div className="flex min-h-[1080px] flex-col">
+            <Navbar />
+            <div className="flex-1">{children}</div>
+            <Footer />
+          </div>
         </AuthProvider>
       </body>
     </html>
