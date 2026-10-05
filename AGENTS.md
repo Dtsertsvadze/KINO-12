@@ -173,6 +173,23 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 - Announce important asynchronous errors and status changes.
 - Disabled controls must accurately represent unavailable behavior.
 
+## Modal behavior
+
+- Build application modals on the shared dialog foundation so behavior stays consistent.
+- Darken and/or blur the page behind every open modal.
+- Every modal must close through:
+  - its X button;
+  - a visible Close button, when one is present;
+  - the Escape key;
+  - clicking the overlay outside the dialog surface.
+- Validate text fields on blur instead of waiting only for form submission.
+- After a field has been validated, show a green border or checkmark when it is valid.
+- Show a red border and a clear, associated error message when a field is invalid.
+- Validate file inputs when the user selects a file.
+- Show an explicit loading state while a form request is running.
+- Disable or guard submission while a request is running to prevent duplicate requests.
+- Preserve accessible dialog labelling, keyboard focus behavior, error announcements, and loading state with `aria-busy` where appropriate.
+
 ## Environment files
 
 - Keep `.env.local` untracked.

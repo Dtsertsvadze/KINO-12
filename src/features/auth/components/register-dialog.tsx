@@ -69,6 +69,7 @@ export function RegisterDialog({
   onAuthenticated,
 }: RegisterDialogProps) {
   const formRef = useRef<HTMLFormElement>(null);
+  const submissionInFlightRef = useRef(false);
   const [values, setValues] = useState<RegisterValues>(initialValues);
   const [touched, setTouched] = useState<TouchedFields>({});
   const [fieldErrors, setFieldErrors] = useState<AuthFormErrors>({});
@@ -131,7 +132,12 @@ export function RegisterDialog({
   }
 
   function isFieldValid(field: RegisterField) {
-    return Boolean(values[field] && !fieldErrors[field] && !clientErrors[field]);
+    return Boolean(
+      touched[field] &&
+        values[field] &&
+        !fieldErrors[field] &&
+        !clientErrors[field],
+    );
   }
 
   function handleAvatarChange(event: ChangeEvent<HTMLInputElement>) {
@@ -181,10 +187,14 @@ export function RegisterDialog({
     });
     setFormError(undefined);
 
-    if (Object.keys(clientErrors).length > 0) {
+    if (
+      Object.keys(clientErrors).length > 0 ||
+      submissionInFlightRef.current
+    ) {
       return;
     }
 
+    submissionInFlightRef.current = true;
     setIsSubmitting(true);
 
     try {
@@ -199,6 +209,7 @@ export function RegisterDialog({
         setFormError("Something went wrong. Please try again.");
       }
     } finally {
+      submissionInFlightRef.current = false;
       setIsSubmitting(false);
     }
   }
@@ -218,6 +229,7 @@ export function RegisterDialog({
         ref={formRef}
         className="flex min-h-0 flex-1 flex-col"
         noValidate
+        aria-busy={isSubmitting}
         onSubmit={handleSubmit}
       >
         <FormError message={formError} />

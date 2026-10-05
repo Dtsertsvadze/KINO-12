@@ -41,7 +41,7 @@ export function AuthDialog({
     }
   }, [open]);
 
-  function handleBackdropClick(event: React.MouseEvent<HTMLDialogElement>) {
+  function handleOverlayClick(event: React.MouseEvent<HTMLDialogElement>) {
     const dialog = dialogRef.current;
 
     if (!dialog) {
@@ -74,14 +74,14 @@ export function AuthDialog({
         event.preventDefault();
         onRequestClose();
       }}
-      onMouseDown={handleBackdropClick}
+      onClick={handleOverlayClick}
     >
       <div
         className="relative flex h-full flex-col p-8"
       >
         <button
           type="button"
-          className="absolute top-8 right-8 inline-flex size-5 items-center justify-center text-white/[0.7] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          className="absolute top-8 right-8 inline-flex size-5 cursor-pointer items-center justify-center text-white/[0.7] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           aria-label="Close dialog"
           onClick={onRequestClose}
         >

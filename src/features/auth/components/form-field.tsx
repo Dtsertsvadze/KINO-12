@@ -38,7 +38,13 @@ export function FormField({
             compact
               ? "h-10 rounded-lg bg-input px-3 text-[11px]"
               : "h-12 rounded-xl bg-white/[0.055] px-4 text-sm focus:bg-white/[0.08]"
-          } ${error ? "border-brand" : "border-white/[0.1]"} ${className}`}
+          } ${
+            error
+              ? "border-brand"
+              : valid
+                ? "border-success"
+                : "border-white/[0.1]"
+          } ${className}`}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : undefined}
         />

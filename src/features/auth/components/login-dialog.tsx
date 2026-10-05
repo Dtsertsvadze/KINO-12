@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type ChangeEvent, type FormEvent } from "react";
+import { useRef, useState, type ChangeEvent, type FormEvent } from "react";
 
 import { AuthApiError, login } from "../api";
 import type { AuthFormErrors, AuthUser } from "../types";
@@ -40,6 +40,7 @@ export function LoginDialog({
   onShowRegister,
   onAuthenticated,
 }: LoginDialogProps) {
+  const submissionInFlightRef = useRef(false);
   const [values, setValues] = useState<LoginValues>(initialValues);
   const [touched, setTouched] = useState<Partial<Record<LoginField, boolean>>>({});
   const [fieldErrors, setFieldErrors] = useState<AuthFormErrors>({});
@@ -89,7 +90,12 @@ export function LoginDialog({
   }
 
   function isFieldValid(field: LoginField) {
-    return Boolean(values[field] && !fieldErrors[field] && !clientErrors[field]);
+    return Boolean(
+      touched[field] &&
+        values[field] &&
+        !fieldErrors[field] &&
+        !clientErrors[field],
+    );
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -97,10 +103,14 @@ export function LoginDialog({
     clearErrors();
     setTouched({ email: true, password: true });
 
-    if (Object.keys(clientErrors).length > 0) {
+    if (
+      Object.keys(clientErrors).length > 0 ||
+      submissionInFlightRef.current
+    ) {
       return;
     }
 
+    submissionInFlightRef.current = true;
     setIsSubmitting(true);
 
     try {
@@ -121,6 +131,7 @@ export function LoginDialog({
         setFormError("Something went wrong. Please try again.");
       }
     } finally {
+      submissionInFlightRef.current = false;
       setIsSubmitting(false);
     }
   }
@@ -137,6 +148,7 @@ export function LoginDialog({
       <form
         className="flex min-h-0 flex-1 flex-col"
         noValidate
+        aria-busy={isSubmitting}
         onSubmit={handleSubmit}
       >
         <div className="grid gap-3.5">
