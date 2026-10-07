@@ -2,7 +2,11 @@ import { getApiUrl } from "@/config/api";
 
 import type {
   FilterOptionsResponse,
+  MovieVenueSessions,
+  MovieVenueSessionsResponse,
   SessionFilterOptions,
+  SessionDetail,
+  SessionResponse,
   SessionsQuery,
   SessionsResponse,
 } from "./types";
@@ -73,4 +77,26 @@ export function getSessions(query: SessionsQuery): Promise<SessionsResponse> {
     `/sessions?${params.toString()}`,
     "Sessions",
   );
+}
+
+export async function getSession(sessionId: string): Promise<SessionDetail> {
+  const response = await requestSessionsApi<SessionResponse>(
+    `/sessions/${encodeURIComponent(sessionId)}`,
+    "Session",
+  );
+
+  return response.data;
+}
+
+export async function getMovieVenueSessions(
+  movieSlug: string,
+  date: string,
+): Promise<MovieVenueSessions[]> {
+  const params = new URLSearchParams({ date });
+  const response = await requestSessionsApi<MovieVenueSessionsResponse>(
+    `/movies/${encodeURIComponent(movieSlug)}/sessions?${params.toString()}`,
+    "Movie sessions",
+  );
+
+  return response.data;
 }

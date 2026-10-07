@@ -45,6 +45,23 @@ export type CinemaSession = {
   language: SessionLanguage;
 };
 
+export type SessionDetail = CinemaSession & {
+  movie: Movie;
+};
+
+export type SessionResponse = {
+  data: SessionDetail;
+};
+
+export type MovieVenueSessions = {
+  venue: VenueSummary;
+  sessions: CinemaSession[];
+};
+
+export type MovieVenueSessionsResponse = {
+  data: MovieVenueSessions[];
+};
+
 export type SessionMovieGroup = {
   movie: Movie;
   sessions: CinemaSession[];

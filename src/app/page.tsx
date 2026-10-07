@@ -6,6 +6,8 @@ import {
 import { ComingSoonCarousel } from "@/features/movies/components/coming-soon-carousel";
 import { FeaturedHero } from "@/features/movies/components/featured-hero";
 import { MovieCarousel } from "@/features/movies/components/movie-carousel";
+import { getMovieSessionIds } from "@/features/movies/session-links";
+import { getTodayInTbilisi } from "@/features/sessions/query";
 
 export default async function Home() {
   const [featuredResult, nowPlayingResult, comingSoonResult] =
@@ -21,16 +23,22 @@ export default async function Home() {
     nowPlayingResult.status === "fulfilled" ? nowPlayingResult.value : [];
   const comingSoonMovies =
     comingSoonResult.status === "fulfilled" ? comingSoonResult.value : [];
+  const sessionIdsByMovieId = await getMovieSessionIds(
+    [...featuredMovies, ...nowPlayingMovies],
+    getTodayInTbilisi(),
+  );
 
   return (
     <main className="min-h-[1080px] bg-page">
       <FeaturedHero
         movies={featuredMovies}
+        sessionIdsByMovieId={sessionIdsByMovieId}
         requestFailed={featuredResult.status === "rejected"}
       />
       <MovieCarousel
         title="Now Playing"
         movies={nowPlayingMovies}
+        sessionIdsByMovieId={sessionIdsByMovieId}
         requestFailed={nowPlayingResult.status === "rejected"}
       />
       <ComingSoonCarousel

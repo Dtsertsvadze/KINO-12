@@ -39,3 +39,14 @@ export type Movie = {
 export type MoviesResponse = {
   data: Movie[];
 };
+
+export type MovieDetail = Movie & {
+  synopsis: string;
+  director: string | null;
+  cast: string | null;
+  availableDates: string[];
+};
+
+export type MovieDetailResponse = {
+  data: MovieDetail;
+};

@@ -13,6 +13,7 @@ import type { Movie } from "../types";
 type MovieCarouselProps = {
   title: string;
   movies: Movie[];
+  sessionIdsByMovieId: Record<number, number>;
   requestFailed?: boolean;
 };
 
@@ -77,9 +78,51 @@ function CarouselArrow({ direction }: { direction: "previous" | "next" }) {
   );
 }
 
+function MovieCardDetails({ movie }: { movie: Movie }) {
+  return (
+    <>
+      <div className="relative h-[330px] shrink-0 overflow-hidden rounded-xl bg-white/[0.04] transition-[height] duration-300 ease-out group-hover/movie:h-64 group-focus-within/movie:h-64 motion-reduce:transition-none">
+        {movie.posterUrl ? (
+          <Image
+            className="pointer-events-none object-cover"
+            src={movie.posterUrl}
+            alt={`${movie.title} poster`}
+            fill
+            sizes="236px"
+          />
+        ) : (
+          <div className="flex size-full items-center justify-center px-5 text-center text-sm text-white/[0.45]">
+            Poster unavailable
+          </div>
+        )}
+      </div>
+
+      <h3 className="mt-3 truncate text-base leading-5 font-bold text-white">
+        {movie.title}
+      </h3>
+      <p className="mt-1 truncate text-[11px] leading-4 text-white/[0.48]">
+        {movie.genres[0]?.name ?? movie.kind} · {movie.runtimeMinutes} min
+      </p>
+      <p
+        className="mt-2 text-[11px] leading-4 font-semibold text-brand"
+        title={movie.ageRating.description}
+      >
+        {movie.ageRating.code}
+      </p>
+
+      <div className="mt-0 grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,margin,opacity] duration-300 group-hover/movie:mt-2 group-hover/movie:grid-rows-[1fr] group-hover/movie:opacity-100 group-focus-within/movie:mt-2 group-focus-within/movie:grid-rows-[1fr] group-focus-within/movie:opacity-100 motion-reduce:transition-none">
+        <p className="line-clamp-3 overflow-hidden text-sm leading-5 text-white/[0.66]">
+          {movie.synopsis}
+        </p>
+      </div>
+    </>
+  );
+}
+
 export function MovieCarousel({
   title,
   movies,
+  sessionIdsByMovieId,
   requestFailed = false,
 }: MovieCarouselProps) {
   const {
@@ -131,78 +174,54 @@ export function MovieCarousel({
               onPointerUp={stopDragging}
               onPointerCancel={stopDragging}
             >
-              {movies.map((movie) => (
-                <article
-                  key={movie.id}
-                  className="group/movie flex h-[494px] w-[260px] shrink-0 snap-start flex-col rounded-2xl bg-input p-3 outline-none transition-[width] duration-300 ease-out hover:w-[480px] focus:w-[480px] focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-page motion-reduce:transition-none"
-                  aria-label={`${movie.title} details`}
-                  tabIndex={0}
-                >
-                  <div className="relative h-[330px] shrink-0 overflow-hidden rounded-xl bg-white/[0.04] transition-[height] duration-300 ease-out group-hover/movie:h-64 group-focus/movie:h-64 motion-reduce:transition-none">
-                    {movie.posterUrl ? (
-                      <Image
-                        className={`pointer-events-none object-cover transition-opacity duration-300 motion-reduce:transition-none ${
-                          movie.backdropUrl
-                            ? "group-hover/movie:opacity-0 group-focus/movie:opacity-0"
-                            : ""
-                        }`}
-                        src={movie.posterUrl}
-                        alt={`${movie.title} poster`}
-                        fill
-                        sizes="236px"
-                      />
+              {movies.map((movie) => {
+                const sessionId = sessionIdsByMovieId[movie.id];
+
+                return (
+                  <article
+                    key={movie.id}
+                    className="group/movie flex h-[494px] w-[260px] shrink-0 snap-start flex-col rounded-2xl bg-input p-3 transition-[width] duration-300 ease-out hover:w-[480px] focus-within:w-[480px] motion-reduce:transition-none"
+                  >
+                    {sessionId ? (
+                      <Link
+                        href={`/session/${sessionId}`}
+                        className="block rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                        aria-label={`View details for ${movie.title}`}
+                      >
+                        <MovieCardDetails movie={movie} />
+                      </Link>
                     ) : (
-                      <div className="flex size-full items-center justify-center px-5 text-center text-sm text-white/[0.45]">
-                        Poster unavailable
+                      <div>
+                        <MovieCardDetails movie={movie} />
                       </div>
                     )}
 
-                    {movie.backdropUrl ? (
-                      <Image
-                        className="pointer-events-none object-cover opacity-0 transition-opacity duration-300 group-hover/movie:opacity-100 group-focus/movie:opacity-100 motion-reduce:transition-none"
-                        src={movie.backdropUrl}
-                        alt=""
-                        fill
-                        sizes="30rem"
-                      />
-                    ) : null}
-                  </div>
-
-                  <h3 className="mt-3 truncate text-base leading-5 font-bold text-white">
-                    {movie.title}
-                  </h3>
-                  <p className="mt-1 truncate text-[11px] leading-4 text-white/[0.48]">
-                    {movie.genres[0]?.name ?? movie.kind} ·{" "}
-                    {movie.runtimeMinutes} min
-                  </p>
-                  <p
-                    className="mt-2 text-[11px] leading-4 font-semibold text-brand"
-                    title={movie.ageRating.description}
-                  >
-                    {movie.ageRating.code}
-                  </p>
-
-                  <div className="mt-0 grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,margin,opacity] duration-300 group-hover/movie:mt-2 group-hover/movie:grid-rows-[1fr] group-hover/movie:opacity-100 group-focus/movie:mt-2 group-focus/movie:grid-rows-[1fr] group-focus/movie:opacity-100 motion-reduce:transition-none">
-                    <p className="line-clamp-3 overflow-hidden text-sm leading-5 text-white/[0.66]">
-                      {movie.synopsis}
-                    </p>
-                  </div>
-
-                  <div className="mt-auto flex items-center justify-between gap-3">
-                    <span className="text-xs font-semibold text-white">
-                      From ₾{movie.fromPrice}
-                    </span>
-                    <button
-                      type="button"
-                      className="inline-flex h-9 cursor-default items-center justify-center gap-1.5 rounded-full bg-brand px-4 text-xs font-extrabold text-white"
-                      disabled
-                    >
-                      <TicketIcon />
-                      Buy Ticket
-                    </button>
-                  </div>
-                </article>
-              ))}
+                    <div className="mt-auto flex items-center justify-between gap-3">
+                      <span className="text-xs font-semibold text-white">
+                        From ₾{movie.fromPrice}
+                      </span>
+                      {sessionId ? (
+                        <Link
+                          href={`/session/${sessionId}`}
+                          className="inline-flex h-9 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-brand px-4 text-xs font-extrabold text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                        >
+                          <TicketIcon />
+                          Buy Ticket
+                        </Link>
+                      ) : (
+                        <button
+                          type="button"
+                          className="inline-flex h-9 cursor-not-allowed items-center justify-center gap-1.5 rounded-full bg-brand px-4 text-xs font-extrabold text-white opacity-45"
+                          disabled
+                        >
+                          <TicketIcon />
+                          No sessions
+                        </button>
+                      )}
+                    </div>
+                  </article>
+                );
+              })}
             </div>
           </div>
 

@@ -53,11 +53,13 @@ function TicketIcon() {
 
 type FeaturedHeroProps = {
   movies: Movie[];
+  sessionIdsByMovieId: Record<number, number>;
   requestFailed?: boolean;
 };
 
 export function FeaturedHero({
   movies,
+  sessionIdsByMovieId,
   requestFailed = false,
 }: FeaturedHeroProps) {
   const [activeIndex, setActiveIndex] = useState(0);
@@ -205,14 +207,24 @@ export function FeaturedHero({
             </p>
 
             <div className="mt-6 flex items-center gap-3">
-              <button
-                type="button"
-                className="inline-flex h-11 cursor-default items-center justify-center gap-2 rounded-full bg-brand px-6 text-sm font-extrabold text-white"
-                disabled
-              >
-                <TicketIcon />
-                Buy tickets
-              </button>
+              {sessionIdsByMovieId[movie.id] ? (
+                <Link
+                  href={`/session/${sessionIdsByMovieId[movie.id]}`}
+                  className="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-brand px-6 text-sm font-extrabold text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                >
+                  <TicketIcon />
+                  Buy tickets
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  className="inline-flex h-11 cursor-not-allowed items-center justify-center gap-2 rounded-full bg-brand px-6 text-sm font-extrabold text-white opacity-45"
+                  disabled
+                >
+                  <TicketIcon />
+                  No sessions
+                </button>
+              )}
               <Link
                 href="/sessions"
                 className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full bg-white/[0.12] px-6 text-sm font-bold text-white transition-colors hover:bg-white/[0.2] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"

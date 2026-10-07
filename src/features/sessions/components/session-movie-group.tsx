@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 import type {
   CinemaSession,
@@ -25,14 +26,14 @@ function formatPrice(price: number) {
 
 function SessionCard({ session }: { session: CinemaSession }) {
   const availabilityTone = session.seatsLeft <= 10 ? "text-brand" : "text-success";
-
-  return (
-    <div
-      className={`flex h-[116px] w-[270px] shrink-0 flex-col rounded-xl bg-input p-4 ${
-        session.isSoldOut ? "opacity-35" : ""
-      }`}
-      aria-label={`${session.time}, ${session.venue.name}, Hall ${session.hall.name}, ${session.format.name}, ${session.language.name}${session.isSoldOut ? ", sold out" : ""}`}
-    >
+  const label = `${session.time}, ${session.venue.name}, Hall ${session.hall.name}, ${session.format.name}, ${session.language.name}${session.isSoldOut ? ", sold out" : ""}`;
+  const className = `flex h-[116px] w-[270px] shrink-0 flex-col rounded-xl bg-input p-4 ${
+    session.isSoldOut
+      ? "cursor-not-allowed opacity-35"
+      : "cursor-pointer transition-colors hover:bg-white/[0.12] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+  }`;
+  const content = (
+    <>
       <div className="flex items-start justify-between gap-3">
         <time
           className="text-base leading-none font-extrabold text-white"
@@ -65,7 +66,25 @@ function SessionCard({ session }: { session: CinemaSession }) {
           from ₾{formatPrice(session.price)}
         </span>
       </div>
-    </div>
+    </>
+  );
+
+  if (session.isSoldOut) {
+    return (
+      <div className={className} aria-label={label} aria-disabled="true">
+        {content}
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href={`/session/${session.id}`}
+      className={className}
+      aria-label={`View ${label}`}
+    >
+      {content}
+    </Link>
   );
 }
 
@@ -75,10 +94,16 @@ export function SessionMovieGroup({
   group: SessionMovieGroupType;
 }) {
   const { movie, sessions } = group;
+  const detailSession =
+    sessions.find((session) => !session.isSoldOut) ?? sessions[0];
 
   return (
     <section className="border-b border-white/[0.1] py-9 first:pt-6 last:border-b-0">
-      <div className="flex items-center gap-4">
+      <Link
+        href={`/session/${detailSession.id}`}
+        className="group/movie-summary flex w-fit items-center gap-4 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+        aria-label={`View details for ${movie.title}`}
+      >
         <div className="relative h-[84px] w-16 shrink-0 overflow-hidden rounded-lg bg-white/[0.05]">
           {movie.posterUrl ? (
             <Image
@@ -97,7 +122,7 @@ export function SessionMovieGroup({
 
         <div className="min-w-0">
           <div className="flex items-center gap-3">
-            <h2 className="truncate text-base font-extrabold text-white">
+            <h2 className="truncate text-base font-extrabold text-white transition-colors group-hover/movie-summary:text-brand">
               {movie.title}
             </h2>
             <span
@@ -111,7 +136,7 @@ export function SessionMovieGroup({
             {movie.runtimeMinutes} min
           </p>
         </div>
-      </div>
+      </Link>
 
       <div className="mt-5 flex gap-3 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {sessions.map((session) => (
