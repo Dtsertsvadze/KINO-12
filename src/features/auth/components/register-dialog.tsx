@@ -8,10 +8,11 @@ import {
   type FormEvent,
 } from "react";
 
+import { FormError, FormField } from "@/components/forms/form-field";
+
 import { AuthApiError, register } from "../api";
 import type { AuthFormErrors, AuthUser } from "../types";
 import { AuthDialog } from "./auth-dialog";
-import { FormError, FormField } from "./form-field";
 
 const MAX_AVATAR_SIZE = 2 * 1024 * 1024;
 const ACCEPTED_AVATAR_TYPES = ["image/jpeg", "image/png", "image/webp"];

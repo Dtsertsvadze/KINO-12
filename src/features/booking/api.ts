@@ -1,6 +1,9 @@
 import { requestAuthenticated } from "@/features/auth/api";
 
 import type {
+  CheckoutInput,
+  CompletedOrder,
+  CompletedOrderResponse,
   HoldSeatInput,
   SeatHold,
   SeatHoldResponse,
@@ -39,4 +42,21 @@ export async function releaseHold(holdId: string): Promise<void> {
     `/holds/${encodeURIComponent(holdId)}`,
     { method: "DELETE" },
   );
+}
+
+export async function completeOrder(
+  checkout: CheckoutInput,
+): Promise<CompletedOrder> {
+  const response = await requestAuthenticated<CompletedOrderResponse>(
+    "/orders",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(checkout),
+    },
+  );
+
+  return response.data;
 }

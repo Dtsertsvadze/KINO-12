@@ -6,6 +6,7 @@ type FormFieldProps = InputHTMLAttributes<HTMLInputElement> & {
   error?: string;
   valid?: boolean;
   compact?: boolean;
+  containerClassName?: string;
 };
 
 export function FormField({
@@ -14,13 +15,17 @@ export function FormField({
   error,
   valid = false,
   compact = false,
+  containerClassName = "",
   className = "",
   ...inputProps
 }: FormFieldProps) {
   const errorId = `${id}-error`;
 
   return (
-    <label className={compact ? "grid gap-1.5" : "grid gap-2"} htmlFor={id}>
+    <label
+      className={`${compact ? "grid gap-1.5" : "grid gap-2"} ${containerClassName}`}
+      htmlFor={id}
+    >
       <span
         className={
           compact
@@ -34,7 +39,7 @@ export function FormField({
         <input
           {...inputProps}
           id={id}
-          className={`w-full border pr-10 text-white outline-none transition placeholder:text-white/[0.4] focus:border-brand ${
+          className={`w-full border pr-10 text-white outline-none transition placeholder:text-white/[0.4] focus:border-brand disabled:cursor-not-allowed disabled:opacity-60 ${
             compact
               ? "h-10 rounded-lg bg-input px-3 text-[11px]"
               : "h-12 rounded-xl bg-white/[0.055] px-4 text-sm focus:bg-white/[0.08]"
@@ -80,6 +85,7 @@ export function FormField({
       {error ? (
         <span
           id={errorId}
+          role="alert"
           className={
             compact
               ? "text-[10px] leading-4 text-brand"

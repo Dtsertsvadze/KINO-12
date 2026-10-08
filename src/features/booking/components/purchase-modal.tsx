@@ -1,10 +1,12 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { AppDialog } from "@/components/overlays/app-dialog";
 import { AuthApiError } from "@/features/auth/api";
 import { useAuth } from "@/features/auth/auth-provider";
+import type { AuthFormErrors } from "@/features/auth/types";
 import { getSessionFilterOptions } from "@/features/sessions/api";
 import type {
   CinemaSession,
@@ -12,9 +14,11 @@ import type {
   TicketTypeSlug,
 } from "@/features/sessions/types";
 
-import { getSeatMap, holdSeats, releaseHold } from "../api";
-import type { HallSeat, SeatHold, SeatMap } from "../types";
+import { completeOrder, getSeatMap, holdSeats, releaseHold } from "../api";
+import type { CompletedOrder, HallSeat, SeatHold, SeatMap } from "../types";
+import { CheckoutStep, type CheckoutValues } from "./checkout-step";
 import { HallSeatMap } from "./hall-seat-map";
+import { OrderConfirmation } from "./order-confirmation";
 import {
   SeatPriceSummary,
   type SelectedSeatLine,
@@ -80,19 +84,33 @@ function CloseIcon() {
   );
 }
 
-function StepIndicator({ step }: { step: 1 | 2 }) {
+function StepIndicator({
+  step,
+  disabled,
+  onSelectSeats,
+}: {
+  step: 1 | 2;
+  disabled: boolean;
+  onSelectSeats: () => void;
+}) {
   return (
     <ol
       className="grid grid-cols-2 overflow-hidden rounded-full bg-input text-[10px] font-bold uppercase"
       aria-label="Purchase progress"
     >
-      <li
-        className={`flex h-9 items-center justify-center ${
-          step === 1 ? "bg-brand text-white" : "text-white/[0.45]"
-        }`}
-        aria-current={step === 1 ? "step" : undefined}
-      >
-        1. Seats
+      <li aria-current={step === 1 ? "step" : undefined}>
+        <button
+          type="button"
+          className={`flex h-9 w-full items-center justify-center transition-colors ${
+            step === 1
+              ? "cursor-default bg-brand text-white"
+              : "cursor-pointer text-white/[0.55] hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+          }`}
+          disabled={step === 1 || disabled}
+          onClick={onSelectSeats}
+        >
+          1. Seats
+        </button>
       </li>
       <li
         className={`flex h-9 items-center justify-center ${
@@ -115,6 +133,7 @@ export function PurchaseModal({
   onClose,
   onAuthenticationRequired,
 }: PurchaseModalProps) {
+  const router = useRouter();
   const { user } = useAuth();
   const [step, setStep] = useState<1 | 2>(1);
   const [seatMap, setSeatMap] = useState<SeatMap>();
@@ -123,14 +142,19 @@ export function PurchaseModal({
     Record<number, TicketTypeSlug>
   >({});
   const [hold, setHold] = useState<SeatHold>();
+  const [order, setOrder] = useState<CompletedOrder>();
   const [heldSelectionKey, setHeldSelectionKey] = useState<string>();
   const [secondsRemaining, setSecondsRemaining] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [isHolding, setIsHolding] = useState(false);
+  const [isPaying, setIsPaying] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [checkoutFieldErrors, setCheckoutFieldErrors] =
+    useState<AuthFormErrors>({});
   const [errorMessage, setErrorMessage] = useState<string>();
   const [notice, setNotice] = useState<string>();
   const holdRequestInFlightRef = useRef(false);
+  const checkoutRequestInFlightRef = useRef(false);
 
   const loadBookingData = useCallback(async () => {
     setIsLoading(true);
@@ -235,7 +259,9 @@ export function PurchaseModal({
         setHeldSelectionKey(undefined);
         setStep(1);
         setSelectedTickets({});
-        setNotice("Your hold expired. Please select your seats again.");
+        setCheckoutFieldErrors({});
+        setErrorMessage(undefined);
+        setNotice("Your hold time expired. Please re-select your seats.");
         void refreshSeatMap();
       }
     };
@@ -411,6 +437,52 @@ export function PurchaseModal({
     void syncHold(next);
   }
 
+  async function recoverContestedSeats(
+    selection: Record<number, TicketTypeSlug>,
+    contestedCodes: string[],
+    fallbackMessage: string,
+  ) {
+    const contested = new Set(contestedCodes);
+    const remainingSelection = Object.fromEntries(
+      Object.entries(selection).filter(([seatId]) => {
+        const code = seatContexts.get(Number(seatId))?.seat.code;
+        return !code || !contested.has(code);
+      }),
+    );
+
+    setSeatMap((current) =>
+      current
+        ? {
+            ...current,
+            sections: current.sections.map((section) => ({
+              ...section,
+              rows: section.rows.map((row) => ({
+                ...row,
+                seats: row.seats.map((seat) =>
+                  contested.has(seat.code)
+                    ? { ...seat, state: "sold", isMine: false }
+                    : seat,
+                ),
+              })),
+            })),
+          }
+        : current,
+    );
+    setSelectedTickets(remainingSelection);
+    setHold(undefined);
+    setHeldSelectionKey(undefined);
+    setSecondsRemaining(0);
+    setCheckoutFieldErrors({});
+    setStep(1);
+    setNotice(undefined);
+    setErrorMessage(
+      contestedCodes.length > 0
+        ? `Seats ${contestedCodes.join(", ")} were just taken. The remaining selection has been kept.`
+        : fallbackMessage,
+    );
+    await refreshSeatMap();
+  }
+
   async function syncHold(selection: Record<number, TicketTypeSlug>) {
     if (holdRequestInFlightRef.current) {
       return;
@@ -451,45 +523,11 @@ export function PurchaseModal({
       }
 
       if (error instanceof AuthApiError && error.status === 409) {
-        const contested = new Set(error.contested ?? []);
-        const lostSeats = Array.from(contested);
-
-        setSeatMap((current) =>
-          current
-            ? {
-                ...current,
-                sections: current.sections.map((section) => ({
-                  ...section,
-                  rows: section.rows.map((row) => ({
-                    ...row,
-                    seats: row.seats.map((seat) =>
-                      contested.has(seat.code)
-                        ? { ...seat, state: "sold", isMine: false }
-                        : seat,
-                    ),
-                  })),
-                })),
-              }
-            : current,
+        await recoverContestedSeats(
+          selection,
+          error.contested ?? [],
+          error.message,
         );
-        const remainingSelection = Object.fromEntries(
-          Object.entries(selection).filter(([seatId]) => {
-            const code = seatContexts.get(Number(seatId))?.seat.code;
-            return !code || !contested.has(code);
-          }),
-        );
-        setSelectedTickets(remainingSelection);
-        setHeldSelectionKey(undefined);
-        if (Object.keys(remainingSelection).length === 0) {
-          setHold(undefined);
-          setSecondsRemaining(0);
-        }
-        setErrorMessage(
-          lostSeats.length > 0
-            ? `Seats ${lostSeats.join(", ")} were just taken. The remaining selection has been kept.`
-            : error.message,
-        );
-        await refreshSeatMap();
         return;
       }
 
@@ -566,11 +604,126 @@ export function PurchaseModal({
       return;
     }
 
+    setCheckoutFieldErrors({});
+    setErrorMessage(undefined);
+    setNotice(undefined);
     setStep(2);
   }
 
+  function returnToSeats() {
+    if (isPaying) {
+      return;
+    }
+
+    setCheckoutFieldErrors({});
+    setErrorMessage(undefined);
+    setNotice(undefined);
+    setStep(1);
+  }
+
+  function clearCheckoutFieldError(field: keyof CheckoutValues) {
+    setCheckoutFieldErrors((current) => {
+      const next = { ...current };
+      delete next[field];
+      return next;
+    });
+  }
+
+  async function resetExpiredCheckout() {
+    setHold(undefined);
+    setHeldSelectionKey(undefined);
+    setSecondsRemaining(0);
+    setSelectedTickets({});
+    setCheckoutFieldErrors({});
+    setErrorMessage(undefined);
+    setStep(1);
+    setNotice("Your hold time expired. Please re-select your seats.");
+    await refreshSeatMap();
+  }
+
+  async function submitCheckout(values: CheckoutValues) {
+    if (
+      !hold?.isLive ||
+      secondsRemaining === 0 ||
+      checkoutRequestInFlightRef.current
+    ) {
+      return;
+    }
+
+    checkoutRequestInFlightRef.current = true;
+    setIsPaying(true);
+    setCheckoutFieldErrors({});
+    setErrorMessage(undefined);
+    setNotice(undefined);
+
+    try {
+      const completedOrder = await completeOrder({
+        holdId: hold.holdId,
+        ...values,
+      });
+
+      setOrder(completedOrder);
+      setHold(undefined);
+      setHeldSelectionKey(undefined);
+      setSecondsRemaining(0);
+      setSelectedTickets({});
+    } catch (error) {
+      if (error instanceof AuthApiError && error.status === 401) {
+        onAuthenticationRequired(() => void submitCheckout(values));
+        return;
+      }
+
+      if (error instanceof AuthApiError && error.status === 422) {
+        if (error.fieldErrors) {
+          setCheckoutFieldErrors(error.fieldErrors);
+          return;
+        }
+
+        await resetExpiredCheckout();
+        return;
+      }
+
+      if (error instanceof AuthApiError && error.status === 409) {
+        if (error.contested?.length) {
+          await recoverContestedSeats(
+            selectedTickets,
+            error.contested,
+            error.message,
+          );
+          return;
+        }
+
+        setErrorMessage(error.message);
+        return;
+      }
+
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "The payment could not be completed. Please try again.",
+      );
+    } finally {
+      checkoutRequestInFlightRef.current = false;
+      setIsPaying(false);
+    }
+  }
+
+  function closeConfirmation() {
+    onClose();
+  }
+
+  function viewTickets() {
+    onClose();
+    router.push("/profile/tickets");
+  }
+
   async function requestClose() {
-    if (isHolding || isClosing) {
+    if (order) {
+      closeConfirmation();
+      return;
+    }
+
+    if (isHolding || isPaying || isClosing) {
       return;
     }
 
@@ -611,11 +764,20 @@ export function PurchaseModal({
       open={open}
       labelledBy={titleId}
       describedBy={descriptionId}
-      busy={isLoading || isHolding || isClosing}
+      busy={isLoading || isHolding || isPaying || isClosing}
       onRequestClose={() => void requestClose()}
-      className="h-[660px] w-[1260px] overflow-hidden rounded-[24px]"
+      className={`${order ? "h-[600px] w-[920px]" : "h-[660px] w-[1260px]"} overflow-hidden rounded-[24px]`}
     >
-      <div className="flex h-full flex-col p-8">
+      {order ? (
+        <OrderConfirmation
+          order={order}
+          titleId={titleId}
+          descriptionId={descriptionId}
+          onClose={closeConfirmation}
+          onViewTickets={viewTickets}
+        />
+      ) : (
+        <div className="flex h-full flex-col p-8">
         <header className="relative shrink-0 pr-40">
           <h2 id={titleId} className="text-lg leading-6 font-extrabold uppercase">
             {movieTitle}
@@ -653,7 +815,7 @@ export function PurchaseModal({
             type="button"
             className="absolute top-1 right-0 inline-flex size-6 cursor-pointer items-center justify-center text-white/[0.55] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-35"
             aria-label="Close purchase dialog"
-            disabled={isHolding || isClosing}
+            disabled={isHolding || isPaying || isClosing}
             onClick={() => void requestClose()}
           >
             <CloseIcon />
@@ -661,7 +823,11 @@ export function PurchaseModal({
         </header>
 
         <div className="mt-6 w-[760px] shrink-0">
-          <StepIndicator step={step} />
+          <StepIndicator
+            step={step}
+            disabled={isPaying}
+            onSelectSeats={returnToSeats}
+          />
         </div>
 
         {errorMessage ? (
@@ -707,33 +873,18 @@ export function PurchaseModal({
           </p>
         ) : null}
 
-        {step === 2 && hold ? (
-          <section className="flex flex-1 flex-col items-center justify-center text-center" aria-labelledby="hold-created-heading">
-            <p className="text-xs font-extrabold tracking-[0.08em] text-success uppercase">
-              Seats held
-            </p>
-            <h3 id="hold-created-heading" className="mt-3 text-3xl font-extrabold">
-              Your selection is ready for checkout
-            </h3>
-            <p className="mt-3 max-w-lg text-sm leading-6 text-white/[0.55]">
-              Your seats are reserved for {formatCountdown(secondsRemaining)}.
-              The checkout form will be implemented in the next step.
-            </p>
-            <div className="mt-6 flex flex-wrap justify-center gap-2">
-              {hold.seats.map((seat) => (
-                <span key={seat.seatId} className="rounded-full bg-input px-4 py-2 text-xs font-bold">
-                  {seat.code} · {seat.ticketType.name} · ₾{seat.price}
-                </span>
-              ))}
-            </div>
-            <button
-              type="button"
-              className="mt-8 cursor-pointer rounded-full border border-white/[0.2] px-6 py-3 text-sm font-bold transition-colors hover:bg-white/[0.08] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-              onClick={() => setStep(1)}
-            >
-              Back to seats
-            </button>
-          </section>
+        {step === 2 && hold && user ? (
+          <CheckoutStep
+            user={user}
+            hold={hold}
+            session={session}
+            movieTitle={movieTitle}
+            fieldErrors={checkoutFieldErrors}
+            isSubmitting={isPaying}
+            onClearFieldError={clearCheckoutFieldError}
+            onClearFormError={() => setErrorMessage(undefined)}
+            onSubmit={(values) => void submitCheckout(values)}
+          />
         ) : (
           <div className="mt-5 grid min-h-0 flex-1 grid-cols-[780px_1fr] gap-8">
             <section className="min-h-0 overflow-auto pr-4" aria-label="Hall seat map">
@@ -809,7 +960,8 @@ export function PurchaseModal({
             </aside>
           </div>
         )}
-      </div>
+        </div>
+      )}
     </AppDialog>
   );
 }
