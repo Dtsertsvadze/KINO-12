@@ -9,6 +9,17 @@ export type SessionSort =
 
 export type SessionTimeBand = "morning" | "afternoon" | "evening";
 
+export type TicketTypeSlug = "adult" | "child" | "student";
+
+export type TicketType = {
+  id: number;
+  slug: TicketTypeSlug;
+  name: string;
+  priceRatio: number;
+  note: string | null;
+  blockedFromRatingAge: number | null;
+};
+
 export type VenueSummary = {
   id: number;
   slug: string;
@@ -93,6 +104,9 @@ export type SessionFilterOptions = {
     id: SessionSort;
     label: string;
   }>;
+  ticketTypes: TicketType[];
+  maxSeatsPerOrder: number;
+  holdMinutes: number;
 };
 
 export type FilterOptionsResponse = {

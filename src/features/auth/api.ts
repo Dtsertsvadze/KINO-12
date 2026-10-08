@@ -15,6 +15,7 @@ type LoginCredentials = {
 type ApiErrorResponse = {
   message?: string;
   errors?: AuthFormErrors;
+  contested?: string[];
 };
 
 type LaravelVenueOptionsResponse = {
@@ -40,16 +41,19 @@ function removeAccessToken() {
 export class AuthApiError extends Error {
   status: number;
   fieldErrors?: AuthFormErrors;
+  contested?: string[];
 
   constructor(
     message: string,
     status: number,
     fieldErrors?: AuthFormErrors,
+    contested?: string[],
   ) {
     super(message);
     this.name = "AuthApiError";
     this.status = status;
     this.fieldErrors = fieldErrors;
+    this.contested = contested;
   }
 }
 
@@ -109,6 +113,7 @@ async function requestAuth<T>(
       error?.message ?? "Something went wrong. Please try again.",
       response.status,
       error?.errors,
+      error?.contested,
     );
   }
 

@@ -226,6 +226,7 @@ export function SessionDetailPage({
             ) : (
               <MovieSessionSchedule
                 venueGroups={venueGroups}
+                movieTitle={movie.title}
                 ageRatingCode={movie.ageRating.code}
                 minimumAge={movie.ageRating.minAge}
                 today={today}

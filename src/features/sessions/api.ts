@@ -21,6 +21,8 @@ export class SessionsApiError extends Error {
   }
 }
 
+let filterOptionsRequest: Promise<SessionFilterOptions> | undefined;
+
 async function requestSessionsApi<T>(path: `/${string}`, requestName: string) {
   let response: Response;
 
@@ -52,13 +54,20 @@ async function requestSessionsApi<T>(path: `/${string}`, requestName: string) {
   return payload as T;
 }
 
-export async function getSessionFilterOptions(): Promise<SessionFilterOptions> {
-  const response = await requestSessionsApi<FilterOptionsResponse>(
-    "/filter-options",
-    "Filter options",
-  );
+export function getSessionFilterOptions(): Promise<SessionFilterOptions> {
+  if (!filterOptionsRequest) {
+    filterOptionsRequest = requestSessionsApi<FilterOptionsResponse>(
+      "/filter-options",
+      "Filter options",
+    )
+      .then((response) => response.data)
+      .catch((error: unknown) => {
+        filterOptionsRequest = undefined;
+        throw error;
+      });
+  }
 
-  return response.data;
+  return filterOptionsRequest;
 }
 
 export function getSessions(query: SessionsQuery): Promise<SessionsResponse> {

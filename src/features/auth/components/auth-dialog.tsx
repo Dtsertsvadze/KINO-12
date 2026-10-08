@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useRef, type ReactNode } from "react";
+import type { ReactNode } from "react";
+
+import { AppDialog } from "@/components/overlays/app-dialog";
 
 type AuthDialogProps = {
   open: boolean;
@@ -21,60 +23,20 @@ export function AuthDialog({
   onRequestClose,
   children,
 }: AuthDialogProps) {
-  const dialogRef = useRef<HTMLDialogElement>(null);
   const descriptionId = `${titleId}-description`;
   const isRegisterDialog = variant === "register";
 
-  useEffect(() => {
-    const dialog = dialogRef.current;
-
-    if (!dialog) {
-      return;
-    }
-
-    if (open && !dialog.open) {
-      dialog.showModal();
-    }
-
-    if (!open && dialog.open) {
-      dialog.close();
-    }
-  }, [open]);
-
-  function handleOverlayClick(event: React.MouseEvent<HTMLDialogElement>) {
-    const dialog = dialogRef.current;
-
-    if (!dialog) {
-      return;
-    }
-
-    const bounds = dialog.getBoundingClientRect();
-    const clickedOutside =
-      event.clientX < bounds.left ||
-      event.clientX > bounds.right ||
-      event.clientY < bounds.top ||
-      event.clientY > bounds.bottom;
-
-    if (clickedOutside) {
-      onRequestClose();
-    }
-  }
-
   return (
-    <dialog
-      ref={dialogRef}
-      className={`fixed inset-0 m-auto overflow-y-auto rounded-[28px] border border-white/[0.1] bg-page p-0 text-white shadow-[0_32px_100px_rgba(0,0,0,0.55)] backdrop:bg-black/[0.78] backdrop:backdrop-blur-sm ${
+    <AppDialog
+      open={open}
+      labelledBy={titleId}
+      describedBy={descriptionId}
+      onRequestClose={onRequestClose}
+      className={`overflow-y-auto rounded-[28px] ${
         isRegisterDialog
           ? "h-[558px] w-[475px]"
           : "h-[399px] w-[403px]"
       }`}
-      aria-labelledby={titleId}
-      aria-describedby={descriptionId}
-      onCancel={(event) => {
-        event.preventDefault();
-        onRequestClose();
-      }}
-      onClick={handleOverlayClick}
     >
       <div
         className="relative flex h-full flex-col p-8"
@@ -117,6 +79,6 @@ export function AuthDialog({
 
         {children}
       </div>
-    </dialog>
+    </AppDialog>
   );
 }

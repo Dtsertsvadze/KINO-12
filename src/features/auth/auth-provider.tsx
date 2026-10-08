@@ -17,7 +17,7 @@ import { RegisterDialog } from "./components/register-dialog";
 import type { AuthUser } from "./types";
 
 type AuthModal = "login" | "register" | null;
-type PendingAuthAction = () => void | Promise<void>;
+type PendingAuthAction = (user: AuthUser) => void | Promise<void>;
 
 type AuthContextValue = {
   user: AuthUser | null;
@@ -104,7 +104,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setActiveModal(null);
 
     if (pendingAction) {
-      queueMicrotask(() => void pendingAction());
+      queueMicrotask(() => void pendingAction(authenticatedUser));
     }
   }, []);
 

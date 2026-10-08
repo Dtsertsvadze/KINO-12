@@ -1,11 +1,17 @@
 "use client";
 
+import { useCallback, useState } from "react";
+import { useRouter } from "next/navigation";
+
 import { useAuth } from "@/features/auth/auth-provider";
+import type { AuthUser } from "@/features/auth/types";
+import { PurchaseModal } from "@/features/booking/components/purchase-modal";
 
 import type { CinemaSession, MovieVenueSessions } from "../types";
 
 type MovieSessionScheduleProps = {
   venueGroups: MovieVenueSessions[];
+  movieTitle: string;
   ageRatingCode: string;
   minimumAge: number;
   today: string;
@@ -60,21 +66,27 @@ function calculateAge(dateOfBirth: string | null, today: string) {
 function SessionTicket({
   session,
   isUnavailable,
+  onSelect,
 }: {
   session: CinemaSession;
   isUnavailable: boolean;
+  onSelect: (session: CinemaSession) => void;
 }) {
   const availabilityTone =
     session.seatsLeft <= 10 ? "text-brand" : "text-white/[0.55]";
   const label = `${session.time}, Hall ${session.hall.name}, ${session.format.name}, ${session.language.name}, ₾${formatPrice(session.price)}${session.isSoldOut ? ", sold out" : `, ${session.seatsLeft} seats left`}`;
 
   return (
-    <div
+    <button
+      type="button"
       className={`grid h-[74px] w-[200px] shrink-0 grid-cols-[116px_84px] overflow-hidden rounded-lg border border-white/[0.08] bg-page/[0.82] ${
-        isUnavailable ? "cursor-not-allowed opacity-35" : ""
+        isUnavailable
+          ? "cursor-not-allowed opacity-35"
+          : "cursor-pointer transition-colors hover:border-white/[0.28] hover:bg-white/[0.08] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
       }`}
       aria-label={label}
-      aria-disabled={isUnavailable ? "true" : undefined}
+      disabled={isUnavailable}
+      onClick={() => onSelect(session)}
     >
       <div className="flex flex-col justify-center px-4">
         <time
@@ -116,16 +128,20 @@ function SessionTicket({
           )}
         </span>
       </div>
-    </div>
+    </button>
   );
 }
 
 function VenueSchedule({
   group,
   isAgeRestricted,
+  isAuthLoading,
+  onSelectSession,
 }: {
   group: MovieVenueSessions;
   isAgeRestricted: boolean;
+  isAuthLoading: boolean;
+  onSelectSession: (session: CinemaSession) => void;
 }) {
   const sessionsByHall = new Map<string, CinemaSession[]>();
 
@@ -151,7 +167,10 @@ function VenueSchedule({
                 <SessionTicket
                   key={session.id}
                   session={session}
-                  isUnavailable={session.isSoldOut || isAgeRestricted}
+                  isUnavailable={
+                    session.isSoldOut || isAgeRestricted || isAuthLoading
+                  }
+                  onSelect={onSelectSession}
                 />
               ))}
             </div>
@@ -164,20 +183,89 @@ function VenueSchedule({
 
 export function MovieSessionSchedule({
   venueGroups,
+  movieTitle,
   ageRatingCode,
   minimumAge,
   today,
 }: MovieSessionScheduleProps) {
-  const { user, isLoading } = useAuth();
+  const router = useRouter();
+  const { user, isLoading, openLogin, signOut } = useAuth();
+  const [activeSession, setActiveSession] = useState<CinemaSession>();
+  const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
   const calculatedAge = calculateAge(user?.dateOfBirth ?? null, today);
   const accountAge = calculatedAge ?? user?.age ?? null;
   const isAgeRestricted = Boolean(
     !isLoading &&
       user &&
-      minimumAge >= 16 &&
+      minimumAge > 0 &&
       accountAge !== null &&
       accountAge < minimumAge,
   );
+
+  const openPurchaseForUser = useCallback(
+    (session: CinemaSession, authenticatedUser: AuthUser) => {
+      if (!authenticatedUser.profileComplete) {
+        router.push("/profile");
+        return;
+      }
+
+      if (
+        authenticatedUser.age !== null &&
+        authenticatedUser.age < minimumAge
+      ) {
+        return;
+      }
+
+      setActiveSession(session);
+      setIsPurchaseOpen(true);
+    },
+    [minimumAge, router],
+  );
+
+  function selectSession(session: CinemaSession) {
+    if (isLoading || session.isSoldOut) {
+      return;
+    }
+
+    if (!user) {
+      openLogin((authenticatedUser) =>
+        openPurchaseForUser(session, authenticatedUser),
+      );
+      return;
+    }
+
+    openPurchaseForUser(session, user);
+  }
+
+  const handleAuthenticationRequired = useCallback(
+    async (replay: () => void) => {
+      if (!activeSession) {
+        return;
+      }
+
+      setIsPurchaseOpen(false);
+      await signOut();
+      openLogin((authenticatedUser) => {
+        if (
+          !authenticatedUser.profileComplete ||
+          (authenticatedUser.age !== null &&
+            authenticatedUser.age < minimumAge)
+        ) {
+          openPurchaseForUser(activeSession, authenticatedUser);
+          return;
+        }
+
+        setIsPurchaseOpen(true);
+        window.setTimeout(replay, 0);
+      });
+    },
+    [activeSession, minimumAge, openLogin, openPurchaseForUser, signOut],
+  );
+
+  function closePurchase() {
+    setIsPurchaseOpen(false);
+    setActiveSession(undefined);
+  }
 
   return (
     <div aria-busy={isLoading}>
@@ -196,8 +284,25 @@ export function MovieSessionSchedule({
           key={group.venue.id}
           group={group}
           isAgeRestricted={isAgeRestricted}
+          isAuthLoading={isLoading}
+          onSelectSession={selectSession}
         />
       ))}
+
+      {activeSession ? (
+        <PurchaseModal
+          key={activeSession.id}
+          open={isPurchaseOpen}
+          session={activeSession}
+          movieTitle={movieTitle}
+          ageRatingCode={ageRatingCode}
+          minimumAge={minimumAge}
+          onClose={closePurchase}
+          onAuthenticationRequired={(replay) =>
+            void handleAuthenticationRequired(replay)
+          }
+        />
+      ) : null}
     </div>
   );
 }
