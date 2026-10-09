@@ -39,7 +39,7 @@ export function useHorizontalCarousel(itemCount: number) {
       viewport.scrollWidth - viewport.clientWidth,
     );
     const nextNavigation = {
-      hasOverflow: maximumScroll > 0,
+      hasOverflow: maximumScroll > 1,
       atStart: viewport.scrollLeft <= 1,
       atEnd: viewport.scrollLeft >= maximumScroll - 1,
     };

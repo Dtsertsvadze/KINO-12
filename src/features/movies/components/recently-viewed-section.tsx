@@ -9,6 +9,23 @@ import {
   getRecentlyViewedMoviesSnapshot,
   subscribeToRecentlyViewedMovies,
 } from "../recently-viewed-storage";
+import { useHorizontalCarousel } from "../hooks/use-horizontal-carousel";
+
+function CarouselArrow({ direction }: { direction: "previous" | "next" }) {
+  const isPrevious = direction === "previous";
+
+  return (
+    <svg aria-hidden="true" className="size-6" viewBox="0 0 20 20" fill="none">
+      <path
+        d={isPrevious ? "m12.5 5-5 5 5 5" : "m7.5 5 5 5-5 5"}
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.7"
+      />
+    </svg>
+  );
+}
 
 export function RecentlyViewedSection() {
   const movies = useSyncExternalStore(
@@ -16,6 +33,14 @@ export function RecentlyViewedSection() {
     getRecentlyViewedMoviesSnapshot,
     getRecentlyViewedMoviesServerSnapshot,
   );
+  const {
+    viewportRef,
+    navigation,
+    scrollByPage,
+    handlePointerDown,
+    handlePointerMove,
+    stopDragging,
+  } = useHorizontalCarousel(movies.length);
 
   if (movies.length === 0) {
     return null;
@@ -27,19 +52,60 @@ export function RecentlyViewedSection() {
       aria-labelledby="recently-viewed-heading"
     >
       <div className="mx-auto w-full max-w-[1640px]">
-        <h2
-          id="recently-viewed-heading"
-          className="text-2xl leading-7 font-extrabold"
-        >
-          Recently viewed
-        </h2>
+        <div className="flex items-center justify-between gap-6">
+          <h2
+            id="recently-viewed-heading"
+            className="text-2xl leading-7 font-extrabold"
+          >
+            Recently viewed
+          </h2>
 
-        <div className="mt-5 flex gap-4 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {navigation.hasOverflow ? (
+            <nav
+              className="flex items-center gap-2"
+              aria-label="Recently viewed navigation"
+            >
+              <button
+                type="button"
+                className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full bg-surface text-foreground transition-colors hover:bg-foreground/[0.14] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-default disabled:opacity-35"
+                aria-label="Scroll recently viewed backward"
+                disabled={navigation.atStart}
+                onClick={() => scrollByPage(-1)}
+              >
+                <CarouselArrow direction="previous" />
+              </button>
+              <button
+                type="button"
+                className="inline-flex size-9 cursor-pointer items-center justify-center rounded-full bg-surface text-foreground transition-colors hover:bg-foreground/[0.14] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-default disabled:opacity-35"
+                aria-label="Scroll recently viewed forward"
+                disabled={navigation.atEnd}
+                onClick={() => scrollByPage(1)}
+              >
+                <CarouselArrow direction="next" />
+              </button>
+            </nav>
+          ) : null}
+        </div>
+
+        <div
+          ref={viewportRef}
+          className="mt-5 flex cursor-grab snap-x snap-mandatory gap-4 overflow-x-auto overscroll-x-contain pb-1 select-none active:cursor-grabbing [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+          role="region"
+          aria-label="Recently viewed movies"
+          tabIndex={0}
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={stopDragging}
+          onPointerCancel={stopDragging}
+        >
           {movies.map((movie) => (
-            <article key={movie.id} className="shrink-0">
+            <article
+              key={movie.id}
+              className="w-[calc((100%-4rem)/5)] shrink-0 snap-start"
+            >
               <Link
                 href={`/session/${movie.sessionId}`}
-                className="flex h-[72px] w-[274px] items-center gap-2 rounded-2xl bg-surface p-2 transition-colors hover:bg-foreground/[0.1] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                className="flex h-[72px] w-full items-center gap-2 rounded-2xl bg-surface p-2 transition-colors hover:bg-foreground/[0.1] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                 aria-label={`View ${movie.title}`}
               >
                 <div className="relative h-14 w-[72px] shrink-0 overflow-hidden rounded-xl bg-foreground/[0.05]">

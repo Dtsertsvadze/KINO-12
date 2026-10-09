@@ -2,7 +2,6 @@ import type { RecentlyViewedMovie } from "./types";
 
 const RECENTLY_VIEWED_STORAGE_KEY = "kino-xii:recently-viewed:v1";
 const RECENTLY_VIEWED_CHANGED_EVENT = "kino-xii:recently-viewed-changed";
-const MAX_RECENTLY_VIEWED_MOVIES = 6;
 const EMPTY_RECENTLY_VIEWED_MOVIES: readonly RecentlyViewedMovie[] = [];
 
 let cachedValue: string | null | undefined;
@@ -39,9 +38,7 @@ function parseRecentlyViewedMovies(value: string | null) {
       return EMPTY_RECENTLY_VIEWED_MOVIES;
     }
 
-    return parsed
-      .filter(isRecentlyViewedMovie)
-      .slice(0, MAX_RECENTLY_VIEWED_MOVIES);
+    return parsed.filter(isRecentlyViewedMovie);
   } catch {
     return EMPTY_RECENTLY_VIEWED_MOVIES;
   }
@@ -100,7 +97,7 @@ export function addRecentlyViewedMovie(movie: RecentlyViewedMovie) {
   const nextMovies = [
     movie,
     ...movies.filter((recentMovie) => recentMovie.id !== movie.id),
-  ].slice(0, MAX_RECENTLY_VIEWED_MOVIES);
+  ];
   const serializedMovies = JSON.stringify(nextMovies);
 
   try {
