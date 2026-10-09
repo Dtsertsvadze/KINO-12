@@ -16,6 +16,7 @@ type SessionDetailPageProps = {
   selectedDate: string;
   today: string;
   scheduleFailed: boolean;
+  initialBookingSession?: SessionDetail;
 };
 
 function ClockIcon() {
@@ -131,6 +132,7 @@ export function SessionDetailPage({
   selectedDate,
   today,
   scheduleFailed,
+  initialBookingSession,
 }: SessionDetailPageProps) {
   return (
     <main className="bg-page text-white">
@@ -230,6 +232,7 @@ export function SessionDetailPage({
                 ageRatingCode={movie.ageRating.code}
                 minimumAge={movie.ageRating.minAge}
                 today={today}
+                initialBookingSession={initialBookingSession}
               />
             )}
           </div>

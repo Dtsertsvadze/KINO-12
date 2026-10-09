@@ -79,9 +79,9 @@ function SessionCard({ session }: { session: CinemaSession }) {
 
   return (
     <Link
-      href={`/session/${session.id}`}
+      href={`/session/${session.id}?booking=1`}
       className={className}
-      aria-label={`View ${label}`}
+      aria-label={`Book ${label}`}
     >
       {content}
     </Link>

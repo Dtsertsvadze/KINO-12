@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { useAuth } from "@/features/auth/auth-provider";
@@ -15,6 +15,7 @@ type MovieSessionScheduleProps = {
   ageRatingCode: string;
   minimumAge: number;
   today: string;
+  initialBookingSession?: CinemaSession;
 };
 
 function SeatIcon() {
@@ -188,11 +189,13 @@ export function MovieSessionSchedule({
   ageRatingCode,
   minimumAge,
   today,
+  initialBookingSession,
 }: MovieSessionScheduleProps) {
   const router = useRouter();
   const { user, isLoading, openLogin, signOut } = useAuth();
   const [activeSession, setActiveSession] = useState<CinemaSession>();
   const [isPurchaseOpen, setIsPurchaseOpen] = useState(false);
+  const autoOpenAttemptedRef = useRef(false);
   const calculatedAge = calculateAge(user?.dateOfBirth ?? null, today);
   const accountAge = calculatedAge ?? user?.age ?? null;
   const isAgeRestricted = Boolean(
@@ -222,6 +225,41 @@ export function MovieSessionSchedule({
     },
     [minimumAge, router],
   );
+
+  useEffect(() => {
+    if (
+      !initialBookingSession ||
+      isLoading ||
+      autoOpenAttemptedRef.current
+    ) {
+      return;
+    }
+
+    const openTimer = window.setTimeout(() => {
+      if (autoOpenAttemptedRef.current) {
+        return;
+      }
+
+      autoOpenAttemptedRef.current = true;
+
+      if (!user) {
+        openLogin((authenticatedUser) =>
+          openPurchaseForUser(initialBookingSession, authenticatedUser),
+        );
+        return;
+      }
+
+      openPurchaseForUser(initialBookingSession, user);
+    }, 0);
+
+    return () => window.clearTimeout(openTimer);
+  }, [
+    initialBookingSession,
+    isLoading,
+    openLogin,
+    openPurchaseForUser,
+    user,
+  ]);
 
   function selectSession(session: CinemaSession) {
     if (isLoading || session.isSoldOut) {

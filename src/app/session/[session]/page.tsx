@@ -46,6 +46,7 @@ export default async function SessionPage({
     getSessionDateChoices(today).map((date) => date.value),
   );
   const requestedDate = firstValue(rawSearchParams.date);
+  const shouldOpenBooking = firstValue(rawSearchParams.booking) === "1";
   const selectedDate =
     requestedDate && validDates.has(requestedDate)
       ? requestedDate
@@ -72,6 +73,7 @@ export default async function SessionPage({
       selectedDate={selectedDate}
       today={today}
       scheduleFailed={scheduleResult.status === "rejected"}
+      initialBookingSession={shouldOpenBooking ? selectedSession : undefined}
     />
   );
 }
