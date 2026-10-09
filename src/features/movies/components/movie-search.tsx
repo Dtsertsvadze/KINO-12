@@ -207,9 +207,15 @@ export function MovieSearch() {
     setIsOpen(true);
   }
 
-  function clearSearch() {
-    handleQueryChange("");
-    inputRef.current?.focus();
+  function clearOrCloseSearch() {
+    if (query) {
+      handleQueryChange("");
+      inputRef.current?.focus();
+      return;
+    }
+
+    closeSearch();
+    inputRef.current?.blur();
   }
 
   async function openMovie(movie: Movie) {
@@ -281,14 +287,30 @@ export function MovieSearch() {
     activeIndex >= 0 ? `movie-search-result-${results[activeIndex]?.id}` : undefined;
 
   return (
-    <div ref={containerRef} className="relative w-[380px]">
-      <div className="flex h-[41px] items-center gap-2 rounded-full border border-foreground/[0.04] bg-foreground/[0.14] px-3 py-1.5 text-xs leading-none font-normal text-muted shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-[10px] transition-colors focus-within:border-foreground/[0.2] focus-within:bg-foreground/[0.18]">
+    <div
+      ref={containerRef}
+      className={`relative transition-[width] duration-300 ease-out motion-reduce:transition-none ${
+        isOpen ? "w-[620px]" : "w-[380px]"
+      }`}
+    >
+      <div
+        className={`relative flex h-[41px] cursor-text items-center gap-2 rounded-full border bg-foreground/[0.14] px-3 py-1.5 text-xs leading-none font-normal text-muted shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-[10px] transition-colors duration-300 motion-reduce:transition-none ${
+          isOpen
+            ? "border-foreground/[0.22] bg-foreground/[0.18]"
+            : "border-foreground/[0.04]"
+        }`}
+        onClick={(event) => {
+          if (!(event.target as HTMLElement).closest("button")) {
+            inputRef.current?.focus();
+          }
+        }}
+      >
         <SearchIcon />
         <input
           ref={inputRef}
           type="search"
           name="movie-search"
-          className="min-w-0 flex-1 bg-transparent text-xs text-foreground outline-none placeholder:text-muted [&::-webkit-search-cancel-button]:hidden"
+          className="min-w-0 flex-1 bg-transparent pr-7 text-xs text-foreground outline-none placeholder:text-muted [&::-webkit-search-cancel-button]:hidden"
           placeholder="Search films and live events"
           value={query}
           role="combobox"
@@ -302,16 +324,20 @@ export function MovieSearch() {
           onChange={(event) => handleQueryChange(event.target.value)}
           onKeyDown={handleInputKeyDown}
         />
-        {hasQuery ? (
-          <button
-            type="button"
-            className="flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.16] text-muted transition-colors hover:bg-foreground/[0.24] hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand"
-            aria-label="Clear search"
-            onClick={clearSearch}
-          >
-            <CloseIcon />
-          </button>
-        ) : null}
+        <button
+          type="button"
+          className={`absolute right-2.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-foreground/[0.16] text-muted transition-[opacity,transform,background-color,color] duration-200 hover:bg-foreground/[0.24] hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand motion-reduce:transition-none ${
+            isOpen
+              ? "scale-100 cursor-pointer opacity-100"
+              : "pointer-events-none scale-75 opacity-0"
+          }`}
+          aria-label={hasQuery ? "Clear search" : "Close search"}
+          aria-hidden={!isOpen}
+          tabIndex={isOpen ? 0 : -1}
+          onClick={clearOrCloseSearch}
+        >
+          <CloseIcon />
+        </button>
       </div>
 
       {isOpen ? (
