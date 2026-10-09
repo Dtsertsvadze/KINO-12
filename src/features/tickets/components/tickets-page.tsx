@@ -213,8 +213,8 @@ export function TicketsPage() {
                   type="button"
                   className={`inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg px-4 text-xs font-bold capitalize transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
                     isActive
-                      ? "bg-foreground/[0.09] text-foreground"
-                      : "text-foreground/[0.44] hover:text-foreground"
+                      ? "bg-surface-raised text-foreground"
+                      : "text-muted hover:text-foreground"
                   }`}
                   role="tab"
                   aria-selected={isActive}
@@ -222,7 +222,7 @@ export function TicketsPage() {
                   onClick={() => setActiveFilter(filter)}
                 >
                   {filter}
-                  <span className="text-[10px] text-foreground/[0.52]">
+                  <span className="text-[10px] text-muted">
                     {hasCurrentUserTickets ? tickets[filter].length : "–"}
                   </span>
                 </button>
@@ -233,7 +233,7 @@ export function TicketsPage() {
 
         {successMessage ? (
           <p
-            className="mt-5 rounded-xl border border-success/[0.2] bg-success/[0.08] px-4 py-3 text-sm text-success"
+            className="mt-5 rounded-xl border border-success/[0.2] bg-success-tint px-4 py-3 text-sm text-success"
             role="status"
           >
             {successMessage}
@@ -254,10 +254,10 @@ export function TicketsPage() {
             <TicketsSkeleton />
           ) : authError ? (
             <div
-              className="flex min-h-52 flex-col items-center justify-center rounded-2xl border border-error/[0.18] bg-error/[0.05] px-8 text-center"
+              className="flex min-h-52 flex-col items-center justify-center rounded-2xl border border-error/[0.18] bg-error/[0.1] px-8 text-center"
               role="alert"
             >
-              <p className="text-sm text-foreground/[0.68]">{authError}</p>
+              <p className="text-sm text-muted">{authError}</p>
               <button
                 type="button"
                 className="mt-4 inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand px-5 text-xs font-extrabold text-foreground hover:bg-brand-hover"
@@ -273,11 +273,11 @@ export function TicketsPage() {
             />
           ) : currentTicketsError ? (
             <div
-              className="flex min-h-52 flex-col items-center justify-center rounded-2xl border border-error/[0.18] bg-error/[0.05] px-8 text-center"
+              className="flex min-h-52 flex-col items-center justify-center rounded-2xl border border-error/[0.18] bg-error/[0.1] px-8 text-center"
               role="alert"
             >
               <h2 className="text-lg font-bold">Tickets could not be loaded</h2>
-              <p className="mt-2 text-sm text-foreground/[0.58]">
+              <p className="mt-2 text-sm text-muted">
                 {currentTicketsError}
               </p>
               <button

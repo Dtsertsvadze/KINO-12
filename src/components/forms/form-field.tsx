@@ -29,8 +29,8 @@ export function FormField({
       <span
         className={
           compact
-            ? `text-[10px] leading-4 font-semibold ${error ? "text-error" : "text-foreground/[0.82]"}`
-            : "text-xs font-semibold text-foreground/[0.78]"
+            ? `text-[10px] leading-4 font-semibold ${error ? "text-error" : "text-muted"}`
+            : "text-xs font-semibold text-muted"
         }
       >
         {label}
@@ -39,10 +39,10 @@ export function FormField({
         <input
           {...inputProps}
           id={id}
-          className={`w-full border pr-10 text-foreground outline-none transition placeholder:text-foreground/[0.4] focus:border-brand disabled:cursor-not-allowed disabled:opacity-60 ${
+          className={`w-full border pr-10 text-foreground outline-none transition placeholder:text-muted focus:border-brand disabled:cursor-not-allowed disabled:opacity-60 ${
             compact
               ? "h-10 rounded-lg bg-surface px-3 text-[11px]"
-              : "h-12 rounded-xl bg-foreground/[0.055] px-4 text-sm focus:bg-foreground/[0.08]"
+              : "h-12 rounded-xl bg-surface px-4 text-sm focus:bg-surface-raised"
           } ${
             error
               ? "border-error focus:border-error"
@@ -106,7 +106,7 @@ export function FormError({ message }: { message?: string }) {
 
   return (
     <p
-      className="rounded-xl border border-error/[0.25] bg-error/[0.08] px-4 py-3 text-sm leading-5 text-error"
+      className="rounded-xl border border-error/[0.25] bg-error/[0.1] px-4 py-3 text-sm leading-5 text-error"
       role="alert"
     >
       {message}

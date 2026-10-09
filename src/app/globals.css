@@ -6,14 +6,20 @@
 
 @theme {
   --color-brand: #ec3013;
-  --color-brand-hover: #c92710;
+  --color-brand-hover: color-mix(in srgb, #ec3013 88%, #070c1c);
   --color-page: var(--bg-page);
-  --color-surface: #1d1f2e;
+  --color-surface: #1e2031;
+  --color-surface-raised: #2a2c3d;
   --color-foreground: #ffffff;
+  --color-muted: #a9a9a9;
+  --color-subtle: #505261;
   --color-scrim: #000000;
-  --color-success: #2ecb81;
-  --color-warning: #ff8a22;
-  --color-error: #ff4d4f;
-  --color-disabled: #676b7a;
+  --color-success: #4ade80;
+  --color-warning: #e27e04;
+  --color-error: #ec3013;
+  --color-disabled: #505261;
+  --color-light-tint: rgb(255 255 255 / 10%);
+  --color-brand-tint: rgb(236 48 19 / 10%);
+  --color-success-tint: rgb(74 222 128 / 10%);
   --font-sans: var(--font-archivo), Arial, Helvetica, sans-serif;
 }

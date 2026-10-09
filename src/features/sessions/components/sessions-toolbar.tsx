@@ -31,7 +31,7 @@ export function SessionsToolbar({
           : `Showing ${totalSessions} ${totalSessions === 1 ? "session" : "sessions"}`}
       </p>
 
-      <label className="flex items-center gap-2 text-xs text-foreground/[0.48]">
+      <label className="flex items-center gap-2 text-xs text-muted">
         <span>{isPending ? "Updating:" : "Sort:"}</span>
         <span className="relative">
           <select
@@ -54,7 +54,7 @@ export function SessionsToolbar({
           </select>
           <svg
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 right-0 size-3 -translate-y-1/2 text-foreground/[0.58]"
+            className="pointer-events-none absolute top-1/2 right-0 size-3 -translate-y-1/2 text-muted"
             viewBox="0 0 12 12"
             fill="none"
           >

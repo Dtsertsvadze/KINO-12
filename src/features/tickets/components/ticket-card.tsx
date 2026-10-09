@@ -74,7 +74,7 @@ export function TicketCard({
             className="object-cover"
           />
         ) : (
-          <div className="flex size-full items-center justify-center px-3 text-center text-[10px] text-foreground/[0.42]">
+          <div className="flex size-full items-center justify-center px-3 text-center text-[10px] text-muted">
             Poster unavailable
           </div>
         )}
@@ -86,19 +86,19 @@ export function TicketCard({
             {movie.title}
           </h2>
           <span
-            className="rounded-full bg-brand/[0.12] px-2.5 py-1 text-[10px] leading-none font-bold text-brand"
+            className="rounded-full bg-brand-tint px-2.5 py-1 text-[10px] leading-none font-bold text-brand"
             title={movie.ageRating.description}
           >
             {movie.ageRating.code}
           </span>
-          <span className="text-xs text-foreground/[0.46]">
+          <span className="text-xs text-muted">
             {movie.runtimeMinutes} min
           </span>
         </div>
 
         <dl className="mt-5 flex flex-wrap items-start gap-x-6 gap-y-3">
           <div className="max-w-[260px]">
-            <dt className="text-[10px] font-semibold tracking-[0.06em] text-foreground/[0.42] uppercase">
+            <dt className="text-[10px] font-semibold tracking-[0.06em] text-muted uppercase">
               Date
             </dt>
             <dd className="mt-1 text-xs font-semibold text-foreground">
@@ -106,7 +106,7 @@ export function TicketCard({
             </dd>
           </div>
           <div className="max-w-[260px]">
-            <dt className="text-[10px] font-semibold tracking-[0.06em] text-foreground/[0.42] uppercase">
+            <dt className="text-[10px] font-semibold tracking-[0.06em] text-muted uppercase">
               Venue
             </dt>
             <dd className="mt-1 truncate text-xs font-semibold text-foreground">
@@ -114,7 +114,7 @@ export function TicketCard({
             </dd>
           </div>
           <div>
-            <dt className="text-[10px] font-semibold tracking-[0.06em] text-foreground/[0.42] uppercase">
+            <dt className="text-[10px] font-semibold tracking-[0.06em] text-muted uppercase">
               Format
             </dt>
             <dd className="mt-1 truncate text-xs font-semibold text-foreground">
@@ -124,13 +124,13 @@ export function TicketCard({
         </dl>
 
         <div className="mt-5 flex flex-wrap items-center gap-2">
-          <span className="mr-1 text-[10px] font-semibold tracking-[0.06em] text-foreground/[0.42] uppercase">
+          <span className="mr-1 text-[10px] font-semibold tracking-[0.06em] text-muted uppercase">
             Seats
           </span>
           {order.tickets.map((ticket) => (
             <span
               key={ticket.id}
-              className="rounded-md bg-foreground/[0.1] px-2.5 py-1 text-[10px] font-semibold text-foreground/[0.82]"
+              className="rounded-md bg-light-tint px-2.5 py-1 text-[10px] font-semibold text-muted"
             >
               {ticket.seatCode} · {ticket.ticketType.name}
             </span>
@@ -139,13 +139,13 @@ export function TicketCard({
       </div>
 
       <aside className="flex flex-col border-l border-dashed border-foreground/[0.1] px-7 py-7">
-        <span className="text-[10px] font-semibold tracking-[0.06em] text-foreground/[0.42] uppercase">
+        <span className="text-[10px] font-semibold tracking-[0.06em] text-muted uppercase">
           Order
         </span>
         <strong className="mt-1 text-xs text-foreground">#{order.reference}</strong>
 
         <div className="mt-5 flex items-end justify-between gap-4">
-          <span className="text-xs text-foreground/[0.52]">Total paid</span>
+          <span className="text-xs text-muted">Total paid</span>
           <strong className="text-2xl leading-none font-extrabold text-foreground">
             ₾{formatPrice(order.totalPrice)}
           </strong>
@@ -155,7 +155,7 @@ export function TicketCard({
           <>
             <button
               type="button"
-              className="mt-4 inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-foreground/[0.1] text-xs font-extrabold text-foreground transition-colors hover:bg-foreground/[0.17] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:text-foreground/[0.28] disabled:hover:bg-foreground/[0.1]"
+              className="mt-4 inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-light-tint text-xs font-extrabold text-foreground transition-colors hover:bg-foreground/[0.17] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:text-subtle disabled:hover:bg-light-tint"
               disabled={!order.isRefundable || isRefunding}
               aria-describedby={`refund-hint-${order.id}`}
               onClick={() => onRefund(order)}
@@ -164,13 +164,13 @@ export function TicketCard({
             </button>
             <p
               id={`refund-hint-${order.id}`}
-              className="mt-3 text-center text-[9px] leading-4 text-foreground/[0.4]"
+              className="mt-3 text-center text-[9px] leading-4 text-muted"
             >
               {refundHint}
             </p>
           </>
         ) : (
-          <p className="mt-auto text-[10px] font-semibold text-foreground/[0.42]">
+          <p className="mt-auto text-[10px] font-semibold text-muted">
             {order.status === "refunded" ? "Refunded" : "Completed"}
           </p>
         )}

@@ -115,7 +115,7 @@ export function AuthControls() {
   if (isLoading) {
     return (
       <div
-        className="h-11 w-[216px] animate-pulse rounded-full bg-foreground/[0.1] motion-reduce:animate-none"
+        className="h-11 w-[216px] animate-pulse rounded-full bg-light-tint motion-reduce:animate-none"
         aria-label="Checking your session"
         aria-busy="true"
       />
@@ -207,7 +207,7 @@ export function AuthControls() {
         </span>
         <svg
           aria-hidden="true"
-          className={`size-4 stroke-[1.5] text-foreground/[0.72] transition-transform ${
+          className={`size-4 stroke-[1.5] text-muted transition-transform ${
             isMenuOpen ? "rotate-180" : ""
           }`}
           viewBox="0 0 20 20"
@@ -256,7 +256,7 @@ export function AuthControls() {
                 <span className="block truncate text-base leading-5 font-semibold text-foreground">
                   {getFullDisplayName(user)}
                 </span>
-                <span className="mt-0.5 block truncate text-sm leading-5 text-foreground/[0.62]">
+                <span className="mt-0.5 block truncate text-sm leading-5 text-muted">
                   {user.email}
                 </span>
               </span>
@@ -264,7 +264,7 @@ export function AuthControls() {
 
             {user.profileComplete ? (
               <div
-                className="mt-4 flex h-11 items-center gap-2 rounded-xl bg-success/[0.1] px-3.5 text-base font-semibold text-success"
+                className="mt-4 flex h-11 items-center gap-2 rounded-xl bg-success-tint px-3.5 text-base font-semibold text-success"
                 role="none"
               >
                 <span>Profile Complete</span>
@@ -288,7 +288,7 @@ export function AuthControls() {
                 <p className="text-base leading-5 font-semibold text-warning">
                   Profile incomplete
                 </p>
-                <p className="mt-0.5 text-sm leading-5 text-foreground/[0.62]">
+                <p className="mt-0.5 text-sm leading-5 text-muted">
                   Please complete your profile to enable booking
                 </p>
               </div>

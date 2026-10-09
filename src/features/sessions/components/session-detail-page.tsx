@@ -76,8 +76,8 @@ function SessionDatePicker({
           isSelected
             ? "bg-brand text-foreground"
             : isAvailable
-              ? "bg-surface text-foreground/[0.72] hover:bg-foreground/[0.12]"
-              : "cursor-not-allowed bg-surface text-foreground/[0.24]"
+              ? "bg-surface text-muted hover:bg-foreground/[0.12]"
+              : "cursor-not-allowed bg-surface text-subtle"
         }`;
         const content = (
           <>
@@ -118,7 +118,7 @@ function SessionDatePicker({
 function DetailItem({ label, children }: { label: string; children: string }) {
   return (
     <div>
-      <dt className="text-[10px] leading-none font-semibold tracking-[0.06em] text-foreground/[0.42] uppercase">
+      <dt className="text-[10px] leading-none font-semibold tracking-[0.06em] text-muted uppercase">
         {label}
       </dt>
       <dd className="mt-2 text-xs leading-5 font-semibold text-foreground">{children}</dd>
@@ -165,25 +165,25 @@ export function SessionDetailPage({
                 className="object-cover"
               />
             ) : (
-              <div className="flex size-full items-center justify-center text-sm text-foreground/[0.45]">
+              <div className="flex size-full items-center justify-center text-sm text-muted">
                 Poster unavailable
               </div>
             )}
           </div>
 
           <div className="max-w-[720px] pb-4">
-            <span className="rounded-full bg-brand/[0.14] px-3 py-1.5 text-[10px] leading-none font-extrabold tracking-[0.04em] text-brand uppercase">
+            <span className="rounded-full bg-brand-tint px-3 py-1.5 text-[10px] leading-none font-extrabold tracking-[0.04em] text-brand uppercase">
               Now playing
             </span>
             <h1 className="mt-6 text-[40px] leading-none font-extrabold tracking-[-0.02em] uppercase">
               {movie.title}
             </h1>
-            <p className="mt-6 max-w-[680px] text-sm leading-6 text-foreground/[0.82]">
+            <p className="mt-6 max-w-[680px] text-sm leading-6 text-muted">
               {movie.synopsis}
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-2">
               <span
-                className="rounded-full bg-brand/[0.13] px-3 py-1.5 text-[10px] font-bold text-brand"
+                className="rounded-full bg-brand-tint px-3 py-1.5 text-[10px] font-bold text-brand"
                 title={movie.ageRating.description}
               >
                 {movie.ageRating.code}

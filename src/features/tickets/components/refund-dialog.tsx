@@ -53,7 +53,7 @@ export function RefundDialog({
       <div className="relative flex h-full flex-col p-8">
         <button
           type="button"
-          className="absolute top-8 right-8 inline-flex size-5 cursor-pointer items-center justify-center text-foreground/[0.65] transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-35"
+          className="absolute top-8 right-8 inline-flex size-5 cursor-pointer items-center justify-center text-muted transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-35"
           aria-label="Close refund dialog"
           disabled={isSubmitting}
           onClick={requestClose}
@@ -66,7 +66,7 @@ export function RefundDialog({
         </h2>
         <div
           id={descriptionId}
-          className="mt-3 space-y-1 text-sm leading-6 text-foreground/[0.58]"
+          className="mt-3 space-y-1 text-sm leading-6 text-muted"
         >
           <p>Order #{order?.reference}</p>
           <p>This action cannot be undone.</p>
@@ -74,7 +74,7 @@ export function RefundDialog({
 
         {errorMessage ? (
           <p
-            className="mt-4 rounded-xl border border-error/[0.22] bg-error/[0.08] px-4 py-3 text-xs leading-5 text-error"
+            className="mt-4 rounded-xl border border-error/[0.22] bg-error/[0.1] px-4 py-3 text-xs leading-5 text-error"
             role="alert"
           >
             {errorMessage}

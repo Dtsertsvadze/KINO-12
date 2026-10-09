@@ -256,7 +256,7 @@ export function ComingSoonCarousel({
             Coming Soon...
           </h2>
           {isAuthLoading || isRefreshingNotifications ? (
-            <span className="text-xs font-semibold text-foreground/[0.5]" role="status">
+            <span className="text-xs font-semibold text-muted" role="status">
               Checking reminders…
             </span>
           ) : notificationRefreshError ? (
@@ -311,7 +311,7 @@ export function ComingSoonCarousel({
                         sizes="240px"
                       />
                     ) : (
-                      <div className="flex size-full items-center justify-center px-4 text-center text-xs text-foreground/[0.45]">
+                      <div className="flex size-full items-center justify-center px-4 text-center text-xs text-muted">
                         Poster unavailable
                       </div>
                     )}
@@ -324,12 +324,12 @@ export function ComingSoonCarousel({
                     <h3 className="mt-2 truncate text-sm leading-4 font-bold text-foreground">
                       {movie.title}
                     </h3>
-                    <p className="mt-1 truncate text-[11px] leading-4 text-foreground/[0.5]">
+                    <p className="mt-1 truncate text-[11px] leading-4 text-muted">
                       {movie.genres[0]?.name ?? movie.kind} ·{" "}
                       {movie.runtimeMinutes} min
                     </p>
                     <span
-                      className="mt-2 w-fit rounded-full bg-brand/[0.12] px-2 py-1 text-[10px] leading-none font-bold text-brand"
+                      className="mt-2 w-fit rounded-full bg-brand-tint px-2 py-1 text-[10px] leading-none font-bold text-brand"
                       title={movie.ageRating.description}
                     >
                       {movie.ageRating.code}
@@ -341,7 +341,7 @@ export function ComingSoonCarousel({
                         notifiedMovieIds.has(movie.id)
                           ? "bg-foreground/[0.16]"
                           : notificationErrors[movie.id]
-                            ? "cursor-pointer border border-error transition-colors hover:bg-error/[0.08]"
+                            ? "cursor-pointer border border-error transition-colors hover:bg-error/[0.1]"
                             : "cursor-pointer border border-foreground/[0.72] transition-colors hover:bg-foreground/[0.08]"
                       }`}
                       title={notificationErrors[movie.id]}

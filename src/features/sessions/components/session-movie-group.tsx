@@ -47,9 +47,9 @@ function SessionCard({ session }: { session: CinemaSession }) {
       </div>
 
       <div className="mt-3 flex items-center justify-between gap-3 text-[10px] leading-none">
-        <span className="truncate text-foreground/[0.5]">{session.language.name}</span>
+        <span className="truncate text-muted">{session.language.name}</span>
         {session.isSoldOut ? (
-          <span className="shrink-0 text-foreground/[0.55]">Sold out</span>
+          <span className="shrink-0 text-muted">Sold out</span>
         ) : (
           <span className={`flex shrink-0 items-center gap-1 font-semibold ${availabilityTone}`}>
             <SeatIcon />
@@ -59,7 +59,7 @@ function SessionCard({ session }: { session: CinemaSession }) {
       </div>
 
       <div className="mt-auto flex items-end justify-between gap-3">
-        <span className="truncate text-[10px] font-semibold text-foreground/[0.72]">
+        <span className="truncate text-[10px] font-semibold text-muted">
           {session.venue.name} · Hall {session.hall.name}
         </span>
         <span className="shrink-0 text-xs font-extrabold text-foreground">
@@ -114,7 +114,7 @@ export function SessionMovieGroup({
               className="object-cover"
             />
           ) : (
-            <div className="flex size-full items-center justify-center px-2 text-center text-[9px] text-foreground/[0.42]">
+            <div className="flex size-full items-center justify-center px-2 text-center text-[9px] text-muted">
               No poster
             </div>
           )}
@@ -126,13 +126,13 @@ export function SessionMovieGroup({
               {movie.title}
             </h2>
             <span
-              className="shrink-0 rounded-full bg-brand/[0.12] px-2 py-1 text-[9px] leading-none font-bold text-brand"
+              className="shrink-0 rounded-full bg-brand-tint px-2 py-1 text-[9px] leading-none font-bold text-brand"
               title={movie.ageRating.description}
             >
               {movie.ageRating.code}
             </span>
           </div>
-          <p className="mt-2 text-xs text-foreground/[0.48]">
+          <p className="mt-2 text-xs text-muted">
             {movie.runtimeMinutes} min
           </p>
         </div>

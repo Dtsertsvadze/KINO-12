@@ -95,21 +95,21 @@ function AnimatedMovieDetails({ movie }: { movie: Movie }) {
         <span className="rounded-full bg-brand px-3 py-1.5 text-foreground">
           {movie.ageRating.code}
         </span>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-foreground/[0.1] px-3 py-1.5 text-foreground/[0.9]">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-light-tint px-3 py-1.5 text-foreground">
           <ClockIcon />
           {movie.runtimeMinutes} min
         </span>
         {movie.formats.map((format) => (
           <span
             key={format.id}
-            className="rounded-full bg-foreground/[0.1] px-3 py-1.5 text-foreground/[0.9]"
+            className="rounded-full bg-light-tint px-3 py-1.5 text-foreground"
           >
             {format.name}
           </span>
         ))}
       </div>
 
-      <p className="mt-5 line-clamp-3 max-w-[610px] text-sm leading-5 text-foreground/[0.9]">
+      <p className="mt-5 line-clamp-3 max-w-[610px] text-sm leading-5 text-foreground">
         {movie.synopsis}
       </p>
     </div>
@@ -261,7 +261,7 @@ export function FeaturedHero({
         aria-atomic="true"
       >
         <article key={activeMovie.id} className="absolute inset-0">
-          <p className="inline-flex rounded-full bg-brand/[0.12] px-3 py-1 text-[10px] leading-none font-bold tracking-[0.06em] text-brand uppercase">
+          <p className="inline-flex rounded-full bg-brand-tint px-3 py-1 text-[10px] leading-none font-bold tracking-[0.06em] text-brand uppercase">
             Premiere · {formatPremiereDate(activeMovie.releaseDate)}
           </p>
 

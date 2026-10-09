@@ -41,7 +41,7 @@ function FilterSection({
     <fieldset
       className={withDivider ? "border-b border-foreground/[0.08] pb-6" : undefined}
     >
-      <legend className="mb-3 text-[10px] leading-none font-semibold tracking-[0.08em] text-foreground/[0.5] uppercase">
+      <legend className="mb-3 text-[10px] leading-none font-semibold tracking-[0.08em] text-muted uppercase">
         {title}
       </legend>
       {children}
@@ -176,7 +176,7 @@ export function FilterSidebar({
       <div className="mb-7 flex items-center justify-between">
         <h2 className="text-base font-extrabold">Filters</h2>
         {isPending ? (
-          <span className="text-[10px] font-semibold text-foreground/[0.48]" role="status">
+          <span className="text-[10px] font-semibold text-muted" role="status">
             Updating…
           </span>
         ) : null}
@@ -194,7 +194,7 @@ export function FilterSidebar({
                 label={
                   <span>
                     {venue.name}
-                    <span className="ml-1 text-foreground/[0.42]">· {venue.city}</span>
+                    <span className="ml-1 text-muted">· {venue.city}</span>
                   </span>
                 }
               />
@@ -214,7 +214,7 @@ export function FilterSidebar({
                   className={`flex h-[58px] cursor-pointer flex-col items-center justify-center rounded-lg text-[10px] font-semibold transition-colors disabled:cursor-wait disabled:opacity-55 ${
                     isSelected
                       ? "bg-brand text-foreground"
-                      : "bg-foreground/[0.045] text-foreground/[0.72] hover:bg-foreground/[0.09]"
+                      : "bg-surface-raised text-muted hover:bg-light-tint"
                   }`}
                   aria-pressed={isSelected}
                   disabled={isPending}
@@ -284,7 +284,7 @@ export function FilterSidebar({
             Clear all filters
           </button>
         ) : null}
-        <p className="mt-3 text-[10px] text-foreground/[0.48]" aria-live="polite">
+        <p className="mt-3 text-[10px] text-muted" aria-live="polite">
           {activeFilterCount} {activeFilterCount === 1 ? "filter" : "filters"} active
         </p>
       </div>

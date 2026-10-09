@@ -65,7 +65,7 @@ function BrowseSessionsLink({ onClick }: { onClick: () => void }) {
 function IdleSearchState({ onClose }: { onClose: () => void }) {
   return (
     <div className="flex min-h-[190px] flex-col items-center justify-center px-6 py-7 text-center">
-      <span className="flex size-10 items-center justify-center rounded-full bg-surface text-foreground/[0.82]">
+      <span className="flex size-10 items-center justify-center rounded-full bg-surface text-muted">
         <svg aria-hidden="true" className="size-5" viewBox="0 0 20 20" fill="none">
           <path
             d="M4.5 6h11M8 3.8h4M6 6l.7 10h6.6L14 6M8.4 8.5v5m3.2-5v5"
@@ -77,7 +77,7 @@ function IdleSearchState({ onClose }: { onClose: () => void }) {
         </svg>
       </span>
       <p className="mt-4 text-xs font-extrabold">What do you want to watch?</p>
-      <p className="mt-1 text-[11px] text-foreground/[0.52]">
+      <p className="mt-1 text-[11px] text-muted">
         Search by title, director or cast
       </p>
       <BrowseSessionsLink onClick={onClose} />
@@ -88,13 +88,13 @@ function IdleSearchState({ onClose }: { onClose: () => void }) {
 function SearchLoadingState() {
   return (
     <div className="px-4 py-4" role="status" aria-label="Searching movies">
-      <div className="mb-3 h-2.5 w-28 animate-pulse rounded-full bg-foreground/[0.1] motion-reduce:animate-none" />
+      <div className="mb-3 h-2.5 w-28 animate-pulse rounded-full bg-light-tint motion-reduce:animate-none" />
       <div className="grid gap-3">
         {Array.from({ length: 4 }, (_, index) => (
           <div key={index} className="flex h-14 items-center gap-3">
-            <div className="h-14 w-10 animate-pulse rounded-md bg-foreground/[0.1] motion-reduce:animate-none" />
+            <div className="h-14 w-10 animate-pulse rounded-md bg-light-tint motion-reduce:animate-none" />
             <div className="flex-1">
-              <div className="h-2.5 w-1/2 animate-pulse rounded-full bg-foreground/[0.1] motion-reduce:animate-none" />
+              <div className="h-2.5 w-1/2 animate-pulse rounded-full bg-light-tint motion-reduce:animate-none" />
               <div className="mt-2 h-2 w-1/3 animate-pulse rounded-full bg-foreground/[0.07] motion-reduce:animate-none" />
             </div>
           </div>
@@ -107,13 +107,13 @@ function SearchLoadingState() {
 function NoResultsState({ query, onClose }: { query: string; onClose: () => void }) {
   return (
     <div className="flex min-h-[210px] flex-col items-center justify-center px-6 py-7 text-center">
-      <span className="flex size-10 items-center justify-center rounded-full bg-surface text-foreground/[0.82]">
+      <span className="flex size-10 items-center justify-center rounded-full bg-surface text-muted">
         <SearchIcon className="size-4" />
       </span>
       <p className="mt-4 text-xs font-extrabold">
         No results for “{query.trim()}”
       </p>
-      <p className="mt-1 text-[11px] text-foreground/[0.52]">
+      <p className="mt-1 text-[11px] text-muted">
         Check the spelling or try another film or live event.
       </p>
       <BrowseSessionsLink onClick={onClose} />
@@ -282,13 +282,13 @@ export function MovieSearch() {
 
   return (
     <div ref={containerRef} className="relative w-[380px]">
-      <div className="flex h-[41px] items-center gap-2 rounded-full border border-foreground/[0.04] bg-foreground/[0.14] px-3 py-1.5 text-xs leading-none font-normal text-foreground/[0.82] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-[10px] transition-colors focus-within:border-foreground/[0.2] focus-within:bg-foreground/[0.18]">
+      <div className="flex h-[41px] items-center gap-2 rounded-full border border-foreground/[0.04] bg-foreground/[0.14] px-3 py-1.5 text-xs leading-none font-normal text-muted shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-[10px] transition-colors focus-within:border-foreground/[0.2] focus-within:bg-foreground/[0.18]">
         <SearchIcon />
         <input
           ref={inputRef}
           type="search"
           name="movie-search"
-          className="min-w-0 flex-1 bg-transparent text-xs text-foreground outline-none placeholder:text-foreground/[0.55] [&::-webkit-search-cancel-button]:hidden"
+          className="min-w-0 flex-1 bg-transparent text-xs text-foreground outline-none placeholder:text-muted [&::-webkit-search-cancel-button]:hidden"
           placeholder="Search films and live events"
           value={query}
           role="combobox"
@@ -305,7 +305,7 @@ export function MovieSearch() {
         {hasQuery ? (
           <button
             type="button"
-            className="flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.16] text-foreground/[0.72] transition-colors hover:bg-foreground/[0.24] hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand"
+            className="flex size-5 shrink-0 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.16] text-muted transition-colors hover:bg-foreground/[0.24] hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-brand"
             aria-label="Clear search"
             onClick={clearSearch}
           >
@@ -325,7 +325,7 @@ export function MovieSearch() {
           ) : status === "error" ? (
             <div className="flex min-h-[170px] flex-col items-center justify-center px-6 py-7 text-center" role="alert">
               <p className="text-xs font-extrabold">Search is unavailable</p>
-              <p className="mt-1 text-[11px] text-foreground/[0.52]">
+              <p className="mt-1 text-[11px] text-muted">
                 We could not load results. Please try again.
               </p>
               <button
@@ -343,7 +343,7 @@ export function MovieSearch() {
             <NoResultsState query={query} onClose={closeSearch} />
           ) : (
             <div className="p-3">
-              <div className="mb-2 flex items-center justify-between px-1 text-[9px] font-semibold tracking-[0.08em] text-foreground/[0.52] uppercase">
+              <div className="mb-2 flex items-center justify-between px-1 text-[9px] font-semibold tracking-[0.08em] text-muted uppercase">
                 <span>Films &amp; Events</span>
                 <span>
                   {results.length} {results.length === 1 ? "result" : "results"}
@@ -385,7 +385,7 @@ export function MovieSearch() {
                             className="object-cover"
                           />
                         ) : (
-                          <span className="flex size-full items-center justify-center px-1 text-center text-[8px] text-foreground/[0.4]">
+                          <span className="flex size-full items-center justify-center px-1 text-center text-[8px] text-muted">
                             No poster
                           </span>
                         )}
@@ -395,7 +395,7 @@ export function MovieSearch() {
                         <span className="block truncate text-xs font-semibold text-foreground">
                           {movie.title}
                         </span>
-                        <span className="mt-1 block truncate text-[10px] text-foreground/[0.5]">
+                        <span className="mt-1 block truncate text-[10px] text-muted">
                           {movie.kind === "film" ? "Film" : "Event"} · {movie.ageRating.code} · {movie.runtimeMinutes} min
                         </span>
                       </span>

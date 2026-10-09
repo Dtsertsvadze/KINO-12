@@ -105,7 +105,7 @@ export function RecentlyViewedSection() {
             >
               <Link
                 href={`/session/${movie.sessionId}`}
-                className="flex h-[72px] w-full items-center gap-2 rounded-2xl bg-surface p-2 transition-colors hover:bg-foreground/[0.1] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                className="flex h-[72px] w-full items-center gap-2 rounded-2xl bg-surface p-2 transition-colors hover:bg-light-tint focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                 aria-label={`View ${movie.title}`}
               >
                 <div className="relative h-14 w-[72px] shrink-0 overflow-hidden rounded-xl bg-foreground/[0.05]">
@@ -118,7 +118,7 @@ export function RecentlyViewedSection() {
                       className="object-cover"
                     />
                   ) : (
-                    <span className="flex size-full items-center justify-center px-2 text-center text-[9px] text-foreground/[0.45]">
+                    <span className="flex size-full items-center justify-center px-2 text-center text-[9px] text-muted">
                       No poster
                     </span>
                   )}
@@ -128,11 +128,11 @@ export function RecentlyViewedSection() {
                   <h3 className="truncate text-xs leading-4 font-extrabold uppercase">
                     {movie.title}
                   </h3>
-                  <p className="mt-0.5 truncate text-[10px] leading-4 text-foreground/[0.5]">
+                  <p className="mt-0.5 truncate text-[10px] leading-4 text-muted">
                     {movie.genre} · {movie.runtimeMinutes} min
                   </p>
                   <span
-                    className="mt-0.5 inline-flex rounded-full bg-brand/[0.12] px-2 py-0.5 text-[9px] leading-3 font-bold text-brand"
+                    className="mt-0.5 inline-flex rounded-full bg-brand-tint px-2 py-0.5 text-[9px] leading-3 font-bold text-brand"
                     aria-label={`Rated ${movie.ageRatingCode}`}
                   >
                     {movie.ageRatingCode}

@@ -72,7 +72,7 @@ function SessionTicket({
   onSelect: (session: CinemaSession) => void;
 }) {
   const availabilityTone =
-    session.seatsLeft <= 10 ? "text-brand" : "text-foreground/[0.55]";
+    session.seatsLeft <= 10 ? "text-brand" : "text-muted";
   const label = `${session.time}, Hall ${session.hall.name}, ${session.format.name}, ${session.language.name}, ₾${formatPrice(session.price)}${session.isSoldOut ? ", sold out" : `, ${session.seatsLeft} seats left`}`;
 
   return (
@@ -94,9 +94,9 @@ function SessionTicket({
         >
           {session.time}
         </time>
-        <div className="mt-2.5 flex items-center justify-center gap-2 text-[10px] leading-none text-foreground/[0.5]">
+        <div className="mt-2.5 flex items-center justify-center gap-2 text-[10px] leading-none text-muted">
           <span>{session.language.code}</span>
-          <span className="rounded-full bg-foreground/[0.1] px-2 py-1 font-semibold text-foreground/[0.62]">
+          <span className="rounded-full bg-light-tint px-2 py-1 font-semibold text-muted">
             {session.format.name}
           </span>
         </div>
@@ -161,7 +161,7 @@ function VenueSchedule({
       <div className="mt-3 flex flex-wrap gap-3">
         {Array.from(sessionsByHall.entries()).map(([hallName, sessions]) => (
           <div key={hallName} className="rounded-xl bg-surface p-3">
-            <h4 className="mb-2 text-[10px] font-semibold text-foreground/[0.66]">
+            <h4 className="mb-2 text-[10px] font-semibold text-muted">
               Hall {hallName}
             </h4>
             <div className="flex gap-2">

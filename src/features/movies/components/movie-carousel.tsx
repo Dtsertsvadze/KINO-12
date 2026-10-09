@@ -91,7 +91,7 @@ function MovieCardDetails({ movie }: { movie: Movie }) {
             sizes="236px"
           />
         ) : (
-          <div className="flex size-full items-center justify-center px-5 text-center text-sm text-foreground/[0.45]">
+          <div className="flex size-full items-center justify-center px-5 text-center text-sm text-muted">
             Poster unavailable
           </div>
         )}
@@ -100,7 +100,7 @@ function MovieCardDetails({ movie }: { movie: Movie }) {
       <h3 className="mt-3 truncate text-base leading-5 font-bold text-foreground">
         {movie.title}
       </h3>
-      <p className="mt-1 truncate text-[11px] leading-4 text-foreground/[0.48]">
+      <p className="mt-1 truncate text-[11px] leading-4 text-muted">
         {movie.genres[0]?.name ?? movie.kind} · {movie.runtimeMinutes} min
       </p>
       <p
@@ -111,7 +111,7 @@ function MovieCardDetails({ movie }: { movie: Movie }) {
       </p>
 
       <div className="mt-0 grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,margin,opacity] delay-0 duration-300 group-hover/movie:mt-2 group-hover/movie:grid-rows-[1fr] group-hover/movie:opacity-100 group-hover/movie:delay-300 group-focus-within/movie:mt-2 group-focus-within/movie:grid-rows-[1fr] group-focus-within/movie:opacity-100 group-focus-within/movie:delay-0 motion-reduce:transition-none">
-        <p className="line-clamp-3 overflow-hidden text-sm leading-5 text-foreground/[0.66]">
+        <p className="line-clamp-3 overflow-hidden text-sm leading-5 text-muted">
           {movie.synopsis}
         </p>
       </div>

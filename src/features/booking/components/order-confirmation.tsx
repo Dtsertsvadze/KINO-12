@@ -69,7 +69,7 @@ export function OrderConfirmation({
     <article className="relative flex h-full flex-col items-center px-14 py-10 text-center">
       <button
         type="button"
-        className="absolute top-7 right-7 inline-flex size-7 cursor-pointer items-center justify-center text-foreground/[0.55] transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        className="absolute top-7 right-7 inline-flex size-7 cursor-pointer items-center justify-center text-muted transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
         aria-label="Close order confirmation"
         onClick={onClose}
       >
@@ -80,10 +80,10 @@ export function OrderConfirmation({
       <h2 id={titleId} className="mt-4 text-xl font-extrabold">
         Booking confirmed!
       </h2>
-      <p id={descriptionId} className="mt-2 text-xs text-foreground/[0.5]">
+      <p id={descriptionId} className="mt-2 text-xs text-muted">
         Your tickets are ready. Keep this order reference for your records.
       </p>
-      <span className="mt-4 rounded-full bg-surface px-5 py-2 text-[10px] font-extrabold tracking-[0.08em] text-foreground/[0.72] uppercase">
+      <span className="mt-4 rounded-full bg-surface px-5 py-2 text-[10px] font-extrabold tracking-[0.08em] text-muted uppercase">
         Order {order.reference}
       </span>
 
@@ -107,7 +107,7 @@ export function OrderConfirmation({
             <h3 className="text-xs font-extrabold uppercase">
               {order.session.movie.title}
             </h3>
-            <p className="mt-1 text-[9px] leading-4 text-foreground/[0.48]">
+            <p className="mt-1 text-[9px] leading-4 text-muted">
               {order.session.venue.name} · Hall {order.session.hall.name} ·{" "}
               {formatOrderDate(order.session.date)} · {order.session.time}
             </p>
@@ -116,13 +116,13 @@ export function OrderConfirmation({
 
         <dl className="mt-3 grid gap-2 text-[10px]">
           <div className="flex items-start justify-between gap-5">
-            <dt className="text-foreground/[0.45]">Seats</dt>
+            <dt className="text-muted">Seats</dt>
             <dd className="text-right font-semibold text-foreground">
               {order.tickets.map((ticket) => ticket.seatCode).join(", ")}
             </dd>
           </div>
           <div className="flex items-start justify-between gap-5">
-            <dt className="text-foreground/[0.45]">Tickets</dt>
+            <dt className="text-muted">Tickets</dt>
             <dd className="grid gap-1 text-right font-semibold text-foreground">
               {order.tickets.map((ticket) => (
                 <span key={ticket.id}>
@@ -133,7 +133,7 @@ export function OrderConfirmation({
             </dd>
           </div>
           <div className="mt-1 flex items-center justify-between border-t border-foreground/[0.08] pt-3">
-            <dt className="font-semibold tracking-[0.05em] text-foreground/[0.58] uppercase">
+            <dt className="font-semibold tracking-[0.05em] text-muted uppercase">
               Total paid
             </dt>
             <dd className="text-base font-extrabold text-foreground">
@@ -141,7 +141,7 @@ export function OrderConfirmation({
             </dd>
           </div>
           <div className="flex items-center justify-between">
-            <dt className="text-foreground/[0.45]">Payment card</dt>
+            <dt className="text-muted">Payment card</dt>
             <dd className="font-semibold text-foreground">
               •••• {order.cardLastFour}
             </dd>

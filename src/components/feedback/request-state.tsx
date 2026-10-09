@@ -30,11 +30,11 @@ export function RequestErrorState({
 
   return (
     <div
-      className={`flex min-h-44 flex-col items-center justify-center rounded-2xl border border-error/[0.18] bg-error/[0.05] px-8 text-center ${className}`}
+      className={`flex min-h-44 flex-col items-center justify-center rounded-2xl border border-error/[0.18] bg-error/[0.1] px-8 text-center ${className}`}
       role="alert"
     >
       <h2 className="text-lg font-bold text-foreground">{title}</h2>
-      <p className="mt-2 max-w-xl text-sm leading-5 text-foreground/[0.58]">
+      <p className="mt-2 max-w-xl text-sm leading-5 text-muted">
         {message}
       </p>
       <button
@@ -60,7 +60,7 @@ export function EmptyState({
       className={`flex min-h-44 flex-col items-center justify-center rounded-2xl border border-foreground/[0.08] bg-foreground/[0.025] px-8 text-center ${className}`}
     >
       <h2 className="text-lg font-bold text-foreground">{title}</h2>
-      <p className="mt-2 max-w-xl text-sm leading-5 text-foreground/[0.58]">
+      <p className="mt-2 max-w-xl text-sm leading-5 text-muted">
         {message}
       </p>
       {action ? (

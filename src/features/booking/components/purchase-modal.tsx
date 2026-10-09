@@ -105,7 +105,7 @@ function StepIndicator({
           className={`flex h-9 w-full items-center justify-center transition-colors ${
             step === 1
               ? "cursor-default bg-brand text-foreground"
-              : "cursor-pointer text-foreground/[0.55] hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
+              : "cursor-pointer text-muted hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
           }`}
           disabled={step === 1 || disabled}
           onClick={onSelectSeats}
@@ -115,7 +115,7 @@ function StepIndicator({
       </li>
       <li
         className={`flex h-9 items-center justify-center ${
-          step === 2 ? "bg-brand text-foreground" : "text-foreground/[0.45]"
+          step === 2 ? "bg-brand text-foreground" : "text-subtle"
         }`}
         aria-current={step === 2 ? "step" : undefined}
       >
@@ -785,7 +785,7 @@ export function PurchaseModal({
           </h2>
           <p
             id={descriptionId}
-            className="mt-1 text-[10px] leading-4 text-foreground/[0.52]"
+            className="mt-1 text-[10px] leading-4 text-muted"
           >
             {session.venue.name} · Hall {session.hall.name} ·{" "}
             {formatSessionDate(session.date)} · {session.time} ·{" "}
@@ -796,7 +796,7 @@ export function PurchaseModal({
             className="absolute top-0 right-10 min-w-20 rounded-lg bg-surface px-3 py-2 text-center"
             aria-live="polite"
           >
-            <span className="block text-[8px] font-semibold tracking-[0.05em] text-foreground/[0.5] uppercase">
+            <span className="block text-[8px] font-semibold tracking-[0.05em] text-muted uppercase">
               {isHolding
                 ? hold
                   ? "Updating hold"
@@ -814,7 +814,7 @@ export function PurchaseModal({
 
           <button
             type="button"
-            className="absolute top-1 right-0 inline-flex size-6 cursor-pointer items-center justify-center text-foreground/[0.55] transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-35"
+            className="absolute top-1 right-0 inline-flex size-6 cursor-pointer items-center justify-center text-muted transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-35"
             aria-label="Close purchase dialog"
             disabled={isHolding || isPaying || isClosing}
             onClick={() => void requestClose()}
@@ -833,7 +833,7 @@ export function PurchaseModal({
 
         {errorMessage ? (
           <div
-            className="mt-4 flex items-center justify-between gap-4 rounded-xl border border-error/[0.25] bg-error/[0.08] px-4 py-3 text-xs text-error"
+            className="mt-4 flex items-center justify-between gap-4 rounded-xl border border-error/[0.25] bg-error/[0.1] px-4 py-3 text-xs text-error"
             role="alert"
           >
             <span>{errorMessage}</span>
@@ -906,7 +906,7 @@ export function PurchaseModal({
                   onToggleSeat={toggleSeat}
                 />
               ) : !errorMessage ? (
-                <p className="py-20 text-center text-sm text-foreground/[0.5]">
+                <p className="py-20 text-center text-sm text-muted">
                   No seat map is available for this session.
                 </p>
               ) : null}
@@ -918,7 +918,7 @@ export function PurchaseModal({
                   Your seats · Max {maximumSeats || "–"}
                 </h3>
                 {config ? (
-                  <span className="text-[9px] text-foreground/[0.42]">
+                  <span className="text-[9px] text-muted">
                     {config.holdMinutes} min hold
                   </span>
                 ) : null}
@@ -952,7 +952,7 @@ export function PurchaseModal({
 
               <button
                 type="button"
-                className="mt-auto inline-flex h-11 w-full items-center justify-center rounded-full bg-brand text-sm font-extrabold text-foreground transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:bg-foreground/[0.28] disabled:text-foreground/[0.55]"
+                className="mt-auto inline-flex h-11 w-full items-center justify-center rounded-full bg-brand text-sm font-extrabold text-foreground transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:bg-foreground/[0.28] disabled:text-muted"
                 disabled={!canContinue}
                 onClick={continueToCheckout}
               >

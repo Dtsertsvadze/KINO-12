@@ -39,7 +39,7 @@ export function SeatPriceSummary({
   return (
     <div>
       {lines.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-foreground/[0.12] px-4 py-6 text-xs leading-5 text-foreground/[0.5]">
+        <div className="rounded-xl border border-dashed border-foreground/[0.12] px-4 py-6 text-xs leading-5 text-muted">
           Pick up to three seats from the map. Each seat can carry its own
           ticket type.
         </div>
@@ -52,7 +52,7 @@ export function SeatPriceSummary({
                   <h4 className="text-xs font-extrabold text-foreground">
                     Seat {line.seat.code}
                   </h4>
-                  <p className="mt-1 text-[10px] text-foreground/[0.48]">
+                  <p className="mt-1 text-[10px] text-muted">
                     {line.sectionName}
                   </p>
                 </div>
@@ -62,7 +62,7 @@ export function SeatPriceSummary({
                   </span>
                   <button
                     type="button"
-                    className="inline-flex size-5 cursor-pointer items-center justify-center rounded text-foreground/[0.45] transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-35"
+                    className="inline-flex size-5 cursor-pointer items-center justify-center rounded text-muted transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-35"
                     aria-label={`Remove seat ${line.seat.code}`}
                     disabled={disabled}
                     onClick={() => onRemove(line.seat.id)}
@@ -87,7 +87,7 @@ export function SeatPriceSummary({
                       className={`rounded-full px-3 py-1.5 text-[9px] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
                         isSelected
                           ? "bg-brand text-foreground"
-                          : "bg-page text-foreground/[0.55] hover:text-foreground"
+                          : "bg-page text-muted hover:text-foreground"
                       } ${isBlocked || disabled ? "cursor-not-allowed opacity-35" : "cursor-pointer"}`}
                       title={
                         isBlocked ? ticketType.note ?? undefined : undefined
@@ -118,7 +118,7 @@ export function SeatPriceSummary({
       )}
 
       <div className="mt-5 flex items-center justify-between border-t border-foreground/[0.1] pt-4">
-        <span className="text-[10px] font-semibold tracking-[0.05em] text-foreground/[0.55] uppercase">
+        <span className="text-[10px] font-semibold tracking-[0.05em] text-muted uppercase">
           Subtotal
         </span>
         <strong className="text-xl font-extrabold text-foreground">

@@ -44,7 +44,7 @@ export function SessionsPageContent({
       <ContentContainer>
         <header>
           <h1 className="text-2xl leading-7 font-extrabold">Sessions</h1>
-          <p className="mt-2 text-xs text-foreground/[0.48]">
+          <p className="mt-2 text-xs text-muted">
             Browse showtimes across all venues
           </p>
         </header>

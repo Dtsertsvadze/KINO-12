@@ -240,7 +240,7 @@ export function RegisterDialog({
             className="inline-flex cursor-pointer items-center gap-3"
             htmlFor="register-avatar"
           >
-            <span className="inline-flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface text-foreground/[0.42]">
+            <span className="inline-flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-surface text-muted">
               {avatarPreview ? (
                 // Object URLs are local previews and do not need image optimization.
                 // eslint-disable-next-line @next/next/no-img-element
@@ -270,7 +270,7 @@ export function RegisterDialog({
               <span className="text-xs leading-4 font-bold text-foreground">
                 Upload avatar (optional)
               </span>
-              <span className="text-[10px] leading-3 text-foreground/[0.5]">
+              <span className="text-[10px] leading-3 text-muted">
                 JPG, PNG or WEBP
               </span>
             </span>
@@ -363,13 +363,13 @@ export function RegisterDialog({
 
         <button
           type="submit"
-          className="mt-auto inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand text-xs font-bold text-foreground transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:bg-disabled disabled:text-foreground/[0.65] disabled:brightness-100"
+          className="mt-auto inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand text-xs font-bold text-foreground transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:bg-disabled disabled:text-muted disabled:brightness-100"
           disabled={!hasRequiredValues || isSubmitting}
         >
           {isSubmitting ? "Signing up…" : "Sign up"}
         </button>
 
-        <p className="mt-5 text-center text-[11px] leading-4 text-foreground/[0.5]">
+        <p className="mt-5 text-center text-[11px] leading-4 text-muted">
           Already have an account?{" "}
           <button
             type="button"

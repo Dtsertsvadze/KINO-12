@@ -13,7 +13,7 @@ export default function SessionNotFound() {
           <h1 className="mt-4 text-4xl font-extrabold">
             This session could not be found
           </h1>
-          <p className="mt-4 max-w-lg text-sm leading-6 text-foreground/[0.55]">
+          <p className="mt-4 max-w-lg text-sm leading-6 text-muted">
             It may have ended or been removed from the current cinema schedule.
           </p>
           <Link

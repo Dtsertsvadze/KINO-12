@@ -38,7 +38,7 @@ export function ProfilePageShell({
               className={`flex h-full items-center border-b-2 text-sm font-semibold transition-colors duration-200 ${
                 isActive
                   ? "border-brand text-foreground"
-                  : "border-transparent text-foreground/[0.58] hover:text-foreground"
+                  : "border-transparent text-muted hover:text-foreground"
               }`}
               aria-current={isActive ? "page" : undefined}
             >

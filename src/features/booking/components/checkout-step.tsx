@@ -349,18 +349,18 @@ export function CheckoutStep({
 
         <div className="mt-4 rounded-xl bg-surface p-4">
           <h4 className="text-xs font-extrabold uppercase">{movieTitle}</h4>
-          <p className="mt-1 text-[9px] leading-4 text-foreground/[0.48]">
+          <p className="mt-1 text-[9px] leading-4 text-muted">
             Hall {session.hall.name} · {formatSummaryDate(session.date)} · {session.time}
           </p>
           <dl className="mt-4 grid gap-2 text-[10px]">
             <div className="flex items-start justify-between gap-4">
-              <dt className="text-foreground/[0.45]">Seats</dt>
+              <dt className="text-muted">Seats</dt>
               <dd className="text-right font-semibold text-foreground">
                 {hold.seats.map((seat) => seat.code).join(", ")}
               </dd>
             </div>
             <div className="flex items-start justify-between gap-4">
-              <dt className="text-foreground/[0.45]">Tickets</dt>
+              <dt className="text-muted">Tickets</dt>
               <dd className="text-right font-semibold text-foreground">
                 {getTicketSummary(hold)}
               </dd>
@@ -369,7 +369,7 @@ export function CheckoutStep({
         </div>
 
         <div className="mt-auto flex items-end justify-between border-t border-foreground/[0.1] pt-4">
-          <span className="text-[10px] font-semibold tracking-[0.05em] text-foreground/[0.55] uppercase">
+          <span className="text-[10px] font-semibold tracking-[0.05em] text-muted uppercase">
             Grand total
           </span>
           <strong className="text-xl font-extrabold text-foreground">
@@ -379,7 +379,7 @@ export function CheckoutStep({
 
         <button
           type="submit"
-          className="mt-4 inline-flex h-11 w-full items-center justify-center rounded-full bg-brand text-sm font-extrabold text-foreground transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:bg-foreground/[0.28] disabled:text-foreground/[0.55]"
+          className="mt-4 inline-flex h-11 w-full items-center justify-center rounded-full bg-brand text-sm font-extrabold text-foreground transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:bg-foreground/[0.28] disabled:text-muted"
           disabled={!canSubmit}
         >
           {isSubmitting ? "Processing payment…" : "Pay & Complete Order"}

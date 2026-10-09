@@ -29,7 +29,7 @@ type ProfileField =
 type ProfileValues = Record<ProfileField, string>;
 
 const inputClassName =
-  "h-11 w-full rounded-xl border border-transparent bg-surface px-4 text-sm text-foreground outline-none transition-colors duration-200 placeholder:text-foreground/[0.42] focus:border-brand disabled:cursor-not-allowed disabled:text-foreground/[0.62]";
+  "h-11 w-full rounded-xl border border-transparent bg-surface px-4 text-sm text-foreground outline-none transition-colors duration-200 placeholder:text-muted focus:border-brand disabled:cursor-not-allowed disabled:text-muted";
 
 function valuesFromUser(user: AuthUser): ProfileValues {
   return {
@@ -66,7 +66,7 @@ function ProfileFormField({
           {error}
         </p>
       ) : hint ? (
-        <p className="text-xs leading-4 text-foreground/[0.58]">{hint}</p>
+        <p className="text-xs leading-4 text-muted">{hint}</p>
       ) : null}
     </div>
   );
@@ -100,10 +100,10 @@ export function PersonalInformationForm() {
   if (authError) {
     return (
       <div
-        className="flex min-h-52 w-[880px] flex-col items-center justify-center rounded-2xl border border-error/[0.18] bg-error/[0.05] px-8 text-center"
+        className="flex min-h-52 w-[880px] flex-col items-center justify-center rounded-2xl border border-error/[0.18] bg-error/[0.1] px-8 text-center"
         role="alert"
       >
-        <p className="text-sm text-foreground/[0.68]">{authError}</p>
+        <p className="text-sm text-muted">{authError}</p>
         <button
           type="button"
           className="mt-4 inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand px-5 text-xs font-extrabold text-foreground hover:bg-brand-hover"
@@ -117,7 +117,7 @@ export function PersonalInformationForm() {
 
   if (!user) {
     return (
-      <p className="text-sm text-foreground/[0.58]">
+      <p className="text-sm text-muted">
         Log in to view and update your profile.
       </p>
     );
@@ -346,7 +346,7 @@ function AuthenticatedProfileForm({ user }: { user: AuthUser }) {
           </select>
           <svg
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2 text-foreground/[0.65]"
+            className="pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2 text-muted"
             viewBox="0 0 20 20"
             fill="none"
           >
