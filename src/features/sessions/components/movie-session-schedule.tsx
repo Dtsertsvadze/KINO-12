@@ -40,9 +40,7 @@ function calculateAge(dateOfBirth: string | null, today: string) {
     return null;
   }
 
-  const [birthYear, birthMonth, birthDay] = dateOfBirth
-    .split("-")
-    .map(Number);
+  const [birthYear, birthMonth, birthDay] = dateOfBirth.split("-").map(Number);
   const [currentYear, currentMonth, currentDay] = today.split("-").map(Number);
 
   if (
@@ -79,7 +77,7 @@ function SessionTicket({
   return (
     <button
       type="button"
-      className={`grid h-[74px] w-[200px] shrink-0 grid-cols-[116px_84px] overflow-hidden rounded-lg border border-white/[0.08] bg-page/[0.82] ${
+      className={`grid h-[74px] w-[200px] shrink-0 grid-cols-[124px_80px] overflow-hidden rounded-lg border border-white/[0.08] bg-page/[0.82] ${
         isUnavailable
           ? "cursor-not-allowed opacity-35"
           : "cursor-pointer transition-colors hover:border-white/[0.28] hover:bg-white/[0.08] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
@@ -95,7 +93,7 @@ function SessionTicket({
         >
           {session.time}
         </time>
-        <div className="mt-2.5 flex items-center gap-2 text-[10px] leading-none text-white/[0.5]">
+        <div className="mt-2.5 flex items-center justify-center gap-2 text-[10px] leading-none text-white/[0.5]">
           <span>{session.language.code}</span>
           <span className="rounded-full bg-white/[0.1] px-2 py-1 font-semibold text-white/[0.62]">
             {session.format.name}
@@ -153,7 +151,10 @@ function VenueSchedule({
 
   return (
     <section className="mt-8" aria-labelledby={`venue-${group.venue.id}`}>
-      <h3 id={`venue-${group.venue.id}`} className="text-sm font-extrabold text-white">
+      <h3
+        id={`venue-${group.venue.id}`}
+        className="text-sm font-extrabold text-white"
+      >
         {group.venue.name}
       </h3>
       <div className="mt-3 flex flex-wrap gap-3">
@@ -196,10 +197,10 @@ export function MovieSessionSchedule({
   const accountAge = calculatedAge ?? user?.age ?? null;
   const isAgeRestricted = Boolean(
     !isLoading &&
-      user &&
-      minimumAge > 0 &&
-      accountAge !== null &&
-      accountAge < minimumAge,
+    user &&
+    minimumAge > 0 &&
+    accountAge !== null &&
+    accountAge < minimumAge,
   );
 
   const openPurchaseForUser = useCallback(
@@ -248,8 +249,7 @@ export function MovieSessionSchedule({
       openLogin((authenticatedUser) => {
         if (
           !authenticatedUser.profileComplete ||
-          (authenticatedUser.age !== null &&
-            authenticatedUser.age < minimumAge)
+          (authenticatedUser.age !== null && authenticatedUser.age < minimumAge)
         ) {
           openPurchaseForUser(activeSession, authenticatedUser);
           return;
