@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import { EmptyState, RequestErrorState } from "@/components/feedback/request-state";
 import { ContentContainer } from "@/components/layout/content-container";
+import { RecentlyViewedTracker } from "@/features/movies/components/recently-viewed-tracker";
 import type { MovieDetail } from "@/features/movies/types";
 
 import { getSessionDateChoices } from "../query";
@@ -136,6 +137,8 @@ export function SessionDetailPage({
 }: SessionDetailPageProps) {
   return (
     <main className="bg-page text-foreground">
+      <RecentlyViewedTracker movie={movie} sessionId={selectedSession.id} />
+
       <section className="relative h-[630px] overflow-hidden bg-page">
         {movie.backdropUrl ? (
           <Image

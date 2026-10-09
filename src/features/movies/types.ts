@@ -50,3 +50,14 @@ export type MovieDetail = Movie & {
 export type MovieDetailResponse = {
   data: MovieDetail;
 };
+
+export type RecentlyViewedMovie = {
+  id: number;
+  sessionId: number;
+  title: string;
+  posterUrl: string | null;
+  runtimeMinutes: number;
+  genre: string;
+  ageRatingCode: string;
+  viewedAt: number;
+};

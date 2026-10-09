@@ -6,6 +6,7 @@ import {
 import { ComingSoonCarousel } from "@/features/movies/components/coming-soon-carousel";
 import { FeaturedHero } from "@/features/movies/components/featured-hero";
 import { MovieCarousel } from "@/features/movies/components/movie-carousel";
+import { RecentlyViewedSection } from "@/features/movies/components/recently-viewed-section";
 import { getMovieSessionIds } from "@/features/movies/session-links";
 import { getTodayInTbilisi } from "@/features/sessions/query";
 
@@ -35,6 +36,7 @@ export default async function Home() {
         sessionIdsByMovieId={sessionIdsByMovieId}
         requestFailed={featuredResult.status === "rejected"}
       />
+      <RecentlyViewedSection />
       <MovieCarousel
         title="Now Playing"
         movies={nowPlayingMovies}
