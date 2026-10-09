@@ -195,11 +195,18 @@ export function FeaturedHero({
   const activeMovie = movies[activeIndex] ?? movies[0];
 
   const showPrevious = () => {
+    setIsPaused(false);
     setActiveIndex((current) => (current - 1 + movies.length) % movies.length);
   };
 
   const showNext = () => {
+    setIsPaused(false);
     setActiveIndex((current) => (current + 1) % movies.length);
+  };
+
+  const showSlide = (index: number) => {
+    setIsPaused(false);
+    setActiveIndex(index);
   };
 
   const handleBlur = (event: FocusEvent<HTMLElement>) => {
@@ -213,8 +220,6 @@ export function FeaturedHero({
       className="relative h-[760px] overflow-hidden bg-page text-foreground"
       aria-roledescription="carousel"
       aria-label="Featured movies"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
       onFocusCapture={() => setIsPaused(true)}
       onBlurCapture={handleBlur}
     >
@@ -304,7 +309,7 @@ export function FeaturedHero({
                 className="group flex h-8 flex-1 cursor-pointer items-center"
                 aria-label={`Show ${movie.title}`}
                 aria-current={index === activeIndex ? "true" : undefined}
-                onClick={() => setActiveIndex(index)}
+                onClick={() => showSlide(index)}
               >
                 <span
                   className={`h-1 w-full rounded-full transition-colors duration-300 ${
