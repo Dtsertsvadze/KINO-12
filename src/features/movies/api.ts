@@ -35,6 +35,27 @@ export function getComingSoonMovies(): Promise<Movie[]> {
   return getMovies("/movies/coming-soon", "Coming-soon movies");
 }
 
+export async function searchMovies(
+  query: string,
+  signal?: AbortSignal,
+): Promise<Movie[]> {
+  const params = new URLSearchParams({ q: query.trim() });
+  const response = await fetch(getApiUrl(`/search?${params.toString()}`), {
+    headers: {
+      Accept: "application/json",
+    },
+    cache: "no-store",
+    signal,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Movie search request failed with ${response.status}.`);
+  }
+
+  const payload = (await response.json()) as MoviesResponse;
+  return payload.data.slice(0, 6);
+}
+
 export async function getAuthenticatedComingSoonMovies(): Promise<Movie[]> {
   const response = await requestAuthenticated<MoviesResponse>(
     "/movies/coming-soon",

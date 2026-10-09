@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ContentContainer } from "@/components/layout/content-container";
 import { BrandLogo } from "@/components/navigation/brand-logo";
 import { AuthControls } from "@/features/auth/components/auth-controls";
+import { MovieSearch } from "@/features/movies/components/movie-search";
 
 export function Navbar() {
   return (
@@ -23,25 +24,7 @@ export function Navbar() {
           </div>
 
           <div className="flex items-center gap-8">
-            <div
-              className="flex h-[41px] w-[380px] items-center gap-1 rounded-full border border-foreground/[0.04] bg-foreground/[0.14] px-3 py-1.5 text-xs leading-none font-normal text-foreground/[0.82] shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-[10px]"
-              aria-label="Search films and live events"
-            >
-              <svg
-                aria-hidden="true"
-                className="size-3.5 shrink-0 stroke-[1.7]"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <circle cx="11" cy="11" r="6.5" stroke="currentColor" />
-                <path
-                  d="m16 16 4 4"
-                  stroke="currentColor"
-                  strokeLinecap="round"
-                />
-              </svg>
-              <span>Search films and live events</span>
-            </div>
+            <MovieSearch />
 
             <AuthControls />
           </div>
