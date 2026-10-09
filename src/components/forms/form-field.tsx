@@ -29,8 +29,8 @@ export function FormField({
       <span
         className={
           compact
-            ? `text-[10px] leading-4 font-semibold ${error ? "text-brand" : "text-white/[0.82]"}`
-            : "text-xs font-semibold text-white/[0.78]"
+            ? `text-[10px] leading-4 font-semibold ${error ? "text-error" : "text-foreground/[0.82]"}`
+            : "text-xs font-semibold text-foreground/[0.78]"
         }
       >
         {label}
@@ -39,16 +39,16 @@ export function FormField({
         <input
           {...inputProps}
           id={id}
-          className={`w-full border pr-10 text-white outline-none transition placeholder:text-white/[0.4] focus:border-brand disabled:cursor-not-allowed disabled:opacity-60 ${
+          className={`w-full border pr-10 text-foreground outline-none transition placeholder:text-foreground/[0.4] focus:border-brand disabled:cursor-not-allowed disabled:opacity-60 ${
             compact
-              ? "h-10 rounded-lg bg-input px-3 text-[11px]"
-              : "h-12 rounded-xl bg-white/[0.055] px-4 text-sm focus:bg-white/[0.08]"
+              ? "h-10 rounded-lg bg-surface px-3 text-[11px]"
+              : "h-12 rounded-xl bg-foreground/[0.055] px-4 text-sm focus:bg-foreground/[0.08]"
           } ${
             error
-              ? "border-brand"
+              ? "border-error focus:border-error"
               : valid
                 ? "border-success"
-                : "border-white/[0.1]"
+                : "border-foreground/[0.1]"
           } ${className}`}
           aria-invalid={Boolean(error)}
           aria-describedby={error ? errorId : undefined}
@@ -57,7 +57,7 @@ export function FormField({
         {error ? (
           <svg
             aria-hidden="true"
-            className="absolute top-1/2 right-3 size-3.5 -translate-y-1/2 text-brand"
+            className="absolute top-1/2 right-3 size-3.5 -translate-y-1/2 text-error"
             viewBox="0 0 16 16"
             fill="none"
           >
@@ -88,8 +88,8 @@ export function FormField({
           role="alert"
           className={
             compact
-              ? "text-[10px] leading-4 text-brand"
-              : "text-xs leading-5 text-red-300"
+              ? "text-[10px] leading-4 text-error"
+              : "text-xs leading-5 text-error"
           }
         >
           {error}
@@ -106,7 +106,7 @@ export function FormError({ message }: { message?: string }) {
 
   return (
     <p
-      className="rounded-xl border border-red-400/[0.25] bg-red-400/[0.08] px-4 py-3 text-sm leading-5 text-red-200"
+      className="rounded-xl border border-error/[0.25] bg-error/[0.08] px-4 py-3 text-sm leading-5 text-error"
       role="alert"
     >
       {message}

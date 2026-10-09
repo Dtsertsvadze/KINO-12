@@ -6,11 +6,14 @@
 
 @theme {
   --color-brand: #ec3013;
+  --color-brand-hover: #c92710;
   --color-page: var(--bg-page);
-  --color-panel: #0c1218;
-  --color-input: #1d1f2e;
+  --color-surface: #1d1f2e;
+  --color-foreground: #ffffff;
+  --color-scrim: #000000;
   --color-success: #2ecb81;
+  --color-warning: #ff8a22;
+  --color-error: #ff4d4f;
   --color-disabled: #676b7a;
-  --color-status: #ff8a22;
   --font-sans: var(--font-archivo), Arial, Helvetica, sans-serif;
 }

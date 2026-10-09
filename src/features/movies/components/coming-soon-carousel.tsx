@@ -227,7 +227,7 @@ export function ComingSoonCarousel({
 
   if (requestFailed || movies.length === 0) {
     return (
-      <section className="bg-page px-16 py-10 text-white">
+      <section className="bg-page px-16 py-10 text-foreground">
         <div className="mx-auto w-full max-w-[1640px]">
           <h2 className="mb-6 text-2xl leading-7 font-extrabold uppercase">
             Coming Soon...
@@ -256,7 +256,7 @@ export function ComingSoonCarousel({
             Coming Soon...
           </h2>
           {isAuthLoading || isRefreshingNotifications ? (
-            <span className="text-xs font-semibold text-white/[0.5]" role="status">
+            <span className="text-xs font-semibold text-foreground/[0.5]" role="status">
               Checking reminders…
             </span>
           ) : notificationRefreshError ? (
@@ -270,7 +270,7 @@ export function ComingSoonCarousel({
           ) : (
             <Link
               href="/sessions"
-              className="text-xs font-bold text-brand transition-colors hover:text-white focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+              className="text-xs font-bold text-brand transition-colors hover:text-foreground focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
             >
               See all
             </Link>
@@ -299,9 +299,9 @@ export function ComingSoonCarousel({
               {movies.map((movie) => (
                 <article
                   key={movie.id}
-                  className="flex h-44 w-[500px] shrink-0 snap-start gap-4 rounded-2xl bg-input p-3"
+                  className="flex h-44 w-[500px] shrink-0 snap-start gap-4 rounded-2xl bg-surface p-3"
                 >
-                  <div className="relative h-full w-60 shrink-0 overflow-hidden rounded-xl bg-white/[0.04]">
+                  <div className="relative h-full w-60 shrink-0 overflow-hidden rounded-xl bg-foreground/[0.04]">
                     {movie.posterUrl ? (
                       <Image
                         className="pointer-events-none object-cover"
@@ -311,7 +311,7 @@ export function ComingSoonCarousel({
                         sizes="240px"
                       />
                     ) : (
-                      <div className="flex size-full items-center justify-center px-4 text-center text-xs text-white/[0.45]">
+                      <div className="flex size-full items-center justify-center px-4 text-center text-xs text-foreground/[0.45]">
                         Poster unavailable
                       </div>
                     )}
@@ -321,10 +321,10 @@ export function ComingSoonCarousel({
                     <p className="text-[10px] leading-3 font-extrabold tracking-[0.02em] text-brand uppercase">
                       In cinemas {formatReleaseDate(movie.releaseDate)}
                     </p>
-                    <h3 className="mt-2 truncate text-sm leading-4 font-bold text-white">
+                    <h3 className="mt-2 truncate text-sm leading-4 font-bold text-foreground">
                       {movie.title}
                     </h3>
-                    <p className="mt-1 truncate text-[11px] leading-4 text-white/[0.5]">
+                    <p className="mt-1 truncate text-[11px] leading-4 text-foreground/[0.5]">
                       {movie.genres[0]?.name ?? movie.kind} ·{" "}
                       {movie.runtimeMinutes} min
                     </p>
@@ -337,12 +337,12 @@ export function ComingSoonCarousel({
 
                     <button
                       type="button"
-                      className={`mt-auto inline-flex h-8 w-fit cursor-default items-center justify-center gap-1.5 rounded-full px-3 text-[11px] font-bold text-white ${
+                      className={`mt-auto inline-flex h-8 w-fit cursor-default items-center justify-center gap-1.5 rounded-full px-3 text-[11px] font-bold text-foreground ${
                         notifiedMovieIds.has(movie.id)
-                          ? "bg-white/[0.16]"
+                          ? "bg-foreground/[0.16]"
                           : notificationErrors[movie.id]
-                            ? "cursor-pointer border border-brand transition-colors hover:bg-brand/[0.08]"
-                            : "cursor-pointer border border-white/[0.72] transition-colors hover:bg-white/[0.08]"
+                            ? "cursor-pointer border border-error transition-colors hover:bg-error/[0.08]"
+                            : "cursor-pointer border border-foreground/[0.72] transition-colors hover:bg-foreground/[0.08]"
                       }`}
                       title={notificationErrors[movie.id]}
                       aria-live="polite"
@@ -376,7 +376,7 @@ export function ComingSoonCarousel({
             <>
               <button
                 type="button"
-                className="absolute top-1/2 -left-16 z-20 inline-flex size-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/[0.52] text-white opacity-0 shadow-lg transition-[opacity,background-color] duration-200 group-hover/carousel:opacity-100 hover:bg-black/[0.72] focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="absolute top-1/2 -left-16 z-20 inline-flex size-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-scrim/[0.52] text-foreground opacity-0 shadow-lg transition-[opacity,background-color] duration-200 group-hover/carousel:opacity-100 hover:bg-scrim/[0.72] focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
                 aria-label="Scroll coming soon movies backward"
                 onClick={() => scrollByPage(-1)}
                 disabled={navigation.atStart}
@@ -385,7 +385,7 @@ export function ComingSoonCarousel({
               </button>
               <button
                 type="button"
-                className="absolute top-1/2 -right-16 z-20 inline-flex size-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/[0.52] text-white opacity-0 shadow-lg transition-[opacity,background-color] duration-200 group-hover/carousel:opacity-100 hover:bg-black/[0.72] focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="absolute top-1/2 -right-16 z-20 inline-flex size-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-scrim/[0.52] text-foreground opacity-0 shadow-lg transition-[opacity,background-color] duration-200 group-hover/carousel:opacity-100 hover:bg-scrim/[0.72] focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
                 aria-label="Scroll coming soon movies forward"
                 onClick={() => scrollByPage(1)}
                 disabled={navigation.atEnd}

@@ -73,10 +73,10 @@ function SessionDatePicker({
         const isAvailable = availableDateSet.has(date.value);
         const className = `flex h-[88px] w-[88px] flex-col items-center justify-center rounded-xl text-xs font-semibold transition-colors ${
           isSelected
-            ? "bg-brand text-white"
+            ? "bg-brand text-foreground"
             : isAvailable
-              ? "bg-input text-white/[0.72] hover:bg-white/[0.12]"
-              : "cursor-not-allowed bg-input text-white/[0.24]"
+              ? "bg-surface text-foreground/[0.72] hover:bg-foreground/[0.12]"
+              : "cursor-not-allowed bg-surface text-foreground/[0.24]"
         }`;
         const content = (
           <>
@@ -117,10 +117,10 @@ function SessionDatePicker({
 function DetailItem({ label, children }: { label: string; children: string }) {
   return (
     <div>
-      <dt className="text-[10px] leading-none font-semibold tracking-[0.06em] text-white/[0.42] uppercase">
+      <dt className="text-[10px] leading-none font-semibold tracking-[0.06em] text-foreground/[0.42] uppercase">
         {label}
       </dt>
-      <dd className="mt-2 text-xs leading-5 font-semibold text-white">{children}</dd>
+      <dd className="mt-2 text-xs leading-5 font-semibold text-foreground">{children}</dd>
     </div>
   );
 }
@@ -135,7 +135,7 @@ export function SessionDetailPage({
   initialBookingSession,
 }: SessionDetailPageProps) {
   return (
-    <main className="bg-page text-white">
+    <main className="bg-page text-foreground">
       <section className="relative h-[630px] overflow-hidden bg-page">
         {movie.backdropUrl ? (
           <Image
@@ -151,7 +151,7 @@ export function SessionDetailPage({
         <div className="absolute inset-0 bg-[linear-gradient(0deg,rgba(7,12,28,0.76)_0%,transparent_46%)]" />
 
         <ContentContainer className="relative z-[1] flex h-full items-end gap-10 pb-12">
-          <div className="relative h-[416px] w-[320px] shrink-0 overflow-hidden rounded-2xl bg-white/[0.06] shadow-2xl">
+          <div className="relative h-[416px] w-[320px] shrink-0 overflow-hidden rounded-2xl bg-foreground/[0.06] shadow-2xl">
             {movie.posterUrl ? (
               <Image
                 src={movie.posterUrl}
@@ -162,7 +162,7 @@ export function SessionDetailPage({
                 className="object-cover"
               />
             ) : (
-              <div className="flex size-full items-center justify-center text-sm text-white/[0.45]">
+              <div className="flex size-full items-center justify-center text-sm text-foreground/[0.45]">
                 Poster unavailable
               </div>
             )}
@@ -175,7 +175,7 @@ export function SessionDetailPage({
             <h1 className="mt-6 text-[40px] leading-none font-extrabold tracking-[-0.02em] uppercase">
               {movie.title}
             </h1>
-            <p className="mt-6 max-w-[680px] text-sm leading-6 text-white/[0.82]">
+            <p className="mt-6 max-w-[680px] text-sm leading-6 text-foreground/[0.82]">
               {movie.synopsis}
             </p>
             <div className="mt-6 flex flex-wrap items-center gap-2">
@@ -185,14 +185,14 @@ export function SessionDetailPage({
               >
                 {movie.ageRating.code}
               </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.12] px-3 py-1.5 text-[10px] font-semibold">
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-foreground/[0.12] px-3 py-1.5 text-[10px] font-semibold">
                 <ClockIcon />
                 {movie.runtimeMinutes} min
               </span>
               {movie.formats.map((format) => (
                 <span
                   key={format.id}
-                  className="rounded-full bg-white/[0.12] px-3 py-1.5 text-[10px] font-semibold"
+                  className="rounded-full bg-foreground/[0.12] px-3 py-1.5 text-[10px] font-semibold"
                 >
                   {format.name}
                 </span>
@@ -263,7 +263,7 @@ export function SessionDetailPage({
               <DetailItem label="From">{`₾${formatPrice(movie.fromPrice)}`}</DetailItem>
             </dl>
 
-            <div className="mt-6 rounded-xl bg-status/[0.09] px-4 py-4 text-status">
+            <div className="mt-6 rounded-xl bg-warning/[0.09] px-4 py-4 text-warning">
               <p className="text-[10px] font-extrabold tracking-[0.06em] uppercase">
                 Rating note
               </p>

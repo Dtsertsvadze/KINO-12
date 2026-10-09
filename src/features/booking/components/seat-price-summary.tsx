@@ -39,30 +39,30 @@ export function SeatPriceSummary({
   return (
     <div>
       {lines.length === 0 ? (
-        <div className="rounded-xl border border-dashed border-white/[0.12] px-4 py-6 text-xs leading-5 text-white/[0.5]">
+        <div className="rounded-xl border border-dashed border-foreground/[0.12] px-4 py-6 text-xs leading-5 text-foreground/[0.5]">
           Pick up to three seats from the map. Each seat can carry its own
           ticket type.
         </div>
       ) : (
         <div className="max-h-[330px] space-y-3 overflow-y-auto pr-1">
           {lines.map((line) => (
-            <article key={line.seat.id} className="rounded-xl bg-input p-3">
+            <article key={line.seat.id} className="rounded-xl bg-surface p-3">
               <div className="flex items-start justify-between gap-3">
                 <div>
-                  <h4 className="text-xs font-extrabold text-white">
+                  <h4 className="text-xs font-extrabold text-foreground">
                     Seat {line.seat.code}
                   </h4>
-                  <p className="mt-1 text-[10px] text-white/[0.48]">
+                  <p className="mt-1 text-[10px] text-foreground/[0.48]">
                     {line.sectionName}
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-xs font-extrabold text-white">
+                  <span className="text-xs font-extrabold text-foreground">
                     ₾{formatPrice(line.price)}
                   </span>
                   <button
                     type="button"
-                    className="inline-flex size-5 cursor-pointer items-center justify-center rounded text-white/[0.45] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-35"
+                    className="inline-flex size-5 cursor-pointer items-center justify-center rounded text-foreground/[0.45] transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-35"
                     aria-label={`Remove seat ${line.seat.code}`}
                     disabled={disabled}
                     onClick={() => onRemove(line.seat.id)}
@@ -86,8 +86,8 @@ export function SeatPriceSummary({
                       type="button"
                       className={`rounded-full px-3 py-1.5 text-[9px] font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
                         isSelected
-                          ? "bg-brand text-white"
-                          : "bg-page text-white/[0.55] hover:text-white"
+                          ? "bg-brand text-foreground"
+                          : "bg-page text-foreground/[0.55] hover:text-foreground"
                       } ${isBlocked || disabled ? "cursor-not-allowed opacity-35" : "cursor-pointer"}`}
                       title={
                         isBlocked ? ticketType.note ?? undefined : undefined
@@ -106,7 +106,7 @@ export function SeatPriceSummary({
 
               {line.error ? (
                 <p
-                  className="mt-2 text-[10px] leading-4 text-brand"
+                  className="mt-2 text-[10px] leading-4 text-error"
                   role="alert"
                 >
                   {line.seat.code}: {line.error}
@@ -117,11 +117,11 @@ export function SeatPriceSummary({
         </div>
       )}
 
-      <div className="mt-5 flex items-center justify-between border-t border-white/[0.1] pt-4">
-        <span className="text-[10px] font-semibold tracking-[0.05em] text-white/[0.55] uppercase">
+      <div className="mt-5 flex items-center justify-between border-t border-foreground/[0.1] pt-4">
+        <span className="text-[10px] font-semibold tracking-[0.05em] text-foreground/[0.55] uppercase">
           Subtotal
         </span>
-        <strong className="text-xl font-extrabold text-white">
+        <strong className="text-xl font-extrabold text-foreground">
           ₾{formatPrice(subtotal)}
         </strong>
       </div>

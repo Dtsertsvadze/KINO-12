@@ -29,18 +29,18 @@ function TicketsSkeleton() {
       {Array.from({ length: 3 }, (_, index) => (
         <div
           key={index}
-          className="grid min-h-[204px] animate-pulse grid-cols-[128px_1fr_316px] overflow-hidden rounded-[28px] bg-input motion-reduce:animate-none"
+          className="grid min-h-[204px] animate-pulse grid-cols-[128px_1fr_316px] overflow-hidden rounded-[28px] bg-surface motion-reduce:animate-none"
         >
-          <div className="m-6 mr-0 h-[156px] w-[112px] rounded-xl bg-white/[0.07]" />
+          <div className="m-6 mr-0 h-[156px] w-[112px] rounded-xl bg-foreground/[0.07]" />
           <div className="px-6 py-7">
-            <div className="h-6 w-64 rounded bg-white/[0.08]" />
-            <div className="mt-6 h-10 w-3/4 rounded bg-white/[0.055]" />
-            <div className="mt-5 h-6 w-1/2 rounded bg-white/[0.055]" />
+            <div className="h-6 w-64 rounded bg-foreground/[0.08]" />
+            <div className="mt-6 h-10 w-3/4 rounded bg-foreground/[0.055]" />
+            <div className="mt-5 h-6 w-1/2 rounded bg-foreground/[0.055]" />
           </div>
-          <div className="border-l border-dashed border-white/[0.08] px-7 py-7">
-            <div className="h-5 w-24 rounded bg-white/[0.07]" />
-            <div className="mt-6 h-7 w-full rounded bg-white/[0.06]" />
-            <div className="mt-5 h-10 w-full rounded-full bg-white/[0.07]" />
+          <div className="border-l border-dashed border-foreground/[0.08] px-7 py-7">
+            <div className="h-5 w-24 rounded bg-foreground/[0.07]" />
+            <div className="mt-6 h-7 w-full rounded bg-foreground/[0.06]" />
+            <div className="mt-5 h-10 w-full rounded-full bg-foreground/[0.07]" />
           </div>
         </div>
       ))}
@@ -199,7 +199,7 @@ export function TicketsPage() {
       <section className="min-h-[700px]" aria-labelledby="profile-tab-tickets">
         {!isAuthLoading && user ? (
           <div
-            className="inline-flex rounded-xl bg-input p-1"
+            className="inline-flex rounded-xl bg-surface p-1"
             role="tablist"
             aria-label="Ticket history"
           >
@@ -213,8 +213,8 @@ export function TicketsPage() {
                   type="button"
                   className={`inline-flex h-9 cursor-pointer items-center gap-2 rounded-lg px-4 text-xs font-bold capitalize transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand ${
                     isActive
-                      ? "bg-white/[0.09] text-white"
-                      : "text-white/[0.44] hover:text-white"
+                      ? "bg-foreground/[0.09] text-foreground"
+                      : "text-foreground/[0.44] hover:text-foreground"
                   }`}
                   role="tab"
                   aria-selected={isActive}
@@ -222,7 +222,7 @@ export function TicketsPage() {
                   onClick={() => setActiveFilter(filter)}
                 >
                   {filter}
-                  <span className="text-[10px] text-white/[0.52]">
+                  <span className="text-[10px] text-foreground/[0.52]">
                     {hasCurrentUserTickets ? tickets[filter].length : "–"}
                   </span>
                 </button>
@@ -254,13 +254,13 @@ export function TicketsPage() {
             <TicketsSkeleton />
           ) : authError ? (
             <div
-              className="flex min-h-52 flex-col items-center justify-center rounded-2xl border border-brand/[0.18] bg-brand/[0.05] px-8 text-center"
+              className="flex min-h-52 flex-col items-center justify-center rounded-2xl border border-error/[0.18] bg-error/[0.05] px-8 text-center"
               role="alert"
             >
-              <p className="text-sm text-white/[0.68]">{authError}</p>
+              <p className="text-sm text-foreground/[0.68]">{authError}</p>
               <button
                 type="button"
-                className="mt-4 inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand px-5 text-xs font-extrabold text-white hover:bg-brand-hover"
+                className="mt-4 inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand px-5 text-xs font-extrabold text-foreground hover:bg-brand-hover"
                 onClick={retryAuthentication}
               >
                 Try again
@@ -273,16 +273,16 @@ export function TicketsPage() {
             />
           ) : currentTicketsError ? (
             <div
-              className="flex min-h-52 flex-col items-center justify-center rounded-2xl border border-brand/[0.18] bg-brand/[0.05] px-8 text-center"
+              className="flex min-h-52 flex-col items-center justify-center rounded-2xl border border-error/[0.18] bg-error/[0.05] px-8 text-center"
               role="alert"
             >
               <h2 className="text-lg font-bold">Tickets could not be loaded</h2>
-              <p className="mt-2 text-sm text-white/[0.58]">
+              <p className="mt-2 text-sm text-foreground/[0.58]">
                 {currentTicketsError}
               </p>
               <button
                 type="button"
-                className="mt-5 inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand px-5 text-xs font-extrabold text-white hover:bg-brand-hover"
+                className="mt-5 inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand px-5 text-xs font-extrabold text-foreground hover:bg-brand-hover"
                 onClick={retryTickets}
               >
                 Try again

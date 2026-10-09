@@ -69,7 +69,7 @@ export function OrderConfirmation({
     <article className="relative flex h-full flex-col items-center px-14 py-10 text-center">
       <button
         type="button"
-        className="absolute top-7 right-7 inline-flex size-7 cursor-pointer items-center justify-center text-white/[0.55] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+        className="absolute top-7 right-7 inline-flex size-7 cursor-pointer items-center justify-center text-foreground/[0.55] transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
         aria-label="Close order confirmation"
         onClick={onClose}
       >
@@ -80,19 +80,19 @@ export function OrderConfirmation({
       <h2 id={titleId} className="mt-4 text-xl font-extrabold">
         Booking confirmed!
       </h2>
-      <p id={descriptionId} className="mt-2 text-xs text-white/[0.5]">
+      <p id={descriptionId} className="mt-2 text-xs text-foreground/[0.5]">
         Your tickets are ready. Keep this order reference for your records.
       </p>
-      <span className="mt-4 rounded-full bg-input px-5 py-2 text-[10px] font-extrabold tracking-[0.08em] text-white/[0.72] uppercase">
+      <span className="mt-4 rounded-full bg-surface px-5 py-2 text-[10px] font-extrabold tracking-[0.08em] text-foreground/[0.72] uppercase">
         Order {order.reference}
       </span>
 
       <section
-        className="mt-5 w-[620px] rounded-xl bg-input p-4 text-left"
+        className="mt-5 w-[620px] rounded-xl bg-surface p-4 text-left"
         aria-label="Confirmed order summary"
       >
-        <div className="flex items-center gap-3 border-b border-white/[0.08] pb-3">
-          <div className="relative h-14 w-11 shrink-0 overflow-hidden rounded-md bg-white/[0.06]">
+        <div className="flex items-center gap-3 border-b border-foreground/[0.08] pb-3">
+          <div className="relative h-14 w-11 shrink-0 overflow-hidden rounded-md bg-foreground/[0.06]">
             {order.session.movie.posterUrl ? (
               <Image
                 src={order.session.movie.posterUrl}
@@ -107,7 +107,7 @@ export function OrderConfirmation({
             <h3 className="text-xs font-extrabold uppercase">
               {order.session.movie.title}
             </h3>
-            <p className="mt-1 text-[9px] leading-4 text-white/[0.48]">
+            <p className="mt-1 text-[9px] leading-4 text-foreground/[0.48]">
               {order.session.venue.name} · Hall {order.session.hall.name} ·{" "}
               {formatOrderDate(order.session.date)} · {order.session.time}
             </p>
@@ -116,14 +116,14 @@ export function OrderConfirmation({
 
         <dl className="mt-3 grid gap-2 text-[10px]">
           <div className="flex items-start justify-between gap-5">
-            <dt className="text-white/[0.45]">Seats</dt>
-            <dd className="text-right font-semibold text-white">
+            <dt className="text-foreground/[0.45]">Seats</dt>
+            <dd className="text-right font-semibold text-foreground">
               {order.tickets.map((ticket) => ticket.seatCode).join(", ")}
             </dd>
           </div>
           <div className="flex items-start justify-between gap-5">
-            <dt className="text-white/[0.45]">Tickets</dt>
-            <dd className="grid gap-1 text-right font-semibold text-white">
+            <dt className="text-foreground/[0.45]">Tickets</dt>
+            <dd className="grid gap-1 text-right font-semibold text-foreground">
               {order.tickets.map((ticket) => (
                 <span key={ticket.id}>
                   {ticket.seatCode} · {ticket.ticketType.name} · ₾
@@ -132,17 +132,17 @@ export function OrderConfirmation({
               ))}
             </dd>
           </div>
-          <div className="mt-1 flex items-center justify-between border-t border-white/[0.08] pt-3">
-            <dt className="font-semibold tracking-[0.05em] text-white/[0.58] uppercase">
+          <div className="mt-1 flex items-center justify-between border-t border-foreground/[0.08] pt-3">
+            <dt className="font-semibold tracking-[0.05em] text-foreground/[0.58] uppercase">
               Total paid
             </dt>
-            <dd className="text-base font-extrabold text-white">
+            <dd className="text-base font-extrabold text-foreground">
               ₾{formatPrice(order.totalPrice)}
             </dd>
           </div>
           <div className="flex items-center justify-between">
-            <dt className="text-white/[0.45]">Payment card</dt>
-            <dd className="font-semibold text-white">
+            <dt className="text-foreground/[0.45]">Payment card</dt>
+            <dd className="font-semibold text-foreground">
               •••• {order.cardLastFour}
             </dd>
           </div>
@@ -152,14 +152,14 @@ export function OrderConfirmation({
       <div className="mt-5 flex items-center gap-3">
         <button
           type="button"
-          className="inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand px-6 text-xs font-extrabold text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          className="inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand px-6 text-xs font-extrabold text-foreground transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           onClick={onViewTickets}
         >
           My Tickets
         </button>
         <button
           type="button"
-          className="inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-input px-6 text-xs font-extrabold text-white transition-colors hover:bg-white/[0.14] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          className="inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-surface px-6 text-xs font-extrabold text-foreground transition-colors hover:bg-foreground/[0.14] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           onClick={onClose}
         >
           Close

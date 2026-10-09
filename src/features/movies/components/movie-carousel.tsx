@@ -25,7 +25,7 @@ function MovieCarouselState({
   requestFailed: boolean;
 }) {
   return (
-    <section className="border-b border-white/[0.08] bg-page px-16 py-10 text-white">
+    <section className="border-b border-foreground/[0.08] bg-page px-16 py-10 text-foreground">
       <div className="mx-auto w-full max-w-[1640px]">
         <h2 className="mb-6 text-2xl leading-7 font-extrabold uppercase">
           {title}
@@ -81,7 +81,7 @@ function CarouselArrow({ direction }: { direction: "previous" | "next" }) {
 function MovieCardDetails({ movie }: { movie: Movie }) {
   return (
     <>
-      <div className="relative h-[330px] shrink-0 overflow-hidden rounded-xl bg-white/[0.04] transition-[height] delay-0 duration-300 ease-out group-hover/movie:h-64 group-hover/movie:delay-300 group-focus-within/movie:h-64 group-focus-within/movie:delay-0 motion-reduce:transition-none">
+      <div className="relative h-[330px] shrink-0 overflow-hidden rounded-xl bg-foreground/[0.04] transition-[height] delay-0 duration-300 ease-out group-hover/movie:h-64 group-hover/movie:delay-300 group-focus-within/movie:h-64 group-focus-within/movie:delay-0 motion-reduce:transition-none">
         {movie.posterUrl ? (
           <Image
             className="pointer-events-none object-cover"
@@ -91,16 +91,16 @@ function MovieCardDetails({ movie }: { movie: Movie }) {
             sizes="236px"
           />
         ) : (
-          <div className="flex size-full items-center justify-center px-5 text-center text-sm text-white/[0.45]">
+          <div className="flex size-full items-center justify-center px-5 text-center text-sm text-foreground/[0.45]">
             Poster unavailable
           </div>
         )}
       </div>
 
-      <h3 className="mt-3 truncate text-base leading-5 font-bold text-white">
+      <h3 className="mt-3 truncate text-base leading-5 font-bold text-foreground">
         {movie.title}
       </h3>
-      <p className="mt-1 truncate text-[11px] leading-4 text-white/[0.48]">
+      <p className="mt-1 truncate text-[11px] leading-4 text-foreground/[0.48]">
         {movie.genres[0]?.name ?? movie.kind} · {movie.runtimeMinutes} min
       </p>
       <p
@@ -111,7 +111,7 @@ function MovieCardDetails({ movie }: { movie: Movie }) {
       </p>
 
       <div className="mt-0 grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,margin,opacity] delay-0 duration-300 group-hover/movie:mt-2 group-hover/movie:grid-rows-[1fr] group-hover/movie:opacity-100 group-hover/movie:delay-300 group-focus-within/movie:mt-2 group-focus-within/movie:grid-rows-[1fr] group-focus-within/movie:opacity-100 group-focus-within/movie:delay-0 motion-reduce:transition-none">
-        <p className="line-clamp-3 overflow-hidden text-sm leading-5 text-white/[0.66]">
+        <p className="line-clamp-3 overflow-hidden text-sm leading-5 text-foreground/[0.66]">
           {movie.synopsis}
         </p>
       </div>
@@ -141,7 +141,7 @@ export function MovieCarousel({
   }
 
   return (
-    <section className="group/carousel relative border-b border-white/[0.08] bg-page px-16 py-10">
+    <section className="group/carousel relative border-b border-foreground/[0.08] bg-page px-16 py-10">
       <div className="mx-auto w-full max-w-[1640px]">
         <div className="mb-6 flex items-center justify-between">
           <h2 className="text-2xl leading-7 font-extrabold uppercase">
@@ -149,7 +149,7 @@ export function MovieCarousel({
           </h2>
           <Link
             href="/sessions"
-            className="text-xs font-bold text-brand transition-colors hover:text-white focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+            className="text-xs font-bold text-brand transition-colors hover:text-foreground focus-visible:rounded-sm focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
           >
             See all
           </Link>
@@ -180,7 +180,7 @@ export function MovieCarousel({
                 return (
                   <article
                     key={movie.id}
-                    className="group/movie flex h-[494px] w-[260px] shrink-0 snap-start flex-col rounded-2xl bg-input p-3 transition-[width] delay-0 duration-300 ease-out hover:w-[480px] hover:delay-300 focus-within:w-[480px] focus-within:delay-0 motion-reduce:transition-none"
+                    className="group/movie flex h-[494px] w-[260px] shrink-0 snap-start flex-col rounded-2xl bg-surface p-3 transition-[width] delay-0 duration-300 ease-out hover:w-[480px] hover:delay-300 focus-within:w-[480px] focus-within:delay-0 motion-reduce:transition-none"
                   >
                     {sessionId ? (
                       <Link
@@ -197,13 +197,13 @@ export function MovieCarousel({
                     )}
 
                     <div className="mt-auto flex items-center justify-between gap-3">
-                      <span className="text-xs font-semibold text-white">
+                      <span className="text-xs font-semibold text-foreground">
                         From ₾{movie.fromPrice}
                       </span>
                       {sessionId ? (
                         <Link
                           href={`/session/${sessionId}`}
-                          className="inline-flex h-9 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-brand px-4 text-xs font-extrabold text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                          className="inline-flex h-9 cursor-pointer items-center justify-center gap-1.5 rounded-full bg-brand px-4 text-xs font-extrabold text-foreground transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                         >
                           <TicketIcon />
                           Buy Ticket
@@ -211,7 +211,7 @@ export function MovieCarousel({
                       ) : (
                         <button
                           type="button"
-                          className="inline-flex h-9 cursor-not-allowed items-center justify-center gap-1.5 rounded-full bg-brand px-4 text-xs font-extrabold text-white opacity-45"
+                          className="inline-flex h-9 cursor-not-allowed items-center justify-center gap-1.5 rounded-full bg-brand px-4 text-xs font-extrabold text-foreground opacity-45"
                           disabled
                         >
                           <TicketIcon />
@@ -229,7 +229,7 @@ export function MovieCarousel({
             <>
               <button
                 type="button"
-                className="absolute top-1/2 -left-16 z-20 inline-flex size-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/[0.52] text-white opacity-0 shadow-lg transition-[opacity,background-color] duration-200 group-hover/carousel:opacity-100 hover:bg-black/[0.72] focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="absolute top-1/2 -left-16 z-20 inline-flex size-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-scrim/[0.52] text-foreground opacity-0 shadow-lg transition-[opacity,background-color] duration-200 group-hover/carousel:opacity-100 hover:bg-scrim/[0.72] focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
                 aria-label={`Scroll ${title} backward`}
                 onClick={() => scrollByPage(-1)}
                 disabled={navigation.atStart}
@@ -238,7 +238,7 @@ export function MovieCarousel({
               </button>
               <button
                 type="button"
-                className="absolute top-1/2 -right-16 z-20 inline-flex size-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-black/[0.52] text-white opacity-0 shadow-lg transition-[opacity,background-color] duration-200 group-hover/carousel:opacity-100 hover:bg-black/[0.72] focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                className="absolute top-1/2 -right-16 z-20 inline-flex size-12 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-scrim/[0.52] text-foreground opacity-0 shadow-lg transition-[opacity,background-color] duration-200 group-hover/carousel:opacity-100 hover:bg-scrim/[0.72] focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
                 aria-label={`Scroll ${title} forward`}
                 onClick={() => scrollByPage(1)}
                 disabled={navigation.atEnd}

@@ -340,46 +340,46 @@ export function CheckoutStep({
       </section>
 
       <aside
-        className="flex min-h-0 flex-col border-l border-white/[0.1] pl-8"
+        className="flex min-h-0 flex-col border-l border-foreground/[0.1] pl-8"
         aria-labelledby="checkout-summary-heading"
       >
         <h3 id="checkout-summary-heading" className="text-sm font-extrabold">
           Summary
         </h3>
 
-        <div className="mt-4 rounded-xl bg-input p-4">
+        <div className="mt-4 rounded-xl bg-surface p-4">
           <h4 className="text-xs font-extrabold uppercase">{movieTitle}</h4>
-          <p className="mt-1 text-[9px] leading-4 text-white/[0.48]">
+          <p className="mt-1 text-[9px] leading-4 text-foreground/[0.48]">
             Hall {session.hall.name} · {formatSummaryDate(session.date)} · {session.time}
           </p>
           <dl className="mt-4 grid gap-2 text-[10px]">
             <div className="flex items-start justify-between gap-4">
-              <dt className="text-white/[0.45]">Seats</dt>
-              <dd className="text-right font-semibold text-white">
+              <dt className="text-foreground/[0.45]">Seats</dt>
+              <dd className="text-right font-semibold text-foreground">
                 {hold.seats.map((seat) => seat.code).join(", ")}
               </dd>
             </div>
             <div className="flex items-start justify-between gap-4">
-              <dt className="text-white/[0.45]">Tickets</dt>
-              <dd className="text-right font-semibold text-white">
+              <dt className="text-foreground/[0.45]">Tickets</dt>
+              <dd className="text-right font-semibold text-foreground">
                 {getTicketSummary(hold)}
               </dd>
             </div>
           </dl>
         </div>
 
-        <div className="mt-auto flex items-end justify-between border-t border-white/[0.1] pt-4">
-          <span className="text-[10px] font-semibold tracking-[0.05em] text-white/[0.55] uppercase">
+        <div className="mt-auto flex items-end justify-between border-t border-foreground/[0.1] pt-4">
+          <span className="text-[10px] font-semibold tracking-[0.05em] text-foreground/[0.55] uppercase">
             Grand total
           </span>
-          <strong className="text-xl font-extrabold text-white">
+          <strong className="text-xl font-extrabold text-foreground">
             ₾{formatPrice(hold.subtotal)}
           </strong>
         </div>
 
         <button
           type="submit"
-          className="mt-4 inline-flex h-11 w-full items-center justify-center rounded-full bg-brand text-sm font-extrabold text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:bg-white/[0.28] disabled:text-white/[0.55]"
+          className="mt-4 inline-flex h-11 w-full items-center justify-center rounded-full bg-brand text-sm font-extrabold text-foreground transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:bg-foreground/[0.28] disabled:text-foreground/[0.55]"
           disabled={!canSubmit}
         >
           {isSubmitting ? "Processing payment…" : "Pay & Complete Order"}

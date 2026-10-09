@@ -187,20 +187,20 @@ export function LoginDialog({
         </div>
 
         {formError ? (
-          <p className="mt-2 text-[10px] leading-4 text-brand" role="alert">
+          <p className="mt-2 text-[10px] leading-4 text-error" role="alert">
             {formError}
           </p>
         ) : null}
 
         <button
           type="submit"
-          className="mt-auto inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand text-xs font-bold text-white transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:bg-disabled disabled:text-white/[0.65] disabled:brightness-100"
+          className="mt-auto inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand text-xs font-bold text-foreground transition hover:brightness-110 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:bg-disabled disabled:text-foreground/[0.65] disabled:brightness-100"
           disabled={!values.email || !values.password || isSubmitting}
         >
           {isSubmitting ? "Logging in…" : "Log in"}
         </button>
 
-        <p className="mt-5 text-center text-[11px] leading-4 text-white/[0.5]">
+        <p className="mt-5 text-center text-[11px] leading-4 text-foreground/[0.5]">
           Don&apos;t have an account?{" "}
           <button
             type="button"

@@ -20,11 +20,11 @@ export function ProfilePageShell({
   children,
 }: ProfilePageShellProps) {
   return (
-    <main className="min-h-[1080px] bg-page px-[60px] pt-[119px] text-white">
+    <main className="min-h-[1080px] bg-page px-[60px] pt-[119px] text-foreground">
       <h1 className="text-2xl leading-8 font-bold">My Profile</h1>
 
       <nav
-        className="mt-5 flex h-[54px] items-end gap-10 border-b border-white/[0.1]"
+        className="mt-5 flex h-[54px] items-end gap-10 border-b border-foreground/[0.1]"
         aria-label="Profile sections"
       >
         {tabs.map((tab) => {
@@ -37,14 +37,14 @@ export function ProfilePageShell({
               href={tab.href}
               className={`flex h-full items-center border-b-2 text-sm font-semibold transition-colors duration-200 ${
                 isActive
-                  ? "border-brand text-white"
-                  : "border-transparent text-white/[0.58] hover:text-white"
+                  ? "border-brand text-foreground"
+                  : "border-transparent text-foreground/[0.58] hover:text-foreground"
               }`}
               aria-current={isActive ? "page" : undefined}
             >
               {tab.label}
               {tab.id === "tickets" && ticketCount ? (
-                <span className="ml-2 inline-flex min-w-5 items-center justify-center rounded-full bg-brand px-1.5 py-0.5 text-[10px] leading-none font-extrabold text-white">
+                <span className="ml-2 inline-flex min-w-5 items-center justify-center rounded-full bg-brand px-1.5 py-0.5 text-[10px] leading-none font-extrabold text-foreground">
                   {ticketCount}
                 </span>
               ) : null}

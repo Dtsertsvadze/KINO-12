@@ -27,29 +27,29 @@ function formatPrice(price: number) {
 function SessionCard({ session }: { session: CinemaSession }) {
   const availabilityTone = session.seatsLeft <= 10 ? "text-brand" : "text-success";
   const label = `${session.time}, ${session.venue.name}, Hall ${session.hall.name}, ${session.format.name}, ${session.language.name}${session.isSoldOut ? ", sold out" : ""}`;
-  const className = `flex h-[116px] w-[270px] shrink-0 flex-col rounded-xl bg-input p-4 ${
+  const className = `flex h-[116px] w-[270px] shrink-0 flex-col rounded-xl bg-surface p-4 ${
     session.isSoldOut
       ? "cursor-not-allowed opacity-35"
-      : "cursor-pointer transition-colors hover:bg-white/[0.12] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+      : "cursor-pointer transition-colors hover:bg-foreground/[0.12] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
   }`;
   const content = (
     <>
       <div className="flex items-start justify-between gap-3">
         <time
-          className="text-base leading-none font-extrabold text-white"
+          className="text-base leading-none font-extrabold text-foreground"
           dateTime={session.startsAt}
         >
           {session.time}
         </time>
-        <span className="rounded-full bg-white/[0.09] px-2 py-1 text-[9px] leading-none font-semibold text-white">
+        <span className="rounded-full bg-foreground/[0.09] px-2 py-1 text-[9px] leading-none font-semibold text-foreground">
           {session.format.name}
         </span>
       </div>
 
       <div className="mt-3 flex items-center justify-between gap-3 text-[10px] leading-none">
-        <span className="truncate text-white/[0.5]">{session.language.name}</span>
+        <span className="truncate text-foreground/[0.5]">{session.language.name}</span>
         {session.isSoldOut ? (
-          <span className="shrink-0 text-white/[0.55]">Sold out</span>
+          <span className="shrink-0 text-foreground/[0.55]">Sold out</span>
         ) : (
           <span className={`flex shrink-0 items-center gap-1 font-semibold ${availabilityTone}`}>
             <SeatIcon />
@@ -59,10 +59,10 @@ function SessionCard({ session }: { session: CinemaSession }) {
       </div>
 
       <div className="mt-auto flex items-end justify-between gap-3">
-        <span className="truncate text-[10px] font-semibold text-white/[0.72]">
+        <span className="truncate text-[10px] font-semibold text-foreground/[0.72]">
           {session.venue.name} · Hall {session.hall.name}
         </span>
-        <span className="shrink-0 text-xs font-extrabold text-white">
+        <span className="shrink-0 text-xs font-extrabold text-foreground">
           from ₾{formatPrice(session.price)}
         </span>
       </div>
@@ -98,13 +98,13 @@ export function SessionMovieGroup({
     sessions.find((session) => !session.isSoldOut) ?? sessions[0];
 
   return (
-    <section className="border-b border-white/[0.1] py-9 first:pt-6 last:border-b-0">
+    <section className="border-b border-foreground/[0.1] py-9 first:pt-6 last:border-b-0">
       <Link
         href={`/session/${detailSession.id}`}
         className="group/movie-summary flex w-fit items-center gap-4 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
         aria-label={`View details for ${movie.title}`}
       >
-        <div className="relative h-[84px] w-16 shrink-0 overflow-hidden rounded-lg bg-white/[0.05]">
+        <div className="relative h-[84px] w-16 shrink-0 overflow-hidden rounded-lg bg-foreground/[0.05]">
           {movie.posterUrl ? (
             <Image
               src={movie.posterUrl}
@@ -114,7 +114,7 @@ export function SessionMovieGroup({
               className="object-cover"
             />
           ) : (
-            <div className="flex size-full items-center justify-center px-2 text-center text-[9px] text-white/[0.42]">
+            <div className="flex size-full items-center justify-center px-2 text-center text-[9px] text-foreground/[0.42]">
               No poster
             </div>
           )}
@@ -122,7 +122,7 @@ export function SessionMovieGroup({
 
         <div className="min-w-0">
           <div className="flex items-center gap-3">
-            <h2 className="truncate text-base font-extrabold text-white transition-colors group-hover/movie-summary:text-brand">
+            <h2 className="truncate text-base font-extrabold text-foreground transition-colors group-hover/movie-summary:text-brand">
               {movie.title}
             </h2>
             <span
@@ -132,7 +132,7 @@ export function SessionMovieGroup({
               {movie.ageRating.code}
             </span>
           </div>
-          <p className="mt-2 text-xs text-white/[0.48]">
+          <p className="mt-2 text-xs text-foreground/[0.48]">
             {movie.runtimeMinutes} min
           </p>
         </div>

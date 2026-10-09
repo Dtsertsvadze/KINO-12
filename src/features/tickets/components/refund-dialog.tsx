@@ -53,7 +53,7 @@ export function RefundDialog({
       <div className="relative flex h-full flex-col p-8">
         <button
           type="button"
-          className="absolute top-8 right-8 inline-flex size-5 cursor-pointer items-center justify-center text-white/[0.65] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-35"
+          className="absolute top-8 right-8 inline-flex size-5 cursor-pointer items-center justify-center text-foreground/[0.65] transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-35"
           aria-label="Close refund dialog"
           disabled={isSubmitting}
           onClick={requestClose}
@@ -66,7 +66,7 @@ export function RefundDialog({
         </h2>
         <div
           id={descriptionId}
-          className="mt-3 space-y-1 text-sm leading-6 text-white/[0.58]"
+          className="mt-3 space-y-1 text-sm leading-6 text-foreground/[0.58]"
         >
           <p>Order #{order?.reference}</p>
           <p>This action cannot be undone.</p>
@@ -74,7 +74,7 @@ export function RefundDialog({
 
         {errorMessage ? (
           <p
-            className="mt-4 rounded-xl border border-brand/[0.22] bg-brand/[0.08] px-4 py-3 text-xs leading-5 text-brand"
+            className="mt-4 rounded-xl border border-error/[0.22] bg-error/[0.08] px-4 py-3 text-xs leading-5 text-error"
             role="alert"
           >
             {errorMessage}
@@ -84,7 +84,7 @@ export function RefundDialog({
         <div className="mt-auto grid grid-cols-2 gap-3">
           <button
             type="button"
-            className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full bg-input text-xs font-extrabold text-white transition-colors hover:bg-white/[0.14] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-50"
+            className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full bg-surface text-xs font-extrabold text-foreground transition-colors hover:bg-foreground/[0.14] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-50"
             disabled={isSubmitting}
             onClick={requestClose}
           >
@@ -92,7 +92,7 @@ export function RefundDialog({
           </button>
           <button
             type="button"
-            className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full bg-brand text-xs font-extrabold text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-55"
+            className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full bg-brand text-xs font-extrabold text-foreground transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-55"
             disabled={isSubmitting || !order}
             onClick={() => order && onConfirm(order)}
           >

@@ -96,7 +96,7 @@ function StepIndicator({
 }) {
   return (
     <ol
-      className="grid grid-cols-2 overflow-hidden rounded-full bg-input text-[10px] font-bold uppercase"
+      className="grid grid-cols-2 overflow-hidden rounded-full bg-surface text-[10px] font-bold uppercase"
       aria-label="Purchase progress"
     >
       <li aria-current={step === 1 ? "step" : undefined}>
@@ -104,8 +104,8 @@ function StepIndicator({
           type="button"
           className={`flex h-9 w-full items-center justify-center transition-colors ${
             step === 1
-              ? "cursor-default bg-brand text-white"
-              : "cursor-pointer text-white/[0.55] hover:text-white disabled:cursor-not-allowed disabled:opacity-40"
+              ? "cursor-default bg-brand text-foreground"
+              : "cursor-pointer text-foreground/[0.55] hover:text-foreground disabled:cursor-not-allowed disabled:opacity-40"
           }`}
           disabled={step === 1 || disabled}
           onClick={onSelectSeats}
@@ -115,7 +115,7 @@ function StepIndicator({
       </li>
       <li
         className={`flex h-9 items-center justify-center ${
-          step === 2 ? "bg-brand text-white" : "text-white/[0.45]"
+          step === 2 ? "bg-brand text-foreground" : "text-foreground/[0.45]"
         }`}
         aria-current={step === 2 ? "step" : undefined}
       >
@@ -785,7 +785,7 @@ export function PurchaseModal({
           </h2>
           <p
             id={descriptionId}
-            className="mt-1 text-[10px] leading-4 text-white/[0.52]"
+            className="mt-1 text-[10px] leading-4 text-foreground/[0.52]"
           >
             {session.venue.name} · Hall {session.hall.name} ·{" "}
             {formatSessionDate(session.date)} · {session.time} ·{" "}
@@ -793,10 +793,10 @@ export function PurchaseModal({
           </p>
 
           <div
-            className="absolute top-0 right-10 min-w-20 rounded-lg bg-input px-3 py-2 text-center"
+            className="absolute top-0 right-10 min-w-20 rounded-lg bg-surface px-3 py-2 text-center"
             aria-live="polite"
           >
-            <span className="block text-[8px] font-semibold tracking-[0.05em] text-white/[0.5] uppercase">
+            <span className="block text-[8px] font-semibold tracking-[0.05em] text-foreground/[0.5] uppercase">
               {isHolding
                 ? hold
                   ? "Updating hold"
@@ -805,7 +805,7 @@ export function PurchaseModal({
                   ? "Seats held"
                   : "Hold timer"}
             </span>
-            <strong className="mt-0.5 block text-xs text-white">
+            <strong className="mt-0.5 block text-xs text-foreground">
               {holdMatchesSelection
                 ? formatCountdown(secondsRemaining)
                 : "--:--"}
@@ -814,7 +814,7 @@ export function PurchaseModal({
 
           <button
             type="button"
-            className="absolute top-1 right-0 inline-flex size-6 cursor-pointer items-center justify-center text-white/[0.55] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-35"
+            className="absolute top-1 right-0 inline-flex size-6 cursor-pointer items-center justify-center text-foreground/[0.55] transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-wait disabled:opacity-35"
             aria-label="Close purchase dialog"
             disabled={isHolding || isPaying || isClosing}
             onClick={() => void requestClose()}
@@ -833,14 +833,14 @@ export function PurchaseModal({
 
         {errorMessage ? (
           <div
-            className="mt-4 flex items-center justify-between gap-4 rounded-xl border border-brand/[0.25] bg-brand/[0.08] px-4 py-3 text-xs text-brand"
+            className="mt-4 flex items-center justify-between gap-4 rounded-xl border border-error/[0.25] bg-error/[0.08] px-4 py-3 text-xs text-error"
             role="alert"
           >
             <span>{errorMessage}</span>
             {step === 1 && !isLoading ? (
               <button
                 type="button"
-                className="shrink-0 cursor-pointer font-extrabold text-white underline underline-offset-2"
+                className="shrink-0 cursor-pointer font-extrabold text-foreground underline underline-offset-2"
                 onClick={() =>
                   void (
                     !seatMap || !config
@@ -867,7 +867,7 @@ export function PurchaseModal({
 
         {notice ? (
           <p
-            className="mt-4 rounded-xl border border-status/[0.2] bg-status/[0.08] px-4 py-3 text-xs text-status"
+            className="mt-4 rounded-xl border border-warning/[0.2] bg-warning/[0.08] px-4 py-3 text-xs text-warning"
             role="status"
           >
             {notice}
@@ -891,10 +891,10 @@ export function PurchaseModal({
             <section className="min-h-0 overflow-auto pr-4" aria-label="Hall seat map">
               {isLoading ? (
                 <div className="flex h-full animate-pulse flex-col items-center justify-center motion-reduce:animate-none" aria-label="Loading seat map">
-                  <div className="h-8 w-[88%] rounded bg-white/[0.08]" />
+                  <div className="h-8 w-[88%] rounded bg-foreground/[0.08]" />
                   <div className="mt-10 grid grid-cols-10 gap-2">
                     {Array.from({ length: 40 }, (_, index) => (
-                      <span key={index} className="h-9 w-10 rounded-lg bg-input" />
+                      <span key={index} className="h-9 w-10 rounded-lg bg-surface" />
                     ))}
                   </div>
                 </div>
@@ -906,19 +906,19 @@ export function PurchaseModal({
                   onToggleSeat={toggleSeat}
                 />
               ) : !errorMessage ? (
-                <p className="py-20 text-center text-sm text-white/[0.5]">
+                <p className="py-20 text-center text-sm text-foreground/[0.5]">
                   No seat map is available for this session.
                 </p>
               ) : null}
             </section>
 
-            <aside className="flex min-h-0 flex-col border-l border-white/[0.1] pl-8" aria-labelledby="seat-summary-heading">
+            <aside className="flex min-h-0 flex-col border-l border-foreground/[0.1] pl-8" aria-labelledby="seat-summary-heading">
               <div className="flex items-center justify-between gap-4">
                 <h3 id="seat-summary-heading" className="text-sm font-extrabold">
                   Your seats · Max {maximumSeats || "–"}
                 </h3>
                 {config ? (
-                  <span className="text-[9px] text-white/[0.42]">
+                  <span className="text-[9px] text-foreground/[0.42]">
                     {config.holdMinutes} min hold
                   </span>
                 ) : null}
@@ -939,20 +939,20 @@ export function PurchaseModal({
               </div>
 
               {isAgeRestricted ? (
-                <p className="mb-3 text-[10px] leading-4 text-brand" role="alert">
+                <p className="mb-3 text-[10px] leading-4 text-error" role="alert">
                   This film is rated {ageRatingCode}. You cannot buy tickets for
                   it with this account.
                 </p>
               ) : null}
               {!user?.profileComplete ? (
-                <p className="mb-3 text-[10px] leading-4 text-status" role="alert">
+                <p className="mb-3 text-[10px] leading-4 text-warning" role="alert">
                   Complete your profile before continuing to checkout.
                 </p>
               ) : null}
 
               <button
                 type="button"
-                className="mt-auto inline-flex h-11 w-full items-center justify-center rounded-full bg-brand text-sm font-extrabold text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:bg-white/[0.28] disabled:text-white/[0.55]"
+                className="mt-auto inline-flex h-11 w-full items-center justify-center rounded-full bg-brand text-sm font-extrabold text-foreground transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:bg-foreground/[0.28] disabled:text-foreground/[0.55]"
                 disabled={!canContinue}
                 onClick={continueToCheckout}
               >

@@ -40,11 +40,11 @@ export default async function SessionsPage({
     sessionsResult.status === "rejected"
   ) {
     return (
-      <main className="min-h-[969px] bg-page pt-[132px] pb-24 text-white">
+      <main className="min-h-[969px] bg-page pt-[132px] pb-24 text-foreground">
         <ContentContainer>
           <header>
             <h1 className="text-2xl leading-7 font-extrabold">Sessions</h1>
-            <p className="mt-2 text-xs text-white/[0.48]">
+            <p className="mt-2 text-xs text-foreground/[0.48]">
               Browse showtimes across all venues
             </p>
           </header>

@@ -25,17 +25,17 @@ export function SessionsToolbar({
       className="flex min-h-8 items-center justify-between gap-8"
       aria-busy={isPending}
     >
-      <p className="text-xs font-semibold text-white" aria-live="polite">
+      <p className="text-xs font-semibold text-foreground" aria-live="polite">
         {totalSessions === 0
           ? "No sessions found"
           : `Showing ${totalSessions} ${totalSessions === 1 ? "session" : "sessions"}`}
       </p>
 
-      <label className="flex items-center gap-2 text-xs text-white/[0.48]">
+      <label className="flex items-center gap-2 text-xs text-foreground/[0.48]">
         <span>{isPending ? "Updating:" : "Sort:"}</span>
         <span className="relative">
           <select
-            className="cursor-pointer appearance-none bg-transparent py-1 pr-5 font-bold text-white outline-none disabled:cursor-wait disabled:opacity-55"
+            className="cursor-pointer appearance-none bg-transparent py-1 pr-5 font-bold text-foreground outline-none disabled:cursor-wait disabled:opacity-55"
             value={query.sort}
             disabled={isPending}
             onChange={(event) =>
@@ -47,14 +47,14 @@ export function SessionsToolbar({
             }
           >
             {sorts.map((sort) => (
-              <option key={sort.id} value={sort.id} className="bg-input text-white">
+              <option key={sort.id} value={sort.id} className="bg-surface text-foreground">
                 {sort.label}
               </option>
             ))}
           </select>
           <svg
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 right-0 size-3 -translate-y-1/2 text-white/[0.58]"
+            className="pointer-events-none absolute top-1/2 right-0 size-3 -translate-y-1/2 text-foreground/[0.58]"
             viewBox="0 0 12 12"
             fill="none"
           >

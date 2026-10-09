@@ -61,7 +61,7 @@ export function AppDialog({
   return (
     <dialog
       ref={dialogRef}
-      className={`fixed inset-0 m-auto border border-white/[0.1] bg-page p-0 text-white shadow-[0_32px_100px_rgba(0,0,0,0.55)] backdrop:bg-black/[0.78] backdrop:backdrop-blur-sm ${className}`}
+      className={`fixed inset-0 m-auto border border-foreground/[0.1] bg-page p-0 text-foreground shadow-[0_32px_100px_rgba(0,0,0,0.55)] backdrop:bg-scrim/[0.78] backdrop:backdrop-blur-sm ${className}`}
       aria-labelledby={labelledBy}
       aria-describedby={describedBy}
       aria-busy={busy}

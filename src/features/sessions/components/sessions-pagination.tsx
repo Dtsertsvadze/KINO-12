@@ -54,7 +54,7 @@ export function SessionsPagination({ query, meta }: SessionsPaginationProps) {
     >
       <button
         type="button"
-        className="inline-flex size-10 cursor-pointer items-center justify-center rounded-full bg-input text-white transition-colors hover:bg-white/[0.14] disabled:cursor-not-allowed disabled:opacity-35"
+        className="inline-flex size-10 cursor-pointer items-center justify-center rounded-full bg-surface text-foreground transition-colors hover:bg-foreground/[0.14] disabled:cursor-not-allowed disabled:opacity-35"
         aria-label="Previous page"
         disabled={isPending || meta.currentPage <= 1}
         onClick={() => goToPage(meta.currentPage - 1)}
@@ -69,7 +69,7 @@ export function SessionsPagination({ query, meta }: SessionsPaginationProps) {
         return (
           <span key={page} className="contents">
             {hasGap ? (
-              <span className="px-1 text-xs text-white/[0.45]" aria-hidden="true">
+              <span className="px-1 text-xs text-foreground/[0.45]" aria-hidden="true">
                 …
               </span>
             ) : null}
@@ -77,8 +77,8 @@ export function SessionsPagination({ query, meta }: SessionsPaginationProps) {
               type="button"
               className={`inline-flex size-10 cursor-pointer items-center justify-center rounded-full text-xs font-bold transition-colors disabled:cursor-wait ${
                 page === meta.currentPage
-                  ? "bg-brand text-white"
-                  : "text-white/[0.7] hover:bg-white/[0.08] hover:text-white"
+                  ? "bg-brand text-foreground"
+                  : "text-foreground/[0.7] hover:bg-foreground/[0.08] hover:text-foreground"
               }`}
               aria-label={`Page ${page}`}
               aria-current={page === meta.currentPage ? "page" : undefined}
@@ -93,7 +93,7 @@ export function SessionsPagination({ query, meta }: SessionsPaginationProps) {
 
       <button
         type="button"
-        className="inline-flex size-10 cursor-pointer items-center justify-center rounded-full bg-input text-white transition-colors hover:bg-white/[0.14] disabled:cursor-not-allowed disabled:opacity-35"
+        className="inline-flex size-10 cursor-pointer items-center justify-center rounded-full bg-surface text-foreground transition-colors hover:bg-foreground/[0.14] disabled:cursor-not-allowed disabled:opacity-35"
         aria-label="Next page"
         disabled={isPending || meta.currentPage >= meta.lastPage}
         onClick={() => goToPage(meta.currentPage + 1)}
@@ -101,7 +101,7 @@ export function SessionsPagination({ query, meta }: SessionsPaginationProps) {
         <ArrowIcon direction="next" />
       </button>
 
-      <span className="ml-3 text-xs text-white/[0.48]">
+      <span className="ml-3 text-xs text-foreground/[0.48]">
         Page {meta.currentPage} of {meta.lastPage}
       </span>
     </nav>

@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={archivo.variable}>
-      <body className="min-h-[1080px] bg-page font-sans text-white">
+      <body className="min-h-[1080px] bg-page font-sans text-foreground">
         <AuthProvider>
           <div className="flex min-h-[1080px] flex-col">
             <Navbar />

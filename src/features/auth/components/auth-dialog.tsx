@@ -43,7 +43,7 @@ export function AuthDialog({
       >
         <button
           type="button"
-          className="absolute top-8 right-8 inline-flex size-5 cursor-pointer items-center justify-center text-white/[0.7] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+          className="absolute top-8 right-8 inline-flex size-5 cursor-pointer items-center justify-center text-foreground/[0.7] transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
           aria-label="Close dialog"
           onClick={onRequestClose}
         >
@@ -71,7 +71,7 @@ export function AuthDialog({
           </h2>
           <p
             id={descriptionId}
-            className="mt-1 text-[10px] leading-4 text-white/[0.52]"
+            className="mt-1 text-[10px] leading-4 text-foreground/[0.52]"
           >
             {description}
           </p>

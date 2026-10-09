@@ -92,24 +92,24 @@ function AnimatedMovieDetails({ movie }: { movie: Movie }) {
       </h1>
 
       <div className="mt-5 flex items-center gap-2.5 text-[11px] leading-none font-bold uppercase">
-        <span className="rounded-full bg-brand px-3 py-1.5 text-white">
+        <span className="rounded-full bg-brand px-3 py-1.5 text-foreground">
           {movie.ageRating.code}
         </span>
-        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.1] px-3 py-1.5 text-white/[0.9]">
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-foreground/[0.1] px-3 py-1.5 text-foreground/[0.9]">
           <ClockIcon />
           {movie.runtimeMinutes} min
         </span>
         {movie.formats.map((format) => (
           <span
             key={format.id}
-            className="rounded-full bg-white/[0.1] px-3 py-1.5 text-white/[0.9]"
+            className="rounded-full bg-foreground/[0.1] px-3 py-1.5 text-foreground/[0.9]"
           >
             {format.name}
           </span>
         ))}
       </div>
 
-      <p className="mt-5 line-clamp-3 max-w-[610px] text-sm leading-5 text-white/[0.9]">
+      <p className="mt-5 line-clamp-3 max-w-[610px] text-sm leading-5 text-foreground/[0.9]">
         {movie.synopsis}
       </p>
     </div>
@@ -170,7 +170,7 @@ export function FeaturedHero({
 
   if (requestFailed) {
     return (
-      <section className="h-[760px] bg-page p-16 text-white">
+      <section className="h-[760px] bg-page p-16 text-foreground">
         <RequestErrorState
           className="h-full"
           title="Featured movies could not be loaded"
@@ -182,7 +182,7 @@ export function FeaturedHero({
 
   if (movies.length === 0) {
     return (
-      <section className="h-[760px] bg-page p-16 text-white">
+      <section className="h-[760px] bg-page p-16 text-foreground">
         <EmptyState
           className="h-full"
           title="No featured movies"
@@ -210,7 +210,7 @@ export function FeaturedHero({
 
   return (
     <section
-      className="relative h-[760px] overflow-hidden bg-page text-white"
+      className="relative h-[760px] overflow-hidden bg-page text-foreground"
       aria-roledescription="carousel"
       aria-label="Featured movies"
       onMouseEnter={() => setIsPaused(true)}
@@ -269,7 +269,7 @@ export function FeaturedHero({
             {sessionIdsByMovieId[activeMovie.id] ? (
               <Link
                 href={`/session/${sessionIdsByMovieId[activeMovie.id]}`}
-                className="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-brand px-6 text-sm font-extrabold text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+                className="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-brand px-6 text-sm font-extrabold text-foreground transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               >
                 <TicketIcon />
                 Buy tickets
@@ -277,7 +277,7 @@ export function FeaturedHero({
             ) : (
               <button
                 type="button"
-                className="inline-flex h-11 cursor-not-allowed items-center justify-center gap-2 rounded-full bg-brand px-6 text-sm font-extrabold text-white opacity-45"
+                className="inline-flex h-11 cursor-not-allowed items-center justify-center gap-2 rounded-full bg-brand px-6 text-sm font-extrabold text-foreground opacity-45"
                 disabled
               >
                 <TicketIcon />
@@ -286,7 +286,7 @@ export function FeaturedHero({
             )}
             <Link
               href="/sessions"
-              className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full bg-white/[0.12] px-6 text-sm font-bold text-white transition-colors hover:bg-white/[0.2] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full bg-foreground/[0.12] px-6 text-sm font-bold text-foreground transition-colors hover:bg-foreground/[0.2] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
             >
               All sessions
             </Link>
@@ -310,7 +310,7 @@ export function FeaturedHero({
                   className={`h-1 w-full rounded-full transition-colors duration-300 ${
                     index === activeIndex
                       ? "bg-brand"
-                      : "bg-white/[0.88] group-hover:bg-white"
+                      : "bg-foreground/[0.88] group-hover:bg-foreground"
                   }`}
                 />
               </button>
@@ -320,7 +320,7 @@ export function FeaturedHero({
           <div className="flex items-center gap-3">
             <button
               type="button"
-              className="inline-flex size-12 cursor-pointer items-center justify-center rounded-full bg-black/[0.28] text-white transition-colors duration-200 hover:bg-black/[0.48] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="inline-flex size-12 cursor-pointer items-center justify-center rounded-full bg-scrim/[0.28] text-foreground transition-colors duration-200 hover:bg-scrim/[0.48] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
               aria-label="Previous featured movie"
               onClick={showPrevious}
             >
@@ -336,7 +336,7 @@ export function FeaturedHero({
             </button>
             <button
               type="button"
-              className="inline-flex size-12 cursor-pointer items-center justify-center rounded-full bg-black/[0.28] text-white transition-colors duration-200 hover:bg-black/[0.48] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+              className="inline-flex size-12 cursor-pointer items-center justify-center rounded-full bg-scrim/[0.28] text-foreground transition-colors duration-200 hover:bg-scrim/[0.48] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground"
               aria-label="Next featured movie"
               onClick={showNext}
             >

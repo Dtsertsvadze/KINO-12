@@ -63,8 +63,8 @@ export function TicketCard({
     : "Refund unavailable within two hours of the screening.";
 
   return (
-    <article className="grid min-h-[204px] grid-cols-[128px_1fr_316px] overflow-hidden rounded-[28px] bg-input">
-      <div className="relative m-6 mr-0 h-[156px] w-[112px] overflow-hidden rounded-xl bg-white/[0.05]">
+    <article className="grid min-h-[204px] grid-cols-[128px_1fr_316px] overflow-hidden rounded-[28px] bg-surface">
+      <div className="relative m-6 mr-0 h-[156px] w-[112px] overflow-hidden rounded-xl bg-foreground/[0.05]">
         {movie.posterUrl ? (
           <Image
             src={movie.posterUrl}
@@ -74,7 +74,7 @@ export function TicketCard({
             className="object-cover"
           />
         ) : (
-          <div className="flex size-full items-center justify-center px-3 text-center text-[10px] text-white/[0.42]">
+          <div className="flex size-full items-center justify-center px-3 text-center text-[10px] text-foreground/[0.42]">
             Poster unavailable
           </div>
         )}
@@ -91,46 +91,46 @@ export function TicketCard({
           >
             {movie.ageRating.code}
           </span>
-          <span className="text-xs text-white/[0.46]">
+          <span className="text-xs text-foreground/[0.46]">
             {movie.runtimeMinutes} min
           </span>
         </div>
 
         <dl className="mt-5 flex flex-wrap items-start gap-x-6 gap-y-3">
           <div className="max-w-[260px]">
-            <dt className="text-[10px] font-semibold tracking-[0.06em] text-white/[0.42] uppercase">
+            <dt className="text-[10px] font-semibold tracking-[0.06em] text-foreground/[0.42] uppercase">
               Date
             </dt>
-            <dd className="mt-1 text-xs font-semibold text-white">
+            <dd className="mt-1 text-xs font-semibold text-foreground">
               {formatSessionDate(order.session.date, order.session.time)}
             </dd>
           </div>
           <div className="max-w-[260px]">
-            <dt className="text-[10px] font-semibold tracking-[0.06em] text-white/[0.42] uppercase">
+            <dt className="text-[10px] font-semibold tracking-[0.06em] text-foreground/[0.42] uppercase">
               Venue
             </dt>
-            <dd className="mt-1 truncate text-xs font-semibold text-white">
+            <dd className="mt-1 truncate text-xs font-semibold text-foreground">
               {order.session.venue.name} · Hall {order.session.hall.name}
             </dd>
           </div>
           <div>
-            <dt className="text-[10px] font-semibold tracking-[0.06em] text-white/[0.42] uppercase">
+            <dt className="text-[10px] font-semibold tracking-[0.06em] text-foreground/[0.42] uppercase">
               Format
             </dt>
-            <dd className="mt-1 truncate text-xs font-semibold text-white">
+            <dd className="mt-1 truncate text-xs font-semibold text-foreground">
               {order.session.format.name} · {order.session.language.name}
             </dd>
           </div>
         </dl>
 
         <div className="mt-5 flex flex-wrap items-center gap-2">
-          <span className="mr-1 text-[10px] font-semibold tracking-[0.06em] text-white/[0.42] uppercase">
+          <span className="mr-1 text-[10px] font-semibold tracking-[0.06em] text-foreground/[0.42] uppercase">
             Seats
           </span>
           {order.tickets.map((ticket) => (
             <span
               key={ticket.id}
-              className="rounded-md bg-white/[0.1] px-2.5 py-1 text-[10px] font-semibold text-white/[0.82]"
+              className="rounded-md bg-foreground/[0.1] px-2.5 py-1 text-[10px] font-semibold text-foreground/[0.82]"
             >
               {ticket.seatCode} · {ticket.ticketType.name}
             </span>
@@ -138,15 +138,15 @@ export function TicketCard({
         </div>
       </div>
 
-      <aside className="flex flex-col border-l border-dashed border-white/[0.1] px-7 py-7">
-        <span className="text-[10px] font-semibold tracking-[0.06em] text-white/[0.42] uppercase">
+      <aside className="flex flex-col border-l border-dashed border-foreground/[0.1] px-7 py-7">
+        <span className="text-[10px] font-semibold tracking-[0.06em] text-foreground/[0.42] uppercase">
           Order
         </span>
-        <strong className="mt-1 text-xs text-white">#{order.reference}</strong>
+        <strong className="mt-1 text-xs text-foreground">#{order.reference}</strong>
 
         <div className="mt-5 flex items-end justify-between gap-4">
-          <span className="text-xs text-white/[0.52]">Total paid</span>
-          <strong className="text-2xl leading-none font-extrabold text-white">
+          <span className="text-xs text-foreground/[0.52]">Total paid</span>
+          <strong className="text-2xl leading-none font-extrabold text-foreground">
             ₾{formatPrice(order.totalPrice)}
           </strong>
         </div>
@@ -155,7 +155,7 @@ export function TicketCard({
           <>
             <button
               type="button"
-              className="mt-4 inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-white/[0.1] text-xs font-extrabold text-white transition-colors hover:bg-white/[0.17] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:text-white/[0.28] disabled:hover:bg-white/[0.1]"
+              className="mt-4 inline-flex h-10 w-full cursor-pointer items-center justify-center rounded-full bg-foreground/[0.1] text-xs font-extrabold text-foreground transition-colors hover:bg-foreground/[0.17] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand disabled:cursor-not-allowed disabled:text-foreground/[0.28] disabled:hover:bg-foreground/[0.1]"
               disabled={!order.isRefundable || isRefunding}
               aria-describedby={`refund-hint-${order.id}`}
               onClick={() => onRefund(order)}
@@ -164,13 +164,13 @@ export function TicketCard({
             </button>
             <p
               id={`refund-hint-${order.id}`}
-              className="mt-3 text-center text-[9px] leading-4 text-white/[0.4]"
+              className="mt-3 text-center text-[9px] leading-4 text-foreground/[0.4]"
             >
               {refundHint}
             </p>
           </>
         ) : (
-          <p className="mt-auto text-[10px] font-semibold text-white/[0.42]">
+          <p className="mt-auto text-[10px] font-semibold text-foreground/[0.42]">
             {order.status === "refunded" ? "Refunded" : "Completed"}
           </p>
         )}

@@ -29,7 +29,7 @@ type ProfileField =
 type ProfileValues = Record<ProfileField, string>;
 
 const inputClassName =
-  "h-11 w-full rounded-xl border border-transparent bg-input px-4 text-sm text-white outline-none transition-colors duration-200 placeholder:text-white/[0.42] focus:border-brand disabled:cursor-not-allowed disabled:text-white/[0.62]";
+  "h-11 w-full rounded-xl border border-transparent bg-surface px-4 text-sm text-foreground outline-none transition-colors duration-200 placeholder:text-foreground/[0.42] focus:border-brand disabled:cursor-not-allowed disabled:text-foreground/[0.62]";
 
 function valuesFromUser(user: AuthUser): ProfileValues {
   return {
@@ -57,16 +57,16 @@ function ProfileFormField({
 }: ProfileFormFieldProps) {
   return (
     <div className="grid gap-2">
-      <label className="text-xs leading-4 font-semibold text-white" htmlFor={id}>
+      <label className="text-xs leading-4 font-semibold text-foreground" htmlFor={id}>
         {label}
       </label>
       {children}
       {error ? (
-        <p className="text-xs leading-4 text-brand" id={`${id}-error`} role="alert">
+        <p className="text-xs leading-4 text-error" id={`${id}-error`} role="alert">
           {error}
         </p>
       ) : hint ? (
-        <p className="text-xs leading-4 text-white/[0.58]">{hint}</p>
+        <p className="text-xs leading-4 text-foreground/[0.58]">{hint}</p>
       ) : null}
     </div>
   );
@@ -90,7 +90,7 @@ export function PersonalInformationForm() {
   if (isLoading) {
     return (
       <div
-        className="h-80 w-[880px] animate-pulse rounded-2xl bg-white/[0.04] motion-reduce:animate-none"
+        className="h-80 w-[880px] animate-pulse rounded-2xl bg-foreground/[0.04] motion-reduce:animate-none"
         aria-label="Loading your profile"
         aria-busy="true"
       />
@@ -100,13 +100,13 @@ export function PersonalInformationForm() {
   if (authError) {
     return (
       <div
-        className="flex min-h-52 w-[880px] flex-col items-center justify-center rounded-2xl border border-brand/[0.18] bg-brand/[0.05] px-8 text-center"
+        className="flex min-h-52 w-[880px] flex-col items-center justify-center rounded-2xl border border-error/[0.18] bg-error/[0.05] px-8 text-center"
         role="alert"
       >
-        <p className="text-sm text-white/[0.68]">{authError}</p>
+        <p className="text-sm text-foreground/[0.68]">{authError}</p>
         <button
           type="button"
-          className="mt-4 inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand px-5 text-xs font-extrabold text-white hover:bg-brand/[0.85]"
+          className="mt-4 inline-flex h-10 cursor-pointer items-center justify-center rounded-full bg-brand px-5 text-xs font-extrabold text-foreground hover:bg-brand-hover"
           onClick={retryAuthentication}
         >
           Try again
@@ -117,7 +117,7 @@ export function PersonalInformationForm() {
 
   if (!user) {
     return (
-      <p className="text-sm text-white/[0.58]">
+      <p className="text-sm text-foreground/[0.58]">
         Log in to view and update your profile.
       </p>
     );
@@ -346,7 +346,7 @@ function AuthenticatedProfileForm({ user }: { user: AuthUser }) {
           </select>
           <svg
             aria-hidden="true"
-            className="pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2 text-white/[0.65]"
+            className="pointer-events-none absolute top-1/2 right-4 size-4 -translate-y-1/2 text-foreground/[0.65]"
             viewBox="0 0 20 20"
             fill="none"
           >
@@ -363,10 +363,10 @@ function AuthenticatedProfileForm({ user }: { user: AuthUser }) {
 
       {venueError ? (
         <div className="-mt-3 flex items-center gap-3" role="alert">
-          <p className="text-xs text-brand">{venueError}</p>
+          <p className="text-xs text-error">{venueError}</p>
           <button
             type="button"
-            className="cursor-pointer text-xs font-bold text-white underline decoration-brand underline-offset-4 disabled:cursor-wait disabled:opacity-60"
+            className="cursor-pointer text-xs font-bold text-foreground underline decoration-error underline-offset-4 disabled:cursor-wait disabled:opacity-60"
             disabled={isLoadingVenues}
             onClick={retryVenues}
           >
@@ -378,14 +378,14 @@ function AuthenticatedProfileForm({ user }: { user: AuthUser }) {
       <div className="mt-3 flex items-center gap-4">
         <button
           type="submit"
-          className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full bg-brand px-6 text-sm font-extrabold text-white transition-colors duration-200 hover:bg-brand/[0.85] disabled:cursor-wait disabled:opacity-60"
+          className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full bg-brand px-6 text-sm font-extrabold text-foreground transition-colors duration-200 hover:bg-brand-hover disabled:cursor-wait disabled:opacity-60"
           disabled={isSubmitting}
         >
           {isSubmitting ? "Saving…" : "Save changes"}
         </button>
 
         <p
-          className={`text-sm ${formError ? "text-brand" : "text-success"}`}
+          className={`text-sm ${formError ? "text-error" : "text-success"}`}
           role="status"
           aria-live="polite"
         >

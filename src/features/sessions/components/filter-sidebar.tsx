@@ -39,9 +39,9 @@ function FilterSection({
 }: FilterSectionProps) {
   return (
     <fieldset
-      className={withDivider ? "border-b border-white/[0.08] pb-6" : undefined}
+      className={withDivider ? "border-b border-foreground/[0.08] pb-6" : undefined}
     >
-      <legend className="mb-3 text-[10px] leading-none font-semibold tracking-[0.08em] text-white/[0.5] uppercase">
+      <legend className="mb-3 text-[10px] leading-none font-semibold tracking-[0.08em] text-foreground/[0.5] uppercase">
         {title}
       </legend>
       {children}
@@ -56,7 +56,7 @@ function FilterCheckbox({
   onChange,
 }: FilterCheckboxProps) {
   return (
-    <label className="flex cursor-pointer items-center gap-2.5 text-xs leading-4 text-white">
+    <label className="flex cursor-pointer items-center gap-2.5 text-xs leading-4 text-foreground">
       <input
         type="checkbox"
         className="peer sr-only"
@@ -64,7 +64,7 @@ function FilterCheckbox({
         disabled={disabled}
         onChange={onChange}
       />
-      <span className="flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-white/[0.34] bg-transparent transition-colors peer-checked:border-brand peer-checked:bg-brand peer-checked:[&>svg]:opacity-100 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand peer-disabled:cursor-wait peer-disabled:opacity-50">
+      <span className="flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-foreground/[0.34] bg-transparent transition-colors peer-checked:border-brand peer-checked:bg-brand peer-checked:[&>svg]:opacity-100 peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-brand peer-disabled:cursor-wait peer-disabled:opacity-50">
         <svg
           aria-hidden="true"
           className="size-3 opacity-0"
@@ -170,13 +170,13 @@ export function FilterSidebar({
 
   return (
     <aside
-      className="sticky top-6 self-start rounded-[20px] bg-input px-6 py-7 text-white"
+      className="sticky top-6 self-start rounded-[20px] bg-surface px-6 py-7 text-foreground"
       aria-busy={isPending}
     >
       <div className="mb-7 flex items-center justify-between">
         <h2 className="text-base font-extrabold">Filters</h2>
         {isPending ? (
-          <span className="text-[10px] font-semibold text-white/[0.48]" role="status">
+          <span className="text-[10px] font-semibold text-foreground/[0.48]" role="status">
             Updating…
           </span>
         ) : null}
@@ -194,7 +194,7 @@ export function FilterSidebar({
                 label={
                   <span>
                     {venue.name}
-                    <span className="ml-1 text-white/[0.42]">· {venue.city}</span>
+                    <span className="ml-1 text-foreground/[0.42]">· {venue.city}</span>
                   </span>
                 }
               />
@@ -213,8 +213,8 @@ export function FilterSidebar({
                   type="button"
                   className={`flex h-[58px] cursor-pointer flex-col items-center justify-center rounded-lg text-[10px] font-semibold transition-colors disabled:cursor-wait disabled:opacity-55 ${
                     isSelected
-                      ? "bg-brand text-white"
-                      : "bg-white/[0.045] text-white/[0.72] hover:bg-white/[0.09]"
+                      ? "bg-brand text-foreground"
+                      : "bg-foreground/[0.045] text-foreground/[0.72] hover:bg-foreground/[0.09]"
                   }`}
                   aria-pressed={isSelected}
                   disabled={isPending}
@@ -273,18 +273,18 @@ export function FilterSidebar({
         </FilterSection>
       </div>
 
-      <div className="mt-7 border-t border-white/[0.08] pt-6 text-center">
+      <div className="mt-7 border-t border-foreground/[0.08] pt-6 text-center">
         {activeFilterCount > 0 ? (
           <button
             type="button"
-            className="flex h-9 w-full cursor-pointer items-center justify-center rounded-full border border-white/[0.72] text-xs font-semibold transition-colors hover:bg-white/[0.08] disabled:cursor-wait disabled:opacity-55"
+            className="flex h-9 w-full cursor-pointer items-center justify-center rounded-full border border-foreground/[0.72] text-xs font-semibold transition-colors hover:bg-foreground/[0.08] disabled:cursor-wait disabled:opacity-55"
             disabled={isPending}
             onClick={clearFilters}
           >
             Clear all filters
           </button>
         ) : null}
-        <p className="mt-3 text-[10px] text-white/[0.48]" aria-live="polite">
+        <p className="mt-3 text-[10px] text-foreground/[0.48]" aria-live="polite">
           {activeFilterCount} {activeFilterCount === 1 ? "filter" : "filters"} active
         </p>
       </div>
