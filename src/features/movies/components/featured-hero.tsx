@@ -2,7 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState, type FocusEvent } from "react";
+import {
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+  type FocusEvent,
+} from "react";
 
 import {
   EmptyState,
@@ -51,6 +57,65 @@ function TicketIcon() {
   );
 }
 
+function AnimatedMovieDetails({ movie }: { movie: Movie }) {
+  const detailsRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    const element = detailsRef.current;
+
+    if (
+      !element ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    ) {
+      return;
+    }
+
+    const animation = element.animate(
+      [
+        { opacity: 0, transform: "translateY(32px)" },
+        { opacity: 1, transform: "translateY(0)" },
+      ],
+      {
+        duration: 560,
+        easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+        fill: "both",
+      },
+    );
+
+    return () => animation.cancel();
+  }, []);
+
+  return (
+    <div ref={detailsRef}>
+      <h1 className="mt-5 text-[44px] leading-none font-extrabold tracking-[-0.02em] uppercase">
+        {movie.title}
+      </h1>
+
+      <div className="mt-5 flex items-center gap-2.5 text-[11px] leading-none font-bold uppercase">
+        <span className="rounded-full bg-brand px-3 py-1.5 text-white">
+          {movie.ageRating.code}
+        </span>
+        <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.1] px-3 py-1.5 text-white/[0.9]">
+          <ClockIcon />
+          {movie.runtimeMinutes} min
+        </span>
+        {movie.formats.map((format) => (
+          <span
+            key={format.id}
+            className="rounded-full bg-white/[0.1] px-3 py-1.5 text-white/[0.9]"
+          >
+            {format.name}
+          </span>
+        ))}
+      </div>
+
+      <p className="mt-5 line-clamp-3 max-w-[610px] text-sm leading-5 text-white/[0.9]">
+        {movie.synopsis}
+      </p>
+    </div>
+  );
+}
+
 type FeaturedHeroProps = {
   movies: Movie[];
   sessionIdsByMovieId: Record<number, number>;
@@ -63,7 +128,25 @@ export function FeaturedHero({
   requestFailed = false,
 }: FeaturedHeroProps) {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [zoomedIndex, setZoomedIndex] = useState<number>();
   const [isPaused, setIsPaused] = useState(false);
+
+  useEffect(() => {
+    let entranceFrame: number | undefined;
+    const preparationFrame = window.requestAnimationFrame(() => {
+      entranceFrame = window.requestAnimationFrame(() => {
+        setZoomedIndex(activeIndex);
+      });
+    });
+
+    return () => {
+      window.cancelAnimationFrame(preparationFrame);
+
+      if (entranceFrame !== undefined) {
+        window.cancelAnimationFrame(entranceFrame);
+      }
+    };
+  }, [activeIndex]);
 
   useEffect(() => {
     if (movies.length < 2 || isPaused) {
@@ -109,6 +192,8 @@ export function FeaturedHero({
     );
   }
 
+  const activeMovie = movies[activeIndex] ?? movies[0];
+
   const showPrevious = () => {
     setActiveIndex((current) => (current - 1 + movies.length) % movies.length);
   };
@@ -137,23 +222,27 @@ export function FeaturedHero({
         {movies.map((movie, index) => (
           <div
             key={movie.id}
-            className={`absolute inset-0 transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none ${
-              index === activeIndex
-                ? "scale-100 opacity-100"
-                : "scale-[1.025] opacity-0"
-            }`}
+            className={`absolute inset-0 transition-opacity duration-700 ease-out motion-reduce:transition-none ${index === activeIndex ? "opacity-100" : "opacity-0"}`}
             aria-hidden={index !== activeIndex}
           >
-            {movie.backdropUrl ? (
-              <Image
-                className="object-cover object-center"
-                src={movie.backdropUrl}
-                alt=""
-                fill
-                priority={index === 0}
-                sizes="100vw"
-              />
-            ) : null}
+            <div
+              className={`absolute inset-0 transition-transform duration-[6200ms] ease-linear motion-reduce:transform-none motion-reduce:transition-none ${
+                index === activeIndex && zoomedIndex === index
+                  ? "scale-[1.07]"
+                  : "scale-100"
+              }`}
+            >
+              {movie.backdropUrl ? (
+                <Image
+                  className="object-cover object-center"
+                  src={movie.backdropUrl}
+                  alt=""
+                  fill
+                  priority={index === 0}
+                  sizes="100vw"
+                />
+              ) : null}
+            </div>
           </div>
         ))}
       </div>
@@ -166,74 +255,43 @@ export function FeaturedHero({
         aria-live={isPaused ? "polite" : "off"}
         aria-atomic="true"
       >
-        {movies.map((movie, index) => (
-          <article
-            key={movie.id}
-            className={`absolute inset-0 transition-[opacity,transform] duration-500 ease-out motion-reduce:transition-none ${
-              index === activeIndex
-                ? "translate-y-0 opacity-100"
-                : "pointer-events-none translate-y-3 opacity-0"
-            }`}
-            aria-hidden={index !== activeIndex}
-          >
-            <p className="inline-flex rounded-full bg-brand/[0.12] px-3 py-1 text-[10px] leading-none font-bold tracking-[0.06em] text-brand uppercase">
-              Premiere · {formatPremiereDate(movie.releaseDate)}
-            </p>
+        <article key={activeMovie.id} className="absolute inset-0">
+          <p className="inline-flex rounded-full bg-brand/[0.12] px-3 py-1 text-[10px] leading-none font-bold tracking-[0.06em] text-brand uppercase">
+            Premiere · {formatPremiereDate(activeMovie.releaseDate)}
+          </p>
 
-            <h1 className="mt-5 text-[44px] leading-none font-extrabold tracking-[-0.02em] uppercase">
-              {movie.title}
-            </h1>
+          <AnimatedMovieDetails
+            key={activeMovie.id}
+            movie={activeMovie}
+          />
 
-            <div className="mt-5 flex items-center gap-2.5 text-[11px] leading-none font-bold uppercase">
-              <span className="rounded-full bg-brand px-3 py-1.5 text-white">
-                {movie.ageRating.code}
-              </span>
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/[0.1] px-3 py-1.5 text-white/[0.9]">
-                <ClockIcon />
-                {movie.runtimeMinutes} min
-              </span>
-              {movie.formats.map((format) => (
-                <span
-                  key={format.id}
-                  className="rounded-full bg-white/[0.1] px-3 py-1.5 text-white/[0.9]"
-                >
-                  {format.name}
-                </span>
-              ))}
-            </div>
-
-            <p className="mt-5 line-clamp-3 max-w-[610px] text-sm leading-5 text-white/[0.9]">
-              {movie.synopsis}
-            </p>
-
-            <div className="mt-6 flex items-center gap-3">
-              {sessionIdsByMovieId[movie.id] ? (
-                <Link
-                  href={`/session/${sessionIdsByMovieId[movie.id]}`}
-                  className="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-brand px-6 text-sm font-extrabold text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
-                >
-                  <TicketIcon />
-                  Buy tickets
-                </Link>
-              ) : (
-                <button
-                  type="button"
-                  className="inline-flex h-11 cursor-not-allowed items-center justify-center gap-2 rounded-full bg-brand px-6 text-sm font-extrabold text-white opacity-45"
-                  disabled
-                >
-                  <TicketIcon />
-                  No sessions
-                </button>
-              )}
+          <div className="mt-6 flex items-center gap-3">
+            {sessionIdsByMovieId[activeMovie.id] ? (
               <Link
-                href="/sessions"
-                className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full bg-white/[0.12] px-6 text-sm font-bold text-white transition-colors hover:bg-white/[0.2] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                href={`/session/${sessionIdsByMovieId[activeMovie.id]}`}
+                className="inline-flex h-11 cursor-pointer items-center justify-center gap-2 rounded-full bg-brand px-6 text-sm font-extrabold text-white transition-colors hover:bg-brand-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
               >
-                All sessions
+                <TicketIcon />
+                Buy tickets
               </Link>
-            </div>
-          </article>
-        ))}
+            ) : (
+              <button
+                type="button"
+                className="inline-flex h-11 cursor-not-allowed items-center justify-center gap-2 rounded-full bg-brand px-6 text-sm font-extrabold text-white opacity-45"
+                disabled
+              >
+                <TicketIcon />
+                No sessions
+              </button>
+            )}
+            <Link
+              href="/sessions"
+              className="inline-flex h-11 cursor-pointer items-center justify-center rounded-full bg-white/[0.12] px-6 text-sm font-bold text-white transition-colors hover:bg-white/[0.2] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              All sessions
+            </Link>
+          </div>
+        </article>
       </div>
 
       {movies.length > 1 ? (
