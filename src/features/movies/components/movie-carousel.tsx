@@ -81,7 +81,7 @@ function CarouselArrow({ direction }: { direction: "previous" | "next" }) {
 function MovieCardDetails({ movie }: { movie: Movie }) {
   return (
     <>
-      <div className="relative h-[330px] shrink-0 overflow-hidden rounded-xl bg-white/[0.04] transition-[height] duration-300 ease-out group-hover/movie:h-64 group-focus-within/movie:h-64 motion-reduce:transition-none">
+      <div className="relative h-[330px] shrink-0 overflow-hidden rounded-xl bg-white/[0.04] transition-[height] delay-0 duration-300 ease-out group-hover/movie:h-64 group-hover/movie:delay-300 group-focus-within/movie:h-64 group-focus-within/movie:delay-0 motion-reduce:transition-none">
         {movie.posterUrl ? (
           <Image
             className="pointer-events-none object-cover"
@@ -110,7 +110,7 @@ function MovieCardDetails({ movie }: { movie: Movie }) {
         {movie.ageRating.code}
       </p>
 
-      <div className="mt-0 grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,margin,opacity] duration-300 group-hover/movie:mt-2 group-hover/movie:grid-rows-[1fr] group-hover/movie:opacity-100 group-focus-within/movie:mt-2 group-focus-within/movie:grid-rows-[1fr] group-focus-within/movie:opacity-100 motion-reduce:transition-none">
+      <div className="mt-0 grid grid-rows-[0fr] opacity-0 transition-[grid-template-rows,margin,opacity] delay-0 duration-300 group-hover/movie:mt-2 group-hover/movie:grid-rows-[1fr] group-hover/movie:opacity-100 group-hover/movie:delay-300 group-focus-within/movie:mt-2 group-focus-within/movie:grid-rows-[1fr] group-focus-within/movie:opacity-100 group-focus-within/movie:delay-0 motion-reduce:transition-none">
         <p className="line-clamp-3 overflow-hidden text-sm leading-5 text-white/[0.66]">
           {movie.synopsis}
         </p>
@@ -180,7 +180,7 @@ export function MovieCarousel({
                 return (
                   <article
                     key={movie.id}
-                    className="group/movie flex h-[494px] w-[260px] shrink-0 snap-start flex-col rounded-2xl bg-input p-3 transition-[width] duration-300 ease-out hover:w-[480px] focus-within:w-[480px] motion-reduce:transition-none"
+                    className="group/movie flex h-[494px] w-[260px] shrink-0 snap-start flex-col rounded-2xl bg-input p-3 transition-[width] delay-0 duration-300 ease-out hover:w-[480px] hover:delay-300 focus-within:w-[480px] focus-within:delay-0 motion-reduce:transition-none"
                   >
                     {sessionId ? (
                       <Link
