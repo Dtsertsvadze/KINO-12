@@ -42,7 +42,7 @@ export function AppDialog({
   function handleOverlayClick(event: React.MouseEvent<HTMLDialogElement>) {
     const dialog = dialogRef.current;
 
-    if (!dialog) {
+    if (!dialog || event.target !== event.currentTarget) {
       return;
     }
 
