@@ -13,9 +13,10 @@ import type {
   SessionFilterOptions,
   TicketTypeSlug,
 } from "@/features/sessions/types";
+import type { TicketOrder } from "@/features/tickets/types";
 
 import { completeOrder, getSeatMap, holdSeats, releaseHold } from "../api";
-import type { CompletedOrder, HallSeat, SeatHold, SeatMap } from "../types";
+import type { HallSeat, SeatHold, SeatMap } from "../types";
 import { CheckoutStep, type CheckoutValues } from "./checkout-step";
 import { HallSeatMap } from "./hall-seat-map";
 import { OrderConfirmation } from "./order-confirmation";
@@ -142,7 +143,7 @@ export function PurchaseModal({
     Record<number, TicketTypeSlug>
   >({});
   const [hold, setHold] = useState<SeatHold>();
-  const [order, setOrder] = useState<CompletedOrder>();
+  const [order, setOrder] = useState<TicketOrder>();
   const [heldSelectionKey, setHeldSelectionKey] = useState<string>();
   const [secondsRemaining, setSecondsRemaining] = useState(0);
   const [isLoading, setIsLoading] = useState(true);

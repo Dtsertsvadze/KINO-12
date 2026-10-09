@@ -1,9 +1,9 @@
 import Image from "next/image";
 
-import type { CompletedOrder } from "../types";
+import type { TicketOrder } from "@/features/tickets/types";
 
 type OrderConfirmationProps = {
-  order: CompletedOrder;
+  order: TicketOrder;
   titleId: string;
   descriptionId: string;
   onClose: () => void;

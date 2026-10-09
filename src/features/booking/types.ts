@@ -1,6 +1,4 @@
-import type { Movie } from "@/features/movies/types";
 import type {
-  CinemaSession,
   TicketTypeSlug,
   VenueSummary,
 } from "@/features/sessions/types";
@@ -75,37 +73,4 @@ export type CheckoutInput = {
   cardNumber: string;
   expiry: string;
   cvv: string;
-};
-
-export type CompletedOrder = {
-  id: number;
-  reference: string;
-  status: "paid" | "refunded";
-  totalPrice: number;
-  paidAt: string;
-  refundedAt: string | null;
-  isUpcoming: boolean;
-  isRefundable: boolean;
-  cardLastFour: string;
-  contact: {
-    fullName: string;
-    email: string;
-    mobileNumber: string;
-  };
-  session: CinemaSession & {
-    movie: Movie;
-  };
-  tickets: Array<{
-    id: number;
-    seatCode: string;
-    ticketType: {
-      slug: TicketTypeSlug;
-      name: string;
-    };
-    price: number;
-  }>;
-};
-
-export type CompletedOrderResponse = {
-  data: CompletedOrder;
 };

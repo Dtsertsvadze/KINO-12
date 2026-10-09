@@ -5,6 +5,7 @@ type ProfileTab = "personal" | "tickets";
 
 type ProfilePageShellProps = {
   activeTab: ProfileTab;
+  ticketCount?: number;
   children?: ReactNode;
 };
 
@@ -15,6 +16,7 @@ const tabs: Array<{ id: ProfileTab; label: string; href: string }> = [
 
 export function ProfilePageShell({
   activeTab,
+  ticketCount,
   children,
 }: ProfilePageShellProps) {
   return (
@@ -41,6 +43,11 @@ export function ProfilePageShell({
               aria-current={isActive ? "page" : undefined}
             >
               {tab.label}
+              {tab.id === "tickets" && ticketCount ? (
+                <span className="ml-2 inline-flex min-w-5 items-center justify-center rounded-full bg-brand px-1.5 py-0.5 text-[10px] leading-none font-extrabold text-white">
+                  {ticketCount}
+                </span>
+              ) : null}
             </Link>
           );
         })}

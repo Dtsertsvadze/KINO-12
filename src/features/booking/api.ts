@@ -1,9 +1,11 @@
 import { requestAuthenticated } from "@/features/auth/api";
+import type {
+  TicketOrder,
+  TicketOrderResponse,
+} from "@/features/tickets/types";
 
 import type {
   CheckoutInput,
-  CompletedOrder,
-  CompletedOrderResponse,
   HoldSeatInput,
   SeatHold,
   SeatHoldResponse,
@@ -46,8 +48,8 @@ export async function releaseHold(holdId: string): Promise<void> {
 
 export async function completeOrder(
   checkout: CheckoutInput,
-): Promise<CompletedOrder> {
-  const response = await requestAuthenticated<CompletedOrderResponse>(
+): Promise<TicketOrder> {
+  const response = await requestAuthenticated<TicketOrderResponse>(
     "/orders",
     {
       method: "POST",
